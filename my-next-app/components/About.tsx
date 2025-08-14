@@ -46,48 +46,39 @@ export default function About() {
     },
   };
 
-  const skills = [
-    {
-      icon: <FaServer size={24} />,
-      title: "CEO",
-      desc: "E-gram Tech AI company",
-    },
-    {
-      icon: <FaServer size={24} />,
-      title: "Project manager",
-      desc: "Building robust performance software ",
-    },
-    {
-      icon: <FaServer size={24} />,
-      title: "Web Development",
-      desc: "Building robust, scalable web applications and APIs with high performance",
-    },
-    {
-      icon: <FaCloud size={24} />,
-      title: "Machine Learning",
-      desc: "Designing and implementing cloud-native solutions with focus on scalability and reliability",
-    },
-    {
-      icon: <FaDatabase size={24} />,
-      title: "Database Design",
-      desc: "Architecting efficient database schemas and optimizing for performance and scale",
-    },
-    {
-      icon: <FaSitemap size={24} />,
-      title: "System Design",
-      desc: "Creating resilient distributed systems with focus on scalability and maintainability",
-    },
-    {
-      icon: <FaJs size={24} />,
-      title: "JavaScript",
-      desc: "Expert in modern JavaScript, including ES6+ features, async programming, and Node.js ecosystem",
-    },
-    {
-      icon: <SiTypescript size={24} />,
-      title: "TypeScript",
-      desc: "Proficient in TypeScript development with strong typing and object-oriented principles",
-    },
-  ];
+const skills = [
+  {
+    icon: <FaServer size={24} />,
+    title: "CEO",
+    desc: "Leading E-gram Tech AI to drive innovation and impact",
+  },
+  {
+    icon: <FaServer size={24} />,
+    title: "Project Manager",
+    desc: "Delivering high-performance software from concept to launch",
+  },
+  {
+    icon: <FaServer size={24} />,
+    title: "Web Development",
+    desc: "Crafting scalable, high-performance web apps and APIs",
+  },
+  {
+    icon: <FaCloud size={24} />,
+    title: "Machine Learning",
+    desc: "Designing intelligent, scalable AI-powered solutions",
+  },
+  {
+    icon: <FaDatabase size={24} />,
+    title: "Database Design",
+    desc: "Optimizing data architecture for speed and scalability",
+  },
+  {
+    icon: <FaSitemap size={24} />,
+    title: "System Design",
+    desc: "Engineering resilient, scalable distributed systems",
+  },
+];
+
 
   return (
     <section

@@ -196,14 +196,32 @@ const Hero = () => {
                             <div className="text-center">
                                 <div className="text-2xl sm:text-3xl font-bold gradient-text mb-2">4+</div>
                                 <div className="text-gray-300 text-sm sm:text-base">Years Experience</div>
+                                <div
+                className="w-full h-1 rounded-full mb-6"
+                style={{
+                  background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
+                }}
+              ></div>
                             </div>
                             <div className="text-center">
                                 <div className="text-2xl sm:text-3xl font-bold gradient-text-secondary mb-2">50+</div>
                                 <div className="text-gray-300 text-sm sm:text-base">Projects Completed</div>
+                                <div
+                className="w-full h-1 rounded-full mb-6"
+                style={{
+                  background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
+                }}
+              ></div>
                             </div>
                             <div className="text-center">
                                 <div className="text-4sxl sm:text-3xl font-bold gradient-text-accent mb-2">∞</div>
                                 <div className="text-gray-300 text-sm sm:text-base">Problems Solved</div>
+                                <div
+                className="w-full h-1 rounded-full mb-6"
+                style={{
+                  background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
+                }}
+              ></div>
                             </div>
                         </motion.div>
                     </motion.article>
