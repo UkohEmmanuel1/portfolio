@@ -125,7 +125,7 @@ const Contact = () => {
     ];
 
     return (
-        <section id="contact" className="relative py-24 px-4 lg:px-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>
+        <section id="contact" className="relative px-4 lg:px-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' }}>
             {/* Gradient Background Elements */}
             <div className="absolute top-20 left-10 w-96 h-96 rounded-full opacity-10" style={{ background: 'linear-gradient(135deg, #4a38c2, #8f38c2)' }}></div>
             <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full opacity-10" style={{ background: 'linear-gradient(135deg, #c238b0, #b0c238)' }}></div>
@@ -191,13 +191,13 @@ const Contact = () => {
                                 <motion.div
                                     key={index}
                                     variants={itemVariants}
-                                    className="group flex items-center gap-4 sm:gap-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl transition-all duration-300 hover:shadow-lg"
-                                    style={{ background: 'linear-gradient(135deg, #1e293b, #334155)' }}
+                                    className="group flex items-center gap-4 sm:gap-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl transition-all duration-300 hover:shadow-lg bg-gray-700 hover:bg-accent-color hover:text-white"
+                                   
                                     whileHover={{ scale: 1.02, y: -4 }}
                                 >
                                     <motion.div
                                         className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center text-white shadow-lg"
-                                        style={{ background: index === 0 ? 'linear-gradient(135deg, #4a38c2, #8f38c2)' : 'linear-gradient(135deg, #c238b0, #b0c238)' }}
+                                        
                                         whileHover={{ rotate: 360 }}
                                         transition={{ duration: 0.6 }}
                                     >
@@ -210,12 +210,12 @@ const Contact = () => {
                                                 href={info.href}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="font-semibold text-base sm:text-lg text-gray-200 group-hover:gradient-text-secondary transition-all duration-300 break-all sm:break-normal hover:underline cursor-pointer"
+                                                className="font-semibold text-base sm:text-lg text-gray-200 group-hover:gradient-text-secondary transition-all duration-300 break-all sm:break-normal hover:underline cursor-pointer bg-gray-700 hover:bg-accent-color hover:text-white"
                                             >
                                                 {info.value}
                                             </a>
                                         ) : (
-                                            <p className="font-semibold text-base sm:text-lg text-gray-200 group-hover:gradient-text-secondary transition-all duration-300 break-all sm:break-normal">{info.value}</p>
+                                            <p className="font-semibold text-base sm:text-lg text-gray-200 group-hover:gradient-text-secondary transition-all duration-300 break-all sm:break-normal bg-gray-700 hover:bg-accent-color hover:text-white">{info.value}</p>
                                         )}
                                     </div>
                                 </motion.div>
@@ -226,10 +226,10 @@ const Contact = () => {
                             <h4 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 gradient-text-secondary">Follow Me</h4>
                             <div className="flex gap-4">
                                 {[
-                                    { icon: FaTwitter, href: "https://x.com/emma_nuel_david", gradient: 'linear-gradient(135deg, #4a38c2, #8f38c2)' },
-                                    { icon: FaLinkedinIn, href: "https://www.linkedin.com/in/emmanuel-david-77606131b/", gradient: 'linear-gradient(135deg, #8f38c2, #c238b0)' },
-                                    { icon: FaGithub, href: "https://github.com/UkohEmmanuel1", gradient: 'linear-gradient(135deg, #c238b0, #b0c238)' },
-                                    { icon: FaInstagram, href: "https://www.instagram.com/emma_nuel_david/", gradient: 'linear-gradient(135deg, #b0c238, #38c24a)' }
+                                    { icon: FaTwitter, href: "https://x.com/emma_nuel_david", },
+                                    { icon: FaLinkedinIn, href: "https://www.linkedin.com/in/emmanuel-david-77606131b/", },
+                                    { icon: FaGithub, href: "https://github.com/UkohEmmanuel1", },
+                                    { icon: FaInstagram, href: "https://www.instagram.com/emma_nuel_david/", }
                                 ].map((social, index) => {
                                     const Icon = social.icon;
                                     return (

@@ -1,10 +1,9 @@
 "use client";
-
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Image from "next/image";
-import { FaServer, FaCloud, FaDatabase, FaSitemap, FaJs } from "react-icons/fa";
-import { SiTypescript } from "react-icons/si";
+import {FaUsers, FaDatabase, FaSitemap, FaCode, FaRobot, FaProjectDiagram,} from "react-icons/fa";
+
 
 export default function About() {
   const ref = useRef(null);
@@ -46,39 +45,38 @@ export default function About() {
     },
   };
 
-const skills = [
-  {
-    icon: <FaServer size={24} />,
-    title: "CEO",
-    desc: "Leading E-gram Tech AI to drive innovation and impact",
-  },
-  {
-    icon: <FaServer size={24} />,
-    title: "Project Manager",
-    desc: "Delivering high-performance software from concept to launch",
-  },
-  {
-    icon: <FaServer size={24} />,
-    title: "Web Development",
-    desc: "Crafting scalable, high-performance web apps and APIs",
-  },
-  {
-    icon: <FaCloud size={24} />,
-    title: "Machine Learning",
-    desc: "Designing intelligent, scalable AI-powered solutions",
-  },
-  {
-    icon: <FaDatabase size={24} />,
-    title: "Database Design",
-    desc: "Optimizing data architecture for speed and scalability",
-  },
-  {
-    icon: <FaSitemap size={24} />,
-    title: "System Design",
-    desc: "Engineering resilient, scalable distributed systems",
-  },
-];
-
+  const skills = [
+    {
+      icon: <FaUsers size={24} />,
+      title: "Founder / CEO",
+      desc: "Leading E_gramTech AI to drive innovation and impact",
+    },
+    {
+      icon: <FaProjectDiagram size={24} />,
+      title: "Project Manager",
+      desc: "Delivering high-performance software from concept to launch",
+    },
+    {
+      icon: <FaCode size={24} />,
+      title: "Web Development",
+      desc: "Crafting scalable, high-performance web apps and APIs",
+    },
+    {
+      icon: <FaRobot size={24} />,
+      title: "Machine Learning",
+      desc: "Designing intelligent, scalable AI-powered solutions",
+    },
+    {
+      icon: <FaDatabase size={24} />,
+      title: "Database Design",
+      desc: "Optimizing data architecture for speed and scalability",
+    },
+    {
+      icon: <FaSitemap size={24} />,
+      title: "System Design",
+      desc: "Engineering resilient, scalable distributed systems",
+    },
+  ];
 
   return (
     <section
@@ -117,21 +115,22 @@ const skills = [
           >
             About Me
           </motion.h2>
-         <motion.p
-  className="text-xl text-gray-300 max-w-4xl mx-auto text-center leading-relaxed"
-  initial={{ opacity: 0, y: 30 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8, delay: 0.4 }}
-  viewport={{ once: true }}
->
-  Passionate{" "}
-  <span className="gradient-text-secondary font-semibold">
-    full-stack developer, machine learning engineer, and business intelligence specialist
-  </span>{" "}
-  with{" "}
-    building scalable, intelligent systems and data-driven solutions that power modern applications, optimize business operations, and drive digital growth.
-</motion.p>
-
+          <motion.p
+            className="text-xl text-gray-300 max-w-4xl mx-auto text-center sm:text-left leading-relaxed md:p-4"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+          >
+            Passionate{" "}
+            <span className="gradient-text-secondary font-semibold ">
+              full-stack developer, machine learning engineer, and business
+              intelligence specialist
+            </span>{" "}
+            with building scalable, intelligent systems and data-driven
+            solutions that power modern applications, optimize business
+            operations, and drive digital growth.
+          </motion.p>
         </motion.div>
 
         <motion.div
@@ -188,91 +187,95 @@ const skills = [
           </motion.div>
 
           {/* Right Column - Professional Content */}
-          <div className="space-y-6 sm:space-y-8 order-1 lg:order-2">
-            <motion.div variants={itemVariants}>
-  <h3 className="text-2xl font-bold gradient-text-secondary mb-4">
-   Developer & Digital Innovation
-  </h3>
-  <div
-    className="w-24 h-1 rounded-full mb-6"
-    style={{
-      background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
-    }}
-  ></div>
-</motion.div>
+          <div className="space-y-6 sm:space-y-8 order-1 lg:order-2 sm:p-12">
+            <div className="sm:m-12 p-8 text-left">
+              <motion.div variants={itemVariants}>
+                <h3 className="text-2xl font-bold gradient-text-secondary mb-4">
+                  Developer & Digital innovator
+                </h3>
+                <div
+                  className="w-24 h-1 rounded-full mb-6"
+                  style={{
+                    background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
+                  }}
+                ></div>
+              </motion.div>
 
-<motion.p
-  variants={itemVariants}
-  className="text-base sm:text-lg text-gray-300 leading-relaxed"
->
-  {`I'm a`}{" "}
-  <span className="gradient-text-primary font-semibold">
-    Full-Stack Developer, Machine Learning Developer, and Business Intelligence Specialist
-  </span>{" "}
-  with{" "}
-  <span className="gradient-text-secondary font-semibold">
-    years of experience
-  </span>
-  , specializing in building scalable web applications, intelligent systems, and
-  data-driven solutions that power enterprise-level businesses.
-</motion.p>
+              <motion.p
+                variants={itemVariants}
+                className="text-base sm:text-lg text-gray-300 leading-relaxed"
+              >
+                {`I'm a`}{" "}
+                <span className="gradient-text-primary font-semibold">
+                  Full-Stack Developer, Machine Learning Developer, and Business
+                  Intelligence Specialist
+                </span>{" "}
+                with{" "}
+                <span className="gradient-text-secondary font-semibold">
+                  years of experience
+                </span>
+                , specializing in building scalable web applications,
+                intelligent systems, and data-driven solutions that power
+                enterprise-level businesses.
+              </motion.p>
 
-<motion.p
-  variants={itemVariants}
-  className="text-base sm:text-lg text-gray-300 leading-relaxed"
->
-  My expertise lies in designing{" "}
-  <span className="gradient-text-accent font-semibold">
-    robust digital solutions
-  </span>{" "}
-  that combine web development, machine learning, and business intelligence to
-  solve complex problems while ensuring performance, security, and scalability.
-</motion.p>
+              <motion.p
+                variants={itemVariants}
+                className="text-base sm:text-lg text-gray-300 leading-relaxed"
+              >
+                My expertise lies in designing{" "}
+                <span className="gradient-text-accent font-semibold">
+                  robust digital solutions
+                </span>{" "}
+                that combine web development, machine learning, and business
+                intelligence to solve complex problems while ensuring
+                performance, security, and scalability.
+              </motion.p>
 
-<motion.p
-  variants={itemVariants}
-  className="text-base sm:text-lg text-gray-300 leading-relaxed"
->
-  {`I approach every project with analytical thinking, technical precision, and creative problem-solving. From building web applications to managing social media strategies and creating engaging video content, I focus on delivering solutions that drive real results.`}
-</motion.p>
+              <motion.p
+                variants={itemVariants}
+                className="text-base sm:text-lg text-gray-300 leading-relaxed"
+              >
+                {`I approach every project with analytical thinking, technical precision, and creative problem-solving. From building web applications to managing social media strategies and creating engaging video content, I focus on delivering solutions that drive real results.`}
+              </motion.p>
 
-<motion.p
-  variants={itemVariants}
-  className="text-base sm:text-lg text-gray-300 leading-relaxed"
->
-  {`Curious by nature, I thrive on challenging projects that require innovative solutions and meticulous execution. Beyond development, I'm passionate about exploring emerging technologies and crafting digital content that connects brands with their audience.`}
-</motion.p>
+              <motion.p
+                variants={itemVariants}
+                className="text-base sm:text-lg text-gray-300 leading-relaxed"
+              >
+                {`Curious by nature, I thrive on challenging projects that require innovative solutions and meticulous execution. Beyond development, I'm passionate about exploring emerging technologies and crafting digital content that connects brands with their audience.`}
+              </motion.p>
 
-            {/*Education Stats*/}
-            <motion.div variants={itemVariants}>
-              <h3 className="text-2xl font-bold gradient-text-secondary mb-4">
-                Eucation
-              </h3>
-              <div
-                className="w-24 h-1 rounded-full mb-6"
-                style={{
-                  background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
-                }}
-              ></div>
-            </motion.div>
-            <motion.p
-              variants={itemVariants}
-              className="text-base sm:text-lg text-gray-300 leading-relaxed"
-            >
-              <span className="gradient-text-primary font-semibold">
-                BSc
-              </span>{" "}
-               in Mathematics{" "}
-              <span className="gradient-text-secondary font-semibold">
-                {" "}
-                university of Ibadan
-              </span>
-            </motion.p>
+              {/*Education Stats*/}
+              <motion.div variants={itemVariants}>
+                <h3 className="text-2xl font-bold gradient-text-secondary mb-4">
+                  Eucation
+                </h3>
+                <div
+                  className="w-24 h-1 rounded-full mb-6"
+                  style={{
+                    background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
+                  }}
+                ></div>
+              </motion.div>
+              <motion.p
+                variants={itemVariants}
+                className="text-base sm:text-lg text-gray-300 leading-relaxed"
+              >
+                <span className="gradient-text-primary font-semibold">BSc</span>{" "}
+                in computer science{" "}
+                <span className="gradient-text-secondary font-semibold">
+                  {" "}
+                  university of Ibadan
+                </span>{" "}
+                (In Progress)
+              </motion.p>
+            </div>
 
             {/* Professional Stats */}
             <motion.div
               variants={itemVariants}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mt-8 sm:mt-12"
+              className="grid grid-cols-2 gap-4 mt-4 sm:mt-6"
             >
               <motion.div
                 className="glass-effect p-4 sm:p-6 rounded-2xl text-center group cursor-pointer"
@@ -340,7 +343,7 @@ const skills = [
             ></div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 m-8">
             {skills.map((skill, index) => (
               <motion.div
                 key={index}

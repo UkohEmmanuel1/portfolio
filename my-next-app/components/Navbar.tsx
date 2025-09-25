@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
@@ -73,7 +72,7 @@ const Navbar = () => {
                         <h1 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">
                           Emmanuel David
                         </h1>
-                        <p className="text-gray-300 text-sm font-medium">Full Stack &Machine Learning Developer</p>
+                        <p className="text-gray-300 text-sm font-medium">Full Stack & Machine Learning Developer</p>
                     </section>
                 </motion.div>
 
@@ -136,14 +135,14 @@ const Navbar = () => {
             {/* Professional Mobile Menu */}
             {isMobileMenuOpen && (
                 <motion.div
-                    className="md:hidden absolute top-full left-0 right-0 glass-effect shadow-xl border-t border-white/20"
-                    initial={{ opacity: 0, y: -20 }}
+                    className="md:hidden absolute top-full left-0 right-0 glass-effect shadow-xl"
+                    initial={{ opacity: 0, y: -100 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    exit={{ opacity: 0, y: -100 }}
+                    transition={{ duration: 0.4, ease: "easeOut"}}
                 >
-                    <nav className="container-custom py-6">
-                        <div className="flex flex-col gap-y-2">
+                    <nav className="container-custom py-2">
+                        <div className="flex flex-col gap-y-2 px-6 py-2 space-y-2 items-end text-right">
                             {menu.map((item, i) => (
                                 <motion.a
                                     href={`#${item.toLowerCase()}`}
