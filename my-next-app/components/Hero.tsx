@@ -140,7 +140,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
           >
-            {/* Professional greeting */}
+            {/* Professional greeting
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -156,10 +156,10 @@ const Hero = () => {
               >
                 {`Hey, I'm Emmanuel David`}
               </span>
-            </motion.div>
+            </motion.div> */}
 
             <motion.h1
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-6 sm:mb-8 text-balance"
+              className="text-2xl font-bold leading-tight mb-6 sm:mb-8 text-balance"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 1 }}
@@ -177,7 +177,7 @@ const Hero = () => {
               transition={{ delay: 0.9, duration: 0.8 }}
               className="max-w-3xl mx-auto mb-8 sm:mb-12 px-4 sm:px-0"
             >
-              <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-4 sm:mb-6 leading-relaxed">
+              <p className="text-base text-gray-300 mb-4 sm:mb-6 leading-relaxed">
                 Crafting{" "}
                 <strong className="text-white">
                   scalable web systems and intelligent APIs
@@ -201,7 +201,7 @@ const Hero = () => {
             >
               <motion.a
                 href="/resume"
-                className="btn-secondary inline-flex items-center justify-center gap-2 text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-2 rounded-2xl font-semibold w-auto sm:w-auto"
+                className="btn-secondary inline-flex items-center justify-center gap-2 text-base  px-6 sm:px-8 py-3 sm:py-2 rounded-2xl font-semibold w-auto sm:w-auto"
                 style={{
                   background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
                 }}
@@ -215,14 +215,14 @@ const Hero = () => {
 
             {/* Professional stats or highlights */}
             <motion.div
-              className="mt-32 sm:mt-4 grid grid-cols-3 sm:grid-cols-3 gap-4 w-auto mx-auto px-4 py-16 sm:px-0"
+              className="grid grid-cols-3 sm:grid-cols-3 gap-4 w-auto mx-auto px-4 py-16 sm:px-0"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.6 }}
             >
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold gradient-text mb-2">
-                  4+
+                  5+
                 </div>
                 <div className="text-gray-300 text-sm sm:text-base">
                   Years Experience
@@ -231,7 +231,7 @@ const Hero = () => {
 
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold gradient-text-secondary mb-2">
-                  50+
+                  84+
                 </div>
                 <div className="text-gray-300 text-sm sm:text-base">
                   Projects Completed
@@ -240,10 +240,10 @@ const Hero = () => {
 
               <div className="text-center">
                 <div className="text-4sxl sm:text-3xl font-bold gradient-text-accent mb-2">
-                  ∞
+                  14+
                 </div>
                 <div className="text-gray-300 text-sm sm:text-base">
-                  Problems Solved
+                  Complex Architecture
                 </div>
               </div>
             </motion.div>

@@ -139,7 +139,7 @@ const Contact = () => {
                     className="text-center mb-20"
                 >
                     <motion.h2
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 gradient-text-primary"
+                        className="text-3xl sm:text-4xl md:text-5xl p-12  font-bold mb-4 sm:mb-6 gradient-text-primary"
                         initial={{ opacity: 0, y: 20 }}
                         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
@@ -153,22 +153,15 @@ const Contact = () => {
                         transition={{ duration: 0.8, delay: 0.6 }}
                         className="max-w-3xl mx-auto"
                     >
-                        <p className="text-base sm:text-lg text-gray-300 leading-relaxed mb-4 sm:mb-6 px-4 sm:px-0">
+                        <p className="text-base  text-gray-300 leading-relaxed mb-4 sm:mb-6 px-4 sm:px-0">
                             Have a <span className="gradient-text-secondary font-semibold">project in mind</span> {`or want to collaborate? I'm always excited to work on innovative solutions and scalable systems.`}
                         </p>
-                        <p className="text-sm sm:text-base text-gray-400 px-4 sm:px-0">
+                        <p className="text-base  text-gray-400 px-4 sm:px-0">
                             Feel free to reach out using the form below or through my contact information.
                         </p>
                     </motion.div>
 
                     {/* Gradient Divider */}
-                    <motion.div
-                        initial={{ scaleX: 0 }}
-                        animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-                        transition={{ duration: 1, delay: 0.8 }}
-                        className="w-24 h-1 mx-auto mt-8 rounded-full"
-                        style={{ background: 'linear-gradient(135deg, #4a38c2, #8f38c2)' }}
-                    ></motion.div>
                 </motion.div>
 
                 <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16">
@@ -191,7 +184,7 @@ const Contact = () => {
                                 <motion.div
                                     key={index}
                                     variants={itemVariants}
-                                    className="group flex items-center gap-4 sm:gap-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl transition-all duration-300 hover:shadow-lg bg-gray-700 hover:bg-accent-color hover:text-white"
+                                    className="group flex items-center gap-4 sm:gap-6 p-4 sm:p-6 rounded-xl sm:rounded-xl transition-all duration-300 hover:shadow-lg bg-gray-700 hover:bg-accent-color hover:text-white"
                                    
                                     whileHover={{ scale: 1.02, y: -4 }}
                                 >

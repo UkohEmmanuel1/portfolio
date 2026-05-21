@@ -142,10 +142,7 @@ const Skills = () => {
           <h3 className="text-xl sm:text-2xl text-center mx-auto font-bold mb-2 gradient-text-secondary">
             {title}
           </h3>
-          <div
-            className="w-16 h-1 rounded-full"
-            style={{ background: gradients[sectionIndex % gradients.length] }}
-          ></div>
+         
         </motion.div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
@@ -263,18 +260,12 @@ const Skills = () => {
             </p>
           </motion.div>
 
-          {/* Gradient Divider */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="mx-auto mt-8 rounded-full"
-            style={{ background: "linear-gradient(135deg, #4a38c2, #8f38c2)" }}
-          ></motion.div>
+          
         </motion.div>
 
         <div ref={ref} className="space-y-4">
           {renderSkillSection("Programming Languages", languages, 5)}
+          
         </div>
       </div>
     </section>
