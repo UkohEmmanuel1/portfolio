@@ -139,7 +139,7 @@ const Contact = () => {
                     className="text-center mb-20"
                 >
                     <motion.h2
-                        className="text-3xl sm:text-4xl md:text-5xl p-12  font-bold mb-4 sm:mb-6 gradient-text-primary"
+                        className="text-3xl sm:text-4xl md:text-5xl p-12   font-bold mb-4 sm:mb-6 gradient-text-primary"
                         initial={{ opacity: 0, y: 20 }}
                         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
@@ -160,8 +160,6 @@ const Contact = () => {
                             Feel free to reach out using the form below or through my contact information.
                         </p>
                     </motion.div>
-
-                    {/* Gradient Divider */}
                 </motion.div>
 
                 <div ref={ref} className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-16">
@@ -185,12 +183,10 @@ const Contact = () => {
                                     key={index}
                                     variants={itemVariants}
                                     className="group flex items-center gap-4 sm:gap-6 p-4 sm:p-6 rounded-xl sm:rounded-xl transition-all duration-300 hover:shadow-lg bg-gray-700 hover:bg-accent-color hover:text-white"
-                                   
                                     whileHover={{ scale: 1.02, y: -4 }}
                                 >
                                     <motion.div
                                         className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center text-white shadow-lg"
-                                        
                                         whileHover={{ rotate: 360 }}
                                         transition={{ duration: 0.6 }}
                                     >
@@ -219,10 +215,10 @@ const Contact = () => {
                             <h4 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 gradient-text-secondary">Follow Me</h4>
                             <div className="flex gap-4">
                                 {[
-                                    { icon: FaTwitter, href: "https://x.com/emma_nuel_david", },
-                                    { icon: FaLinkedinIn, href: "https://www.linkedin.com/in/emmanuel-david-77606131b/", },
-                                    { icon: FaGithub, href: "https://github.com/UkohEmmanuel1", },
-                                    { icon: FaInstagram, href: "https://www.instagram.com/emma_nuel_david/", }
+                                    { icon: FaTwitter, href: "https://x.com/emma_nuel_david", gradient: "linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%)" },
+                                    { icon: FaLinkedinIn, href: "https://www.linkedin.com/in/emmanuel-david-77606131b/", gradient: "linear-gradient(135deg, #0077B5 0%, #005987 100%)" },
+                                    { icon: FaGithub, href: "https://github.com/UkohEmmanuel1", gradient: "linear-gradient(135deg, #24292E 0%, #171a1d 100%)" },
+                                    { icon: FaInstagram, href: "https://www.instagram.com/emma_nuel_david/", gradient: "linear-gradient(135deg, #405DE6 0%, #E1306C 100%)" }
                                 ].map((social, index) => {
                                     const Icon = social.icon;
                                     return (
@@ -285,16 +281,12 @@ const Contact = () => {
                                     onChange={handleChange}
                                     required
                                     className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-gray-600 rounded-xl sm:rounded-2xl focus:outline-none focus:border-transparent transition-all duration-300 bg-gray-800 text-gray-200 shadow-sm text-sm sm:text-base"
-                                    style={{
-
-                                        boxShadow: 'focus:0 0 0 3px rgba(74, 56, 194, 0.1)'
-                                    }}
                                     onFocus={(e) => {
                                         e.target.style.borderColor = '#4a38c2';
                                         e.target.style.boxShadow = '0 0 0 3px rgba(74, 56, 194, 0.1)';
                                     }}
                                     onBlur={(e) => {
-                                        e.target.style.borderColor = '#e5e7eb';
+                                        e.target.style.borderColor = '#4b5563';
                                         e.target.style.boxShadow = 'none';
                                     }}
                                     placeholder="Emmanuel David"
@@ -316,7 +308,7 @@ const Contact = () => {
                                         e.target.style.boxShadow = '0 0 0 3px rgba(143, 56, 194, 0.1)';
                                     }}
                                     onBlur={(e) => {
-                                        e.target.style.borderColor = '#e5e7eb';
+                                        e.target.style.borderColor = '#4b5563';
                                         e.target.style.boxShadow = 'none';
                                     }}
                                     placeholder="emmanuelukoh08@example.com"
@@ -338,7 +330,7 @@ const Contact = () => {
                                         e.target.style.boxShadow = '0 0 0 3px rgba(194, 56, 176, 0.1)';
                                     }}
                                     onBlur={(e) => {
-                                        e.target.style.borderColor = '#e5e7eb';
+                                        e.target.style.borderColor = '#4b5563';
                                         e.target.style.boxShadow = 'none';
                                     }}
                                     placeholder="Project Inquiry"
@@ -360,7 +352,7 @@ const Contact = () => {
                                         e.target.style.boxShadow = '0 0 0 3px rgba(176, 194, 56, 0.1)';
                                     }}
                                     onBlur={(e) => {
-                                        e.target.style.borderColor = '#e5e7eb';
+                                        e.target.style.borderColor = '#4b5563';
                                         e.target.style.boxShadow = 'none';
                                     }}
                                     placeholder="Hello, I'd like to talk about..."
