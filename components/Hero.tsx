@@ -239,7 +239,7 @@ const Hero = () => {
               </div>
 
               <div className="text-center">
-                <div className="text-4sxl sm:text-3xl font-bold gradient-text-accent mb-2">
+                <div className="text-2xl sm:text-3xl font-bold gradient-text-accent mb-2">
                   14+
                 </div>
                 <div className="text-gray-300 text-sm sm:text-base">
