@@ -1,8 +1,15 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import { FaNodeJs, FaAws, FaDocker, FaGitAlt, FaReact } from "react-icons/fa";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FaReact,
+  FaNodeJs,
+  FaAws,
+  FaDocker,
+  FaGitAlt,
+  FaPython,
+} from "react-icons/fa";
 import {
   SiTypescript,
   SiJavascript,
@@ -27,249 +34,187 @@ import {
   SiNextdotjs,
   SiTailwindcss,
   SiRedux,
-  SiPython,
+  SiPytorch,
+  SiTensorflow,
+  SiScikitlearn,
+  SiRedis,
+  SiOpenai,
 } from "react-icons/si";
+import { EASE, VIEWPORT, fadeUp, stagger } from "@/components/motion";
 
-// Define skill item type
-interface SkillItem {
-  icon: React.ComponentType<{ size?: number }>;
+type CategoryKey = "all" | "languages" | "web" | "ml" | "cloud" | "data";
+
+interface Skill {
   name: string;
+  category: Exclude<CategoryKey, "all">;
+  icon: React.ComponentType<{ size?: number }>;
 }
 
-const Skills = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, {
-    once: true,
-    amount: 0.3,
-  });
-  const [iconSize, setIconSize] = useState(40);
+const allSkills: Skill[] = [
+  { name: "Python", category: "languages", icon: FaPython },
+  { name: "TypeScript", category: "languages", icon: SiTypescript },
+  { name: "JavaScript", category: "languages", icon: SiJavascript },
+  { name: "C++", category: "languages", icon: SiCplusplus },
 
-  useEffect(() => {
-    const updateIconSize = () => {
-      if (typeof window !== "undefined") {
-        if (window.innerWidth < 640) {
-          setIconSize(28);
-        } else if (window.innerWidth < 1024) {
-          setIconSize(32);
-        } else {
-          setIconSize(40);
-        }
-      }
-    };
+  { name: "Next.js", category: "web", icon: SiNextdotjs },
+  { name: "React", category: "web", icon: FaReact },
+  { name: "Node.js", category: "web", icon: FaNodeJs },
+  { name: "Express.js", category: "web", icon: SiExpress },
+  { name: "NestJS", category: "web", icon: SiNestjs },
+  { name: "Tailwind CSS", category: "web", icon: SiTailwindcss },
+  { name: "Redux", category: "web", icon: SiRedux },
+  { name: "Puppeteer", category: "web", icon: SiPuppeteer },
 
-    updateIconSize();
-    window.addEventListener("resize", updateIconSize);
-    return () => window.removeEventListener("resize", updateIconSize);
-  }, []);
+  { name: "PyTorch", category: "ml", icon: SiPytorch },
+  { name: "TensorFlow", category: "ml", icon: SiTensorflow },
+  { name: "Scikit-Learn", category: "ml", icon: SiScikitlearn },
+  { name: "OpenAI / LLMs", category: "ml", icon: SiOpenai },
 
-  // Organize skills by category for better presentation
-  const webTech: SkillItem[] = [
-    { icon: FaReact, name: "React" },
-    { icon: SiNextdotjs, name: "Next.js" },
-    { icon: SiTailwindcss, name: "Tailwind CSS" },
-    { icon: SiRedux, name: "Redux" },
+  { name: "AWS", category: "cloud", icon: FaAws },
+  { name: "Docker", category: "cloud", icon: FaDocker },
+  { name: "Kubernetes", category: "cloud", icon: SiKubernetes },
+  { name: "Terraform", category: "cloud", icon: SiTerraform },
+  { name: "AWS Lambda", category: "cloud", icon: SiAwslambda },
+  { name: "Jenkins", category: "cloud", icon: SiJenkins },
+  { name: "Git", category: "cloud", icon: FaGitAlt },
+  { name: "Grafana", category: "cloud", icon: SiGrafana },
+  { name: "Prometheus", category: "cloud", icon: SiPrometheus },
+  { name: "ELK Stack", category: "cloud", icon: SiElasticsearch },
+  { name: "Dynatrace", category: "cloud", icon: SiDynatrace },
+  { name: "Jira", category: "cloud", icon: SiJira },
+  { name: "CloudWatch", category: "cloud", icon: SiAmazoncloudwatch },
 
-    { icon: FaNodeJs, name: "Node.js" },
-    { icon: SiExpress, name: "Express.js" },
-    { icon: SiNestjs, name: "NestJS" },
-    { icon: SiPuppeteer, name: "Puppeteer" },
-  ];
+  { name: "PostgreSQL", category: "data", icon: SiPostgresql },
+  { name: "MongoDB", category: "data", icon: SiMongodb },
+  { name: "Redis", category: "data", icon: SiRedis },
+  { name: "Amazon RDS", category: "data", icon: SiAmazonrds },
+  { name: "Firebase", category: "data", icon: SiFirebase },
+];
 
-  const databases: SkillItem[] = [
-    { icon: SiMongodb, name: "MongoDB" },
-    { icon: SiPostgresql, name: "PostgreSQL" },
-    { icon: SiAmazonrds, name: "Amazon RDS" },
-    { icon: SiFirebase, name: "Firebase" },
-  ];
+const categories: { key: CategoryKey; label: string }[] = [
+  { key: "all", label: "All" },
+  { key: "languages", label: "Languages" },
+  { key: "web", label: "Web" },
+  { key: "ml", label: "AI & ML" },
+  { key: "cloud", label: "Cloud" },
+  { key: "data", label: "Data" },
+];
 
-  const cloudInfra: SkillItem[] = [
-    { icon: FaAws, name: "AWS" },
-    { icon: SiAwslambda, name: "Lambda" },
-    { icon: SiAmazoncloudwatch, name: "CloudWatch" },
-    { icon: SiTerraform, name: "Terraform" },
-    { icon: SiKubernetes, name: "Kubernetes" },
-  ];
+export default function Skills() {
+  const [active, setActive] = useState<CategoryKey>("all");
 
-  const devOpsTools: SkillItem[] = [
-    { icon: FaDocker, name: "Docker" },
-    { icon: SiJenkins, name: "Jenkins" },
-    { icon: FaGitAlt, name: "Git" },
-    { icon: SiJira, name: "Jira" },
-  ];
-
-  const monitoringTools: SkillItem[] = [
-    { icon: SiDynatrace, name: "Dynatrace" },
-    { icon: SiElasticsearch, name: "ELK Stack" },
-    { icon: SiGrafana, name: "Grafana" },
-    { icon: SiPrometheus, name: "Prometheus" },
-  ];
-
-  const languages: SkillItem[] = [
-    { icon: SiJavascript, name: "JavaScript" },
-    { icon: SiTypescript, name: "TypeScript" },
-    { icon: SiPython, name: "Python" },
-    { icon: SiCplusplus, name: "C plus plus" },
-  ];
-
-  // Helper function to render skill section with professional styling
-  const renderSkillSection = (
-    title: string,
-    skills: SkillItem[],
-    sectionIndex: number
-  ) => {
-    const gradients = [
-      "linear-gradient(135deg, #4a38c2, #8f38c2)",
-      "linear-gradient(135deg, #8f38c2, #c238b0)",
-      "linear-gradient(135deg, #c238b0, #b0c238)",
-      "linear-gradient(135deg, #b0c238, #38c24a)",
-      "linear-gradient(135deg, #38c24a, #4a38c2)",
-      "linear-gradient(135deg, #4a38c2, #c238b0)",
-    ];
-
-    return (
-      <motion.div
-        className="mb-16"
-        initial={{ opacity: 0, y: 40 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 0.8, delay: sectionIndex * 0.2 }}
-      >
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
-          transition={{ duration: 0.6, delay: sectionIndex * 0.2 + 0.3 }}
-          className="mb-8 mx-auto text-center"
-        >
-          <h3 className="text-xl sm:text-2xl text-center mx-auto font-bold mb-2 gradient-text-secondary">
-            {title}
-          </h3>
-         
-        </motion.div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
-          {skills.map((skill, index) => {
-            const Icon = skill.icon;
-            return (
-              <motion.div
-                key={index}
-                className="group glass-effect p-3 sm:p-4 lg:p-6 rounded-xl sm:rounded-2xl flex flex-col items-center gap-2 sm:gap-3 lg:gap-4 hover:shadow-xl transition-all duration-300 cursor-pointer"
-                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                animate={
-                  isInView
-                    ? { opacity: 1, y: 0, scale: 1 }
-                    : { opacity: 0, y: 30, scale: 0.9 }
-                }
-                transition={{
-                  duration: 0.6,
-                  delay: sectionIndex * 0.2 + index * 0.1,
-                }}
-                whileHover={{
-                  scale: 1.05,
-                  y: -8,
-                  transition: { type: "spring", stiffness: 300, damping: 20 },
-                }}
-              >
-                <motion.div
-                  className="p-2 sm:p-3 lg:p-4 rounded-lg sm:rounded-xl transition-all duration-300"
-                  style={{
-                    background: `${
-                      gradients[sectionIndex % gradients.length]
-                    }15`,
-                  }}
-                  whileHover={{
-                    background: gradients[sectionIndex % gradients.length],
-                    transition: { duration: 0.3 },
-                  }}
-                >
-                  <motion.div
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    <Icon size={iconSize} />
-                  </motion.div>
-                </motion.div>
-
-                <span className="text-xs sm:text-sm font-semibold text-gray-200 group-hover:gradient-text-secondary transition-all duration-300 text-center">
-                  {skill.name}
-                </span>
-              </motion.div>
-            );
-          })}
-        </div>
-      </motion.div>
-    );
-  };
+  const visible =
+    active === "all" ? allSkills : allSkills.filter((s) => s.category === active);
 
   return (
-    <section
-      id="skills"
-      className="relative py-24 px-4 lg:px-0 overflow-hidden"
-      style={{
-        background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
-      }}
-    >
-      {/* Gradient Background Elements */}
-      <div
-        className="absolute top-20 right-10 w-96 h-96 rounded-full opacity-10"
-        style={{ background: "linear-gradient(135deg, #4a38c2, #8f38c2)" }}
-      ></div>
-      <div
-        className="absolute bottom-20 left-10 w-80 h-80 rounded-full opacity-10"
-        style={{ background: "linear-gradient(135deg, #c238b0, #b0c238)" }}
-      ></div>
-      <div
-        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full opacity-5"
-        style={{ background: "linear-gradient(135deg, #38c24a, #4a38c2)" }}
-      ></div>
-
-      <div className="container-custom relative z-10">
+    <section id="skills" className="section section-ink">
+      <div className="shell">
         <motion.div
-          initial={{ opacity: 0, y: 30, scale: 0.95 }}
-          animate={
-            isInView
-              ? { opacity: 1, y: 0, scale: 1 }
-              : { opacity: 0, y: 30, scale: 0.95 }
-          }
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-center mb-20"
+          variants={stagger(0.08)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT}
         >
-          <motion.h2
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 gradient-text-primary"
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            Technical Skills
-          </motion.h2>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="max-w-3xl mx-auto"
-          >
-            <p className="text-base sm:text-lg text-gray-300 leading-relaxed mb-4 sm:mb-6 px-4 sm:px-0">
-              I specialize in{" "}
-              <span className="gradient-text-secondary font-semibold">
-                designing and building scalable, high-performance systems
-              </span>{" "}
-              using modern programming languages.
-            </p>
-            <p className="text-sm sm:text-base text-gray-400 px-4 sm:px-0">
-              Here are the programming languages I work with to develop robust
-              and efficient solutions.
-            </p>
+          <motion.div variants={fadeUp} className="eyebrow">
+            <span className="eyebrow-index">04</span>
+            <span className="eyebrow-rule" />
+            <span>Technical stack</span>
           </motion.div>
 
-          
+          <div
+            className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-x-8 gap-y-3 items-end"
+            style={{ marginBottom: "var(--space-head)" }}
+          >
+            <motion.h2 variants={fadeUp} className="display-lg" style={{ maxWidth: "30ch" }}>
+              Tools chosen for the problem
+            </motion.h2>
+            <motion.p
+              variants={fadeUp}
+              className="body-text lg:text-right"
+              style={{ color: "var(--on-dark-3)", maxWidth: "46ch" }}
+            >
+              A stack picked for high availability, inference workloads, distributed
+              services, and products that need to scale past the first thousand users.
+            </motion.p>
+          </div>
         </motion.div>
 
-        <div ref={ref} className="space-y-4">
-          {renderSkillSection("Programming Languages", languages, 5)}
-          
-        </div>
+        {/* Filters — the active pill slides between options */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.5, ease: EASE }}
+          className="flex flex-wrap items-center gap-1.5"
+          style={{ borderTop: "1px solid var(--line-strong)", paddingTop: "1rem" }}
+        >
+          {categories.map((cat) => {
+            const isActive = active === cat.key;
+            return (
+              <button
+                key={cat.key}
+                onClick={() => setActive(cat.key)}
+                className="relative"
+                style={{
+                  padding: "0.4rem 0.7rem",
+                  borderRadius: "999px",
+                  cursor: "pointer",
+                  fontFamily: "var(--font-mono-jb), ui-monospace, monospace",
+                  fontSize: "0.6875rem",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  lineHeight: 1,
+                  color: isActive ? "#050505" : "var(--on-dark-3)",
+                  transition: "color 0.18s ease",
+                }}
+              >
+                {isActive && (
+                  <motion.span
+                    layoutId="skillPill"
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: "#f4f4ef" }}
+                    transition={{ type: "spring", stiffness: 400, damping: 34 }}
+                  />
+                )}
+                <span className="relative" style={{ padding: "0 0.1rem" }}>
+                  {cat.label}
+                </span>
+              </button>
+            );
+          })}
+        </motion.div>
+
+        {/* Tag cloud */}
+        <motion.div
+          layout
+          className="flex flex-wrap gap-x-7 gap-y-2.5"
+          style={{ borderTop: "1px solid var(--line-soft)", paddingTop: "1.25rem" }}
+        >
+          <AnimatePresence mode="popLayout">
+            {visible.map((skill) => {
+              const Icon = skill.icon;
+              return (
+                <motion.span
+                  layout
+                  key={skill.name}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25, ease: EASE }}
+                  whileHover={{ y: -2 }}
+                  className="inline-flex items-center gap-1.5"
+                  style={{ color: "var(--on-dark-5)" }}
+                >
+                  <Icon size={14} />
+                  <span className="mono-sm" style={{ color: "var(--on-dark-2)" }}>
+                    {skill.name}
+                  </span>
+                </motion.span>
+              );
+            })}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );
-};
-
-export default Skills;
+}

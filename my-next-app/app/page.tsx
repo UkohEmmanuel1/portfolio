@@ -1,6 +1,8 @@
-import Navbar from "../components/Navbar";
-import Hero from "../components/Hero";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
 import About from "@/components/About";
+import Projects from "@/components/Projects";
+import Expertise from "@/components/Expertise";
 import Skills from "@/components/Skills";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -9,12 +11,14 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="overflow-hidden">
+      <main className="relative">
         <Hero />
         <About />
+        <Projects />
+        <Expertise />
         <Skills />
-        <Contact />    
-        <Footer /> 
+        <Contact />
+        <Footer />
       </main>
     </>
   );
