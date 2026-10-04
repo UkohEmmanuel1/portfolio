@@ -1,126 +1,204 @@
 "use client";
-import React from 'react';
-import { motion } from 'framer-motion';
+
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import {
   FaGithub,
   FaLinkedinIn,
   FaTwitter,
   FaInstagram,
-  FaEnvelope,
-  FaWhatsapp
+  FaArrowUp,
 } from "react-icons/fa";
+import Link from "next/link";
+import { VIEWPORT, fadeUp, stagger } from "@/components/motion";
 
-const Footer = () => {
-  const currentYear = new Date().getFullYear();
-  const socialLinks = [
-    { icon: <FaGithub size={20} />, url: "https://github.com/UkohEmmanuel1" },
-    { icon: <FaLinkedinIn size={20} />, url: "https://www.linkedin.com/in/emmanuel-david-77606131b/" },
-    { icon: <FaTwitter size={20} />, url: "https://x.com/emma_nuel_david" },
-    { icon: <FaInstagram size={20} />, url: "https://www.instagram.com/emma_nuel_david/" }
-  ];
+const columns = [
+  {
+    title: "Navigate",
+    links: [
+      { name: "Home", href: "#home" },
+      { name: "About", href: "#about" },
+      { name: "Projects", href: "#projects" },
+      { name: "Expertise", href: "#expertise" },
+    ],
+  },
+  {
+    title: "Capabilities",
+    links: [
+      { name: "Web Development", href: "#expertise" },
+      { name: "Machine Learning", href: "#expertise" },
+      { name: "Database Design", href: "#expertise" },
+      { name: "System Design", href: "#expertise" },
+    ],
+  },
+  {
+    title: "Connect",
+    links: [
+      { name: "GitHub", href: "https://github.com/UkohEmmanuel1" },
+      { name: "LinkedIn", href: "https://www.linkedin.com/in/emmanuel-david-77606131b/" },
+      { name: "X / Twitter", href: "https://x.com/emma_nuel_david" },
+      { name: "Instagram", href: "https://www.instagram.com/emma_nuel_david/" },
+    ],
+  },
+];
+
+const socialLinks = [
+  { icon: FaGithub, href: "https://github.com/UkohEmmanuel1", label: "GitHub" },
+  {
+    icon: FaLinkedinIn,
+    href: "https://www.linkedin.com/in/emmanuel-david-77606131b/",
+    label: "LinkedIn",
+  },
+  { icon: FaTwitter, href: "https://x.com/emma_nuel_david", label: "X" },
+  {
+    icon: FaInstagram,
+    href: "https://www.instagram.com/emma_nuel_david/",
+    label: "Instagram",
+  },
+];
+
+export default function Footer() {
+  const year = new Date().getFullYear();
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end end"],
+  });
+  const markY = useTransform(scrollYProgress, [0, 1], ["22%", "0%"]);
 
   return (
-    <footer className="mt-20 py-12 px-4 lg:px-0 border-t border-gray-700 bg-slate-900">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {/* Logo & About */}
+    <footer
+      ref={ref}
+      className="relative overflow-hidden rule-faint"
+      style={{ background: "#000" }}
+    >
+      {/* Giant ghost wordmark, drifting as the footer scrolls in */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none select-none absolute inset-x-0 bottom-0 flex justify-center overflow-hidden"
+        style={{ opacity: 0.055, zIndex: 0 }}
+      >
+        <motion.span
+          style={{
+            y: markY,
+            color: "#fff",
+            marginBottom: "-0.12em",
+            fontSize: "clamp(2.5rem, 9vw, 7rem)",
+            fontWeight: 600,
+            lineHeight: 1,
+            letterSpacing: "-0.045em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          EMMANUEL DAVID
+        </motion.span>
+      </motion.div>
+
+      <div className="relative" style={{ paddingTop: "6rem", zIndex: 1 }}>
+        <div className="shell">
+          {/* Link grid */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            variants={stagger(0.07)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={VIEWPORT}
+            className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10"
+            style={{ marginBottom: "4rem" }}
           >
-            <h3 className="text-2xl font-bold mb-4 text-white">Emmanuel David</h3>
-            <p className="text-gray-400 mb-6">
-             Full-Stack Developer with an analytical mindset, specializing in building intelligent, data-driven solutions by combining modern web technologies, Machine Learning, and Business Intelligence for actionable insights and smarter digital experiences.
-            </p>
-            <div className="flex gap-4">
-              {socialLinks.map((link, index) => (
-                <motion.a
-                  key={index}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-gray-300 hover:bg-accent-color hover:text-white transition-colors"
-                  whileHover={{ scale: 1.1, y: -3 }}
-                  whileTap={{ scale: 0.9 }}
+            {columns.map((col) => (
+              <motion.div key={col.title} variants={fadeUp}>
+                <div
+                  className="mono-label"
+                  style={{ color: "var(--on-dark-4)", marginBottom: "1rem" }}
                 >
-                  {link.icon}
-                </motion.a>
-              ))}
-            </div>
+                  {col.title}
+                </div>
+                <ul className="flex flex-col gap-2.5">
+                  {col.links.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        href={link.href}
+                        className="mono-sm transition-colors duration-200"
+                        style={{ color: "#fff", opacity: 0.68 }}
+                      >
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
           </motion.div>
 
-          {/* Quick Links */}
+          {/* Meta row */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={VIEWPORT}
+            className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-5 pt-5"
+            style={{ borderTop: "1px solid var(--line-faint)" }}
           >
-            <h3 className="text-lg font-bold mb-4 text-white">Quick Links</h3>
-            <ul className="space-y-3">
-              {['Home', 'About', 'Skills', 'Contact'].map((item, index) => (
-                <li key={index}>
-                  <a
-                    href={`#${item.toLowerCase()}`}
-                    className="text-gray-400 hover:text-accent-color transition-colors"
+            <div className="flex items-center gap-1.5">
+              {socialLinks.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <motion.a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    whileHover={{ y: -2 }}
+                    className="flex items-center justify-center"
+                    style={{
+                      width: "2.1rem",
+                      height: "2.1rem",
+                      borderRadius: "999px",
+                      border: "1px solid var(--line-faint)",
+                      color: "var(--on-dark-2)",
+                    }}
                   >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+                    <Icon size={14} />
+                  </motion.a>
+                );
+              })}
+            </div>
 
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <h3 className="text-lg font-bold mb-4 text-white">Contact</h3>
-            <div className="flex gap-4">
-              <motion.a
-                href="mailto:emmanuelukoh08@gmail.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-gray-300 hover:bg-accent-color hover:text-white transition-colors"
-                whileHover={{ scale: 1.1, y: -3 }}
-                whileTap={{ scale: 0.9 }}
+            <div className="mono-label text-center" style={{ color: "var(--on-dark-5)" }}>
+              © {year} Emmanuel David
+            </div>
+
+            <div className="flex items-center gap-4 md:justify-end">
+              <Link
+                href="/resume"
+                className="mono-sm"
+                style={{ color: "var(--on-dark-4)" }}
               >
-                <FaEnvelope size={16} />
-              </motion.a>
-              <motion.a
-                href="https://wa.me/+2348167949054"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center text-gray-300 hover:bg-accent-color hover:text-white transition-colors"
-                whileHover={{ scale: 1.1, y: -3 }}
-                whileTap={{ scale: 0.9 }}
+                Resume
+              </Link>
+              <motion.button
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                whileHover={{ y: -2 }}
+                aria-label="Back to top"
+                className="flex items-center justify-center cursor-pointer"
+                style={{
+                  width: "2.1rem",
+                  height: "2.1rem",
+                  borderRadius: "999px",
+                  border: "1px solid var(--line-faint)",
+                  background: "transparent",
+                  color: "var(--on-dark-2)",
+                }}
               >
-                <FaWhatsapp size={16} />
-              </motion.a>
+                <FaArrowUp size={12} />
+              </motion.button>
             </div>
           </motion.div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-12 pt-6 border-t border-gray-700 text-center text-gray-400"
-        >
-          <p>
-            © {currentYear} Emmanuel David. All rights reserved. 
-            
-          </p>
-        </motion.div>
+        {/* Clearance for the ghost wordmark */}
+        <div style={{ height: "clamp(4rem, 9vw, 7.5rem)" }} />
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

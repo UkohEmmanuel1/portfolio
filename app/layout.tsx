@@ -1,20 +1,41 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Manrope, JetBrains_Mono, Cascadia_Code } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono-jb",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const cascadia = Cascadia_Code({
+  variable: "--font-cascadia",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  // Next ships no metric overrides for Cascadia Code, so it cannot build a
+  // size-adjusted fallback. Opting out keeps the fallback stable instead of
+  // reflowing on swap.
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
-  title: "Emmanuel David",
-  description: "",
+  title: "Emmanuel David — Full Stack & ML Developer",
+  description:
+    "Full Stack & Machine Learning Developer crafting scalable web systems, intelligent APIs, and high-performance data architectures.",
 };
 
 export default function RootLayout({
@@ -25,7 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${manrope.variable} ${jetbrainsMono.variable} ${cascadia.variable}`}
       >
         {children}
       </body>

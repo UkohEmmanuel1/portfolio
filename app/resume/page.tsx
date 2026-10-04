@@ -1,141 +1,191 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FaDownload, FaArrowLeft, FaFileAlt } from "react-icons/fa";
+import { FaArrowLeft, FaPrint } from "react-icons/fa";
 import Link from "next/link";
 
-const ResumePage = () => {
-    const handleDownload = () => {
-        const link = document.createElement('a');
-        link.href = "/ugo's-cv copy.pdf";
-        link.download = "Emmanuel-David-Resume.pdf";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
+const experienceData = [
+  {
+    role: "Senior Full Stack & ML Engineer",
+    company: "Freelance & Consulting",
+    period: "2021 — 2023",
+    desc: "Delivered 80+ high-performance web systems, ML inference APIs, and custom enterprise databases.",
+    highlights: [
+      "Developed custom classification and predictive models inside Next.js and Python services.",
+      "Engineered PostgreSQL schemas with caching layers, cutting API latency by 45%.",
+      "Built resilient CI/CD pipelines with GitHub Actions and Docker containerisation.",
+    ],
+  },
+];
 
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-indigo-900/30 relative overflow-hidden">
-            {/* Background Elements */}
-            <div className="absolute inset-0">
-                <div className="absolute top-1/4 right-1/4 w-[400px] h-[400px] rounded-full opacity-20 blur-3xl"
-                    style={{ background: 'linear-gradient(135deg, #4a38c2, #8f38c2)' }}></div>
-                <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] rounded-full opacity-15 blur-3xl"
-                    style={{ background: 'linear-gradient(135deg, #c238b0, #b0c238)' }}></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full opacity-10 blur-3xl"
-                    style={{ background: 'linear-gradient(135deg, #38c24a, #4a38c2)' }}></div>
-            </div>
+const educationData = [
+  {
+    degree: "BSc in Computer Science",
+    institution: "University of Ibadan",
+    period: "In Progress",
+    focus:
+      "Data Structures, Algorithms, Distributed Computing, Artificial Intelligence & Machine Learning",
+  },
+];
 
-            {/* Header */}
-            <motion.div
-                className="relative z-10 p-4 md:p-8"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-            >
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-                    <Link href="/" className="group">
-                        <motion.div
-                            className="flex items-center gap-3 text-white hover:text-purple-400 transition-colors"
-                            whileHover={{ x: -5 }}
-                        >
-                            <FaArrowLeft className="text-lg" />
-                            <span className="text-lg font-medium">Back to Portfolio</span>
-                        </motion.div>
-                    </Link>
+export default function ResumePage() {
+  return (
+    <div className="min-h-screen" style={{ background: "#050505", padding: "clamp(2.5rem, 5vw, 4rem) 0" }}>
+      <div className="shell" style={{ maxWidth: "62rem" }}>
+        {/* Top bar */}
+        <div className="flex items-center justify-between gap-4 mb-10">
+          <Link
+            href="/"
+            className="mono-sm inline-flex items-center gap-2"
+            style={{ color: "var(--on-dark-3)" }}
+          >
+            <FaArrowLeft size={12} />
+            <span>Back to portfolio</span>
+          </Link>
 
-                    <motion.button
-                        onClick={handleDownload}
-                        className="flex items-center gap-3 px-6 py-3 rounded-2xl font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl"
-                        style={{ background: 'linear-gradient(135deg, #4a38c2, #8f38c2)' }}
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <FaDownload className="text-lg" />
-                        <span className="hidden sm:inline">Download Resume</span>
-                        <span className="sm:hidden">Download</span>
-                    </motion.button>
-                </div>
-
-                {/* Title Section */}
-                <motion.div
-                    className="text-center mb-8"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                >
-                    <div className="flex items-center justify-center gap-3 mb-4">
-                        <motion.div
-                            className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg"
-                            style={{ background: 'linear-gradient(135deg, #c238b0, #b0c238)' }}
-                            whileHover={{ rotate: 360 }}
-                            transition={{ duration: 0.6 }}
-                        >
-                            <FaFileAlt size={24} />
-                        </motion.div>
-                        <h1 className="text-3xl md:text-4xl font-bold text-white">
-                            Resume - <span className="gradient-text-primary">Emmanuel David</span>
-                        </h1>
-                    </div>
-                    <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-                        Web Developer specializing in scalable systems and machine learning architecture
-                    </p>
-                </motion.div>
-            </motion.div>
-
-            {/* PDF Viewer Container */}
-            <motion.div
-                className="relative z-10 px-4 md:px-8 pb-8"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-            >
-                <div className="max-w-5xl mx-auto">
-                    <div className="glass-effect rounded-3xl p-4 md:p-8 shadow-2xl">
-                        <div className="bg-white rounded-2xl overflow-hidden shadow-inner">
-                            <iframe
-                                src="/ugo's-cv copy.pdf"
-                                className="w-full h-[600px] md:h-[800px] lg:h-[900px]"
-                                title="Ugochukwu Paul Resume"
-                                style={{ border: 'none' }}
-                            />
-                        </div>
-
-                        {/* Mobile Download Button */}
-                        <motion.div
-                            className="mt-6 text-center md:hidden"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.8 }}
-                        >
-                            <motion.button
-                                onClick={handleDownload}
-                                className="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-2xl font-semibold text-white shadow-lg transition-all duration-300"
-                                style={{ background: 'linear-gradient(135deg, #4a38c2, #8f38c2)' }}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                            >
-                                <FaDownload className="text-lg" />
-                                <span>Download Resume</span>
-                            </motion.button>
-                        </motion.div>
-                    </div>
-                </div>
-            </motion.div>
-
-            {/* Footer Info */}
-            <motion.div
-                className="relative z-10 text-center pb-8 px-4"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-            >
-                <p className="text-gray-400 text-sm">
-                    Last updated: july 2025 | Available for remote and on-site opportunities
-                </p>
-            </motion.div>
+          <button onClick={() => window.print()} className="btn btn-primary">
+            <FaPrint size={14} />
+            <span>Print / PDF</span>
+          </button>
         </div>
-    );
-};
 
-export default ResumePage;
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="pb-6 mb-9"
+          style={{ borderTop: "1px solid var(--line-strong)" }}
+        >
+          <div className="mono-label pt-5 mb-2.5" style={{ color: "var(--on-dark-4)" }}>
+            Curriculum vitae
+          </div>
+          <h1 className="display-lg">Emmanuel David</h1>
+          <p className="lead mt-2" style={{ color: "var(--on-dark-2)" }}>
+            Full stack &amp; machine learning developer
+          </p>
+
+          <div
+            className="flex flex-wrap gap-x-7 gap-y-1.5 mt-5 pt-4"
+            style={{ borderTop: "1px solid var(--line-soft)" }}
+          >
+            {[
+              "emmanuelukoh08@gmail.com",
+              "+234 816 794 9054",
+              "github.com/UkohEmmanuel1",
+              "linkedin.com/in/emmanuel-david",
+            ].map((c) => (
+              <span key={c} className="mono-sm" style={{ color: "var(--on-dark-3)" }}>
+                {c}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Summary */}
+        <section className="mb-12">
+          <div className="eyebrow">
+            <span className="eyebrow-index">01</span>
+            <span className="eyebrow-rule" />
+            <span>Executive summary</span>
+          </div>
+          <p className="lead" style={{ color: "var(--on-dark-2)", maxWidth: "72ch" }}>
+            Results-driven full stack developer, machine learning engineer, and business
+            intelligence specialist with over five years designing distributed cloud
+            systems, ML pipelines, and high-performance web platforms — with 84+ client
+            and enterprise initiatives delivered.
+          </p>
+        </section>
+
+        {/* Experience */}
+        <section className="mb-12">
+          <div
+            className="eyebrow"
+            style={{ borderTop: "1px solid var(--line-strong)", paddingTop: "1.25rem" }}
+          >
+            <span className="eyebrow-index">02</span>
+            <span className="eyebrow-rule" />
+            <span>Professional experience</span>
+          </div>
+
+          {experienceData.map((job) => (
+            <div
+              key={job.role}
+              className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-x-6 gap-y-3 py-5"
+              style={{ borderTop: "1px solid var(--line-soft)" }}
+            >
+              <div>
+                <h3 className="display-sm">{job.role}</h3>
+                <div className="mono-sm mt-1.5" style={{ color: "var(--on-dark-4)" }}>
+                  {job.company}
+                </div>
+              </div>
+
+              <div className="mono-label md:pt-1" style={{ color: "var(--on-dark-4)" }}>
+                {job.period}
+              </div>
+
+              <div className="md:col-span-2">
+                <p className="body-text mb-3" style={{ color: "var(--on-dark-3)" }}>
+                  {job.desc}
+                </p>
+                <ul className="flex flex-col gap-1.5">
+                  {job.highlights.map((h) => (
+                    <li
+                      key={h}
+                      className="body-text flex items-start gap-3"
+                      style={{ color: "var(--on-dark-3)" }}
+                    >
+                      <span aria-hidden="true" style={{ color: "var(--signal)", lineHeight: 1.65 }}>
+                        —
+                      </span>
+                      <span>{h}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {/* Education */}
+        <section className="mb-12">
+          <div
+            className="eyebrow"
+            style={{ borderTop: "1px solid var(--line-strong)", paddingTop: "1.25rem" }}
+          >
+            <span className="eyebrow-index">03</span>
+            <span className="eyebrow-rule" />
+            <span>Education</span>
+          </div>
+
+          {educationData.map((edu) => (
+            <div
+              key={edu.degree}
+              className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-x-6 gap-y-3 py-5"
+              style={{ borderTop: "1px solid var(--line-soft)" }}
+            >
+              <div>
+                <h3 className="display-sm">{edu.degree}</h3>
+                <div className="mono-sm mt-1.5" style={{ color: "var(--on-dark-4)" }}>
+                  {edu.institution}
+                </div>
+              </div>
+              <div className="mono-label md:pt-1" style={{ color: "var(--on-dark-4)" }}>
+                {edu.period}
+              </div>
+              <p className="body-text md:col-span-2" style={{ color: "var(--on-dark-3)" }}>
+                {edu.focus}
+              </p>
+            </div>
+          ))}
+        </section>
+
+        <div className="rule-ink-soft" />
+        <p className="mono-label pt-6" style={{ color: "var(--on-dark-5)" }}>
+          Emmanuel David — Full stack &amp; machine learning developer
+        </p>
+      </div>
+    </div>
+  );
+}

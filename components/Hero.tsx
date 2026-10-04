@@ -1,257 +1,237 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { RiArrowRightUpLine, RiDownloadLine } from "react-icons/ri";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { FaCode, FaServer, FaDatabase, FaCloud,FaRobot } from "react-icons/fa";
+import Link from "next/link";
+import { EASE } from "@/components/motion";
 
-const Hero = () => {
+function ArrowRight({ size = 13 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.9}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M5 12h14" />
+      <path d="m13 6 6 6-6 6" />
+    </svg>
+  );
+}
+
+function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+
+  useEffect(() => {
+    if (!inView) return;
+
+    let frame = 0;
+    const total = 90;
+    const tick = () => {
+      frame++;
+      const t = frame / total;
+      const eased = 1 - Math.pow(2, -10 * t);
+      setCount(Math.round(to * Math.min(eased, 1)));
+      if (frame < total) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [inView, to]);
+
+  return (
+    <span ref={ref}>
+      {count}
+      {suffix}
+    </span>
+  );
+}
+
+const stats = [
+  { value: 5, suffix: "+", label: "Years in production" },
+  { value: 84, suffix: "+", label: "Projects delivered" },
+  { value: 14, suffix: "+", label: "Systems architected" },
+];
+
+export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 44]);
+  const contentFade = useTransform(scrollYProgress, [0, 0.9], [1, 0.15]);
+
   return (
     <section
+      ref={sectionRef}
       id="home"
-      className="relative h-auto flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900/20 to-indigo-900/30 pt-20"
+      className="relative flex flex-col justify-end overflow-hidden"
+      style={{ minHeight: "100dvh", background: "#050505" }}
     >
-      {/* Professional background elements */}
-      <div className="absolute inset-0">
-        <div
-          className="absolute top-1/4 right-1/4 w-[400px] h-[400px] rounded-full opacity-20 blur-3xl"
-          style={{ background: "linear-gradient(135deg, #4a38c2, #8f38c2)" }}
-        ></div>
-        <div
-          className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] rounded-full opacity-15 blur-3xl"
-          style={{ background: "linear-gradient(135deg, #c238b0, #b0c238)" }}
-        ></div>
-        <div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full opacity-10 blur-3xl"
-          style={{ background: "linear-gradient(135deg, #38c24a, #4a38c2)" }}
-        ></div>
-      </div>
-
-      {/* Floating tech icons with professional styling */}
+      {/* Full-bleed photograph, heavily dimmed into the black, parallaxing */}
       <motion.div
-        className="absolute left-[15%] top-[25%] hidden lg:block"
-        animate={{ y: [0, -15, 0], rotate: [0, 10, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        style={{ color: "#4a38c2", opacity: 0.3 }}
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 0.25, scale: 1.01 }}
+        transition={{ duration: 1.8, ease: EASE }}
+        className="mask-dissolve absolute inset-0 -z-10 overflow-hidden"
       >
-        <FaCode size={40} />
+        <motion.div style={{ y: imageY }} className="absolute inset-[-12%]">
+          <Image
+            src="/image/myemma.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+            style={{ objectPosition: "center 40%" }}
+          />
+        </motion.div>
       </motion.div>
 
-      <motion.div
-        className="absolute right-[15%] top-[30%] hidden lg:block"
-        animate={{ y: [0, 12, 0], rotate: [0, -8, 0] }}
-        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        style={{ color: "#8f38c2", opacity: 0.3 }}
-      >
-        <FaRobot size={36} />
-      </motion.div>
+      {/* Legibility shading */}
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(5,5,5,0.55), transparent 58%), linear-gradient(180deg, rgba(5,5,5,0.4), transparent 24%, transparent 55%, rgba(5,5,5,0.95))",
+        }}
+      />
 
       <motion.div
-        className="absolute right-[20%] bottom-[25%] hidden lg:block"
-        animate={{ y: [0, -10, 0], rotate: [0, 12, 0] }}
-        transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-        style={{ color: "#c238b0", opacity: 0.3 }}
+        style={{ y: contentY, opacity: contentFade }}
+        className="shell w-full relative"
       >
-        <FaDatabase size={38} />
-      </motion.div>
-
-      <motion.div
-        className="absolute left-[20%] bottom-[30%] hidden lg:block"
-        animate={{ y: [0, 10, 0], rotate: [0, -10, 0] }}
-        transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
-        style={{ color: "#c238b0", opacity: 0.3 }}
-      >
-        <FaServer size={42} />
-      </motion.div>
-
-      {/* Main content container */}
-      <div className="container-custom relative z-10 text-center">
-        <div className="w-full max-w-4xl mx-auto flex flex-col items-center relative z-10 px-4">
-          {/* Professional Hero Image */}
+        <div style={{ paddingBottom: "clamp(2rem, 4vw, 3rem)" }}>
+          {/* Availability */}
           <motion.div
-            className="mb-16"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.18, ease: EASE }}
+            className="eyebrow"
           >
-            <div className="relative">
-              {/* Main image container with professional styling */}
-              <div className="relative h-[200px] w-[200px] sm:h-[240px] sm:w-[240px] md:h-[280px] md:w-[280px] lg:h-[320px] lg:w-[320px] mx-auto">
-                {/* Gradient ring around image */}
-                <div
-                  className="absolute inset-0 rounded-full p-1"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #4a38c2, #8f38c2, #c238b0)",
-                  }}
-                >
-                  <div className="w-full h-full rounded-full bg-white p-2">
-                    <div className="relative w-full h-full rounded-full overflow-hidden shadow-2xl">
-                      <Image
-                        src="/image/emma.png"
-                        alt="Emmanuel David - Developer"
-                        fill
-                        style={{ objectFit: "contain" }}
-                        className="transition-transform duration-500 hover:scale-110"
-                        priority
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Professional floating elements */}
-                <motion.div
-                  className="absolute -bottom-6 -right-6 w-16 h-16 rounded-full glass-effect flex items-center justify-center"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  style={{
-                    background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
-                  }}
-                >
-                  <FaCode className="text-white" size={24} />
-                </motion.div>
-
-                <motion.div
-                  className="absolute -top-6 -left-6 w-16 h-16 rounded-full glass-effect flex items-center justify-center"
-                  animate={{ y: [0, 8, 0] }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  style={{
-                    background: "linear-gradient(135deg, #c238b0, #b0c238)",
-                  }}
-                >
-                  <FaRobot className="text-white" size={24} />
-                </motion.div>
-              </div>
-            </div>
+            <span className="signal-dot" />
+            <span style={{ color: "var(--on-dark-3)" }}>Available for new projects</span>
           </motion.div>
 
-          {/* Professional Text Content */}
-          <motion.article
-            className="text-center max-w-5xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
+          {/* Name */}
+          <motion.h1
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.3 }}
+            transition={{ duration: 0.8, delay: 0.26, ease: EASE }}
+            className="display-xl"
+            style={{ color: "#fff" }}
           >
-            {/* Professional greeting
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="mb-6"
-            >
-              <span
-                className="inline-block px-4 py-2 rounded-full text-sm font-medium"
-                style={{
-                  background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
-                  color: "white",
-                }}
-              >
-                {`Hey, I'm Emmanuel David`}
-              </span>
-            </motion.div> */}
+            Emmanuel David
+          </motion.h1>
 
-            <motion.h1
-              className="text-2xl font-bold leading-tight mb-6 sm:mb-8 text-balance"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 1 }}
-            >
-              Full Stack & Machine Learning{" "}
-              <span className="gradient-text" style={{}}>
-                Developer
-              </span>
-              <br />
-            </motion.h1>
+          {/* Lede + second line */}
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.34, ease: EASE }}
+            className="lead-lg"
+            style={{
+              color: "var(--on-dark-2)",
+              maxWidth: "52ch",
+              marginTop: "0.875rem",
+            }}
+          >
+            Crafting scalable web systems and intelligent APIs that power modern AI and
+            data-driven applications.
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: EASE }}
+            className="body-text"
+            style={{
+              color: "var(--on-dark-3)",
+              maxWidth: "52ch",
+              marginTop: "0.5rem",
+            }}
+          >
+            Specializing in machine learning integration, database architecture, and
+            full-stack development to deliver enterprise-grade solutions built for
+            performance, security, and growth.
+          </motion.p>
+
+          {/* Actions */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.46, ease: EASE }}
+            className="flex flex-wrap items-center gap-2"
+            style={{ marginTop: "1.5rem" }}
+          >
+            <a href="#expertise" className="btn btn-primary btn-lg">
+              <span>View expertise</span>
+              <ArrowRight />
+            </a>
+            <a href="#contact" className="btn btn-glass btn-lg">
+              Start a project
+            </a>
+            <Link href="/resume" className="btn btn-outline btn-lg">
+              Resume
+            </Link>
+          </motion.div>
+
+          {/* Stat rail with a rule that draws itself */}
+          <div className="relative" style={{ marginTop: "2.25rem" }}>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1, delay: 0.6, ease: EASE }}
+              className="absolute inset-x-0 top-0 h-px origin-left"
+              style={{ background: "var(--line-soft)" }}
+            />
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9, duration: 0.8 }}
-              className="max-w-3xl mx-auto mb-8 sm:mb-12 px-4 sm:px-0"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.08, delayChildren: 0.7 } },
+              }}
+              className="grid grid-cols-3 gap-6"
+              style={{ paddingTop: "1.25rem", maxWidth: "44rem" }}
             >
-              <p className="text-base text-gray-300 mb-4 sm:mb-6 leading-relaxed">
-                Crafting{" "}
-                <strong className="text-white">
-                  scalable web systems and intelligent APIs
-                </strong>{" "}
-                that power modern AI and data-driven applications.
-              </p>
-              <p className="text-base sm:text-lg text-gray-400 leading-relaxed">
-                Specializing in machine learning integration, database
-                architecture, and full-stack development to deliver
-                enterprise-grade solutions built for performance, security, and
-                growth.
-              </p>
+              {stats.map((s) => (
+                <motion.div
+                  key={s.label}
+                  variants={{
+                    hidden: { opacity: 0, y: 8 },
+                    visible: {
+                      opacity: 1,
+                      y: 0,
+                      transition: { duration: 0.5, ease: EASE },
+                    },
+                  }}
+                >
+                  <div
+                    className="display-md"
+                    style={{ color: "#fff", marginBottom: "0.2rem" }}
+                  >
+                    <Counter to={s.value} suffix={s.suffix} />
+                  </div>
+                  <div className="mono-label" style={{ color: "var(--on-dark-4)" }}>
+                    {s.label}
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
-
-            {/* Professional CTA Buttons */}
-            <motion.div
-              className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center w-full max-w-md sm:max-w-none mx-auto"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1, duration: 0.8 }}
-            >
-              <motion.a
-                href="/resume"
-                className="btn-secondary inline-flex items-center justify-center gap-2 text-base  px-6 sm:px-8 py-3 sm:py-2 rounded-2xl font-semibold w-auto sm:w-auto"
-                style={{
-                  background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
-                }}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <RiDownloadLine size={20} />
-                <span>View Resume</span>
-              </motion.a>
-            </motion.div>
-
-            {/* Professional stats or highlights */}
-            <motion.div
-              className="grid grid-cols-3 sm:grid-cols-3 gap-4 w-auto mx-auto px-4 py-16 sm:px-0"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 0.6 }}
-            >
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold gradient-text mb-2">
-                  5+
-                </div>
-                <div className="text-gray-300 text-sm sm:text-base">
-                  Years Experience
-                </div>
-              </div>
-
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold gradient-text-secondary mb-2">
-                  84+
-                </div>
-                <div className="text-gray-300 text-sm sm:text-base">
-                  Projects Completed
-                </div>
-              </div>
-
-              <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold gradient-text-accent mb-2">
-                  14+
-                </div>
-                <div className="text-gray-300 text-sm sm:text-base">
-                  Complex Architecture
-                </div>
-              </div>
-            </motion.div>
-          </motion.article>
+          </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
-};
-
-export default Hero;
+}

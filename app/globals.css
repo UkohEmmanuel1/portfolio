@@ -1,26 +1,713 @@
 @import "tailwindcss";
 
+/* ──────────────────────────────────────────────
+   DESIGN TOKENS
+   Single dark theme. Near-black base, one neon
+   accent. All secondary colour is pure white at
+   partial alpha.
+   ────────────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surfaces */
+  --ink: #050505;
+  --carbon: #0a0a0a;
+  --graphite: #151515;
+  --offwhite: #f4f4ef;
+
+  /* Accent */
+  --signal: #64ff9b;
+  --signal-soft: rgba(100, 255, 155, 0.12);
+
+  /* Hairlines */
+  --line-strong: rgba(255, 255, 255, 0.8);
+  --line: rgba(255, 255, 255, 0.18);
+  --line-soft: rgba(255, 255, 255, 0.11);
+  --line-faint: rgba(255, 255, 255, 0.08);
+
+  /* Text alpha ladder */
+  --on-dark: rgba(255, 255, 255, 0.92);
+  --on-dark-2: rgba(255, 255, 255, 0.76);
+  --on-dark-3: rgba(255, 255, 255, 0.62);
+  --on-dark-4: rgba(255, 255, 255, 0.5);
+  --on-dark-5: rgba(255, 255, 255, 0.35);
+  --on-dark-6: rgba(255, 255, 255, 0.22);
+
+  /* Geometry */
+  --radius-card: 0.9rem;
+  --radius-pill: 999px;
+
+  /* Motion */
+  --ease-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-hover: 0.18s;
+
+  /* Spacing scale — one rhythm for the whole page */
+  --space-section: clamp(3.5rem, 6.5vw, 6rem);
+  --space-head: clamp(1.75rem, 3.5vw, 2.75rem);
+  --space-row: 1.125rem;
+  --space-para: 0.75rem;
+  --space-card: clamp(1.25rem, 1.7vw, 1.75rem);
+  --gap-card: clamp(0.875rem, 1.3vw, 1.25rem);
+
+  /* Gutter rhythm */
+  --gutter: 2.25rem;
+  --gutter-sm: 1.25rem;
+  --shell: 80rem;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-carbon: var(--carbon);
+  --color-graphite: var(--graphite);
+  --color-offwhite: var(--offwhite);
+  --color-signal: var(--signal);
+
+  --radius-card: var(--radius-card);
+  --radius-pill: var(--radius-pill);
+
+  --font-sans: var(--font-inter), system-ui, arial, sans-serif;
+  --font-mono: var(--font-mono-jb), ui-monospace, monospace;
+
+  --ease-expo: var(--ease-expo);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ──────────────────────────────────────────────
+   BASE
+   ────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+html {
+  background-color: var(--ink);
+  scrollbar-width: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background-color: var(--ink);
+  color: var(--offwhite);
+  font-family: var(--font-inter), system-ui, arial, sans-serif;
+  font-weight: 500;
+  font-optical-sizing: auto;
+  line-height: 1.25;
+  text-rendering: geometricPrecision;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--signal);
+  color: var(--ink);
+}
+
+/* ──────────────────────────────────────────────
+   LAYOUT SHELL
+   Sections separate by spacing and a hairline
+   top rule, never by a background change.
+   ────────────────────────────────────────────── */
+
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@media (max-width: 48rem) {
+  .shell {
+    padding-inline: var(--gutter-sm);
+  }
+}
+
+.section {
+  position: relative;
+  padding-block: var(--space-section);
+}
+
+.section-ink {
+  background: var(--ink);
+  color: var(--offwhite);
+  border-top: 1px solid var(--line-faint);
+}
+
+.section-ink:first-of-type {
+  border-top: 0;
+}
+
+/* ──────────────────────────────────────────────
+   LIGHT SECTION SCOPE
+   Scoped to a single section rather than :root —
+   the rest of the page is dark and must not shift.
+   Type is set in Cascadia Code throughout.
+   ────────────────────────────────────────────── */
+
+.section-light {
+  --light-bg: #f4f4ef;
+  --light-bg-alt: #eceae3;
+  --light-text: #1a1a1a;
+  --light-text-2: #454545;
+  --light-text-3: #6b6b6b;
+  --light-line: rgba(0, 0, 0, 0.1);
+  --light-accent: #1a1a1a;
+
+  background: var(--light-bg);
+  color: var(--light-text);
+  border-top: 1px solid var(--light-line);
+}
+
+.section-light .eyebrow {
+  color: var(--light-text-3);
+}
+
+.section-light .eyebrow-index,
+.section-light .eyebrow-rule {
+  color: var(--light-accent);
+}
+
+.section-light .eyebrow-rule {
+  background: var(--light-accent);
+}
+
+/* Display heading. Mono needs tight tracking at this size. */
+.about-display {
+  font-family: var(--font-cascadia), ui-monospace, monospace;
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--light-text);
+  text-wrap: balance;
+}
+
+/* Body measure runs wider than a serif would need, since
+   every glyph here is the same width. */
+.about-copy {
+  font-family: var(--font-cascadia), ui-monospace, monospace;
+  font-size: clamp(0.9375rem, 1.05vw, 1.0625rem);
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: -0.01em;
+  color: var(--light-text-2);
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+
+.about-copy strong {
+  font-weight: 600;
+  color: var(--light-text);
+}
+
+/* Eyebrow: index + rule + label */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.125rem;
+  font-family: var(--font-mono-jb), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--on-dark-4);
+}
+
+.eyebrow-index {
+  color: var(--signal);
+}
+
+.eyebrow-rule {
+  flex: 0 0 3rem;
+  height: 1px;
+  background: var(--line);
+}
+
+/* Centre the index-rule-label cluster over centred copy */
+.eyebrow-center {
+  justify-content: center;
+}
+
+/* Uniform vertical rhythm inside prose blocks */
+.prose > * + * {
+  margin-top: var(--space-para);
+}
+
+/* ──────────────────────────────────────────────
+   TYPOGRAPHY
+   Dense and near-uniform: headings sit only a
+   little above body copy, so everything stays
+   comfortable to read at a glance.
+   ────────────────────────────────────────────── */
+
+.display-xl {
+  font-size: clamp(1.5rem, 2.1vw, 2rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.display-lg {
+  font-size: clamp(1.25rem, 1.5vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.display-md {
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+.display-sm {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.012em;
+}
+
+.lead-lg {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+.lead {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: -0.005em;
+  text-wrap: pretty;
+}
+
+.body-text {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: -0.003em;
+}
+
+.mono-label {
+  font-family: var(--font-mono-jb), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.mono-sm {
+  font-family: var(--font-mono-jb), ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+/* ──────────────────────────────────────────────
+   HAIRLINE RULES
+   ────────────────────────────────────────────── */
+
+.rule-ink-soft {
+  border-top: 1px solid var(--line-soft);
+}
+
+.rule-faint {
+  border-top: 1px solid var(--line-faint);
+}
+
+/* ──────────────────────────────────────────────
+   RULE LIST
+   One hairline-ruled table pattern, shared by the
+   projects and expertise tables.
+   ────────────────────────────────────────────── */
+
+.rule-list {
+  border-top: 1px solid var(--line-strong);
+}
+
+.rule-row {
+  position: relative;
+  padding-block: var(--space-row);
+  border-top: 1px solid var(--line-soft);
+  transition: background var(--dur-hover) ease;
+}
+
+/* The list already draws the first line — don't double it */
+.rule-list > .rule-row:first-child {
+  border-top: 0;
+}
+
+.rule-row:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.rule-index {
+  transition: color var(--dur-hover) ease;
+}
+
+.rule-row:hover .rule-index {
+  color: var(--signal);
+}
+
+/* ──────────────────────────────────────────────
+   BUTTONS
+   Pill geometry, no transform bounce, .18s ease.
+   ────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.1rem;
+  padding-inline: 0.95rem;
+  border-radius: var(--radius-pill);
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  text-decoration: none;
+  transition: background var(--dur-hover) ease, color var(--dur-hover) ease,
+    border-color var(--dur-hover) ease;
+}
+
+.btn-lg {
+  min-height: 2.4rem;
+  padding-inline: 1.1rem;
+}
+
+.btn-primary {
+  background: #f3f3ef;
+  color: var(--ink);
+}
+
+.btn-primary:hover {
+  background: #e4e4de;
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--offwhite);
+}
+
+.btn-outline:hover {
+  border-color: var(--offwhite);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ──────────────────────────────────────────────
+   MEDIA FRAMES
+   Borderless, shadowless, radius-only. Image
+   rests desaturated and gains colour on hover.
+   ────────────────────────────────────────────── */
+
+.media-frame {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  background: #101010;
+}
+
+.media-frame img {
+  object-fit: cover;
+  transform: scale(1.001);
+  filter: saturate(0.94) brightness(0.97);
+  transition: transform 0.7s var(--ease-expo), filter 0.5s ease;
+}
+
+.group:hover .media-frame img,
+.media-frame:hover img {
+  transform: scale(1.03);
+  filter: saturate(1.04) brightness(1.02);
+}
+
+/* Landscape frame, capped at 509x334, holding one image at
+   a time. Slides crossfade inside a 12px mat and images use
+   contain, so nothing is ever cropped. */
+.marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
+/* Track holds the card set twice, so a -50% shift loops seamlessly */
+.marquee-track {
+  display: flex;
+  align-items: stretch;
+  gap: var(--gap-card);
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* Half the track is 3 cards + 2.5 gaps, so the half-gap
+       correction is what makes one set land exactly on the next */
+    transform: translate3d(calc(-50% - var(--gap-card) / 2), 0, 0);
+  }
+}
+
+/* Exact 509x334 on desktop, 3:2 preserved as the width shrinks */
+.marquee-card {
+  position: relative;
+  flex: none;
+  width: min(509px, 78vw);
+  aspect-ratio: 509 / 334;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* Soft light blobs drifting over the gradient mesh card */
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(38px);
+  animation: mesh-drift 11s ease-in-out infinite;
+}
+
+.mesh-blob-2 {
+  animation-duration: 15s;
+  animation-direction: reverse;
+}
+
+@keyframes mesh-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) scale(1.08);
+  }
+}
+
+/* ──────────────────────────────────────────────
+   CARD SYSTEM
+   Square cards, one accent, radius only. The
+   square comes from aspect-ratio with a min-height
+   floor, so long copy grows the card rather than
+   clipping — rows still equalise via flex stretch.
+   ────────────────────────────────────────────── */
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-card);
+}
+
+.card {
+  flex: 0 0 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 13rem;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-card);
+  background: var(--graphite);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  transition: background var(--dur-hover) ease,
+    border-color var(--dur-hover) ease, transform 0.2s var(--ease-expo);
+}
+
+@media (min-width: 40rem) {
+  .card {
+    flex: 0 0 calc((100% - var(--gap-card)) / 2);
+  }
+}
+
+@media (min-width: 64rem) {
+  .card {
+    flex: 0 0 calc((100% - 2 * var(--gap-card)) / 3);
+  }
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  background: #1a1a1a;
+  border-color: var(--line);
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.card-icon {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: none;
+  border-radius: 0.7rem;
+  border: 1px solid var(--line-soft);
+  background: var(--signal-soft);
+  color: var(--signal);
+  transition: border-color var(--dur-hover) ease;
+}
+
+.card:hover .card-icon {
+  border-color: var(--line);
+}
+
+.card-index {
+  color: var(--on-dark-6);
+  transition: color var(--dur-hover) ease;
+}
+
+.card:hover .card-index {
+  color: var(--signal);
+}
+
+.card-title {
+  margin-top: 0.875rem;
+}
+
+.card-desc {
+  margin-top: 0.5rem;
+  color: var(--on-dark-3);
+}
+
+/* ──────────────────────────────────────────────
+   FORMS
+   ────────────────────────────────────────────── */
+
+.field {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  padding: 0.55rem 0;
+  color: var(--offwhite);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: -0.003em;
+  outline: none;
+  transition: border-color var(--dur-hover) ease;
+}
+
+.field:focus {
+  border-color: var(--offwhite);
+}
+
+.field::placeholder {
+  color: var(--on-dark-6);
+}
+
+/* ──────────────────────────────────────────────
+   EFFECTS
+   ────────────────────────────────────────────── */
+
+.signal-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 0.7rem rgba(100, 255, 155, 0.7);
+  animation: signal-pulse 2.4s var(--ease-expo) infinite;
+  flex: none;
+}
+
+@keyframes signal-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.82);
+  }
+}
+
+/* Hero image dissolve into the page below */
+.mask-dissolve {
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    #000,
+    #000 46%,
+    rgba(0, 0, 0, 0.72) 68%,
+    rgba(0, 0, 0, 0.28) 87%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    180deg,
+    #000,
+    #000 46%,
+    rgba(0, 0, 0, 0.72) 68%,
+    rgba(0, 0, 0, 0.28) 87%,
+    transparent
+  );
+}
+
+/* ──────────────────────────────────────────────
+   REDUCED MOTION
+   ────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

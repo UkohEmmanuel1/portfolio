@@ -1,419 +1,265 @@
 "use client";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+
+import { motion } from "framer-motion";
 import Image from "next/image";
-import {
-  FaUsers,
-  FaDatabase,
-  FaSitemap,
-  FaCode,
-  FaRobot,
-  FaProjectDiagram,
-} from "react-icons/fa";
+import { VIEWPORT, fadeUp, stagger } from "@/components/motion";
 
-export default function About() {
-  const ref = useRef(null);
-  const expertiseRef = useRef(null);
-  const isInView = useInView(ref, {
-    once: true,
-    amount: 0.3,
-  });
-  const isExpertiseInView = useInView(expertiseRef, {
-    once: true,
-    amount: 0.3,
-  });
+const PORTRAIT = {
+  src: "/image/about.jpg",
+  alt: "Emmanuel David, full-stack and machine learning developer",
+  width: 509,
+  height: 334,
+};
 
-  const containerVariants = {
-    hidden: {
-      opacity: 0,
-      y: 20,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.2,
-      },
-    },
-  };
+const WRAPPED_STATS = [
+  { label: "Top genre", value: "Lo-fi & Chill", pct: 92, hue: "#1db954" },
+  { label: "Most played", value: "Khruangbin", pct: 74, hue: "#f472b6" },
+  { label: "On repeat", value: "Coding podcasts", pct: 61, hue: "#38bdf8" },
+];
 
-  const itemVariants = {
-    hidden: {
-      opacity: 0,
-      y: 20,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 },
-    },
-  };
-
-  const skills = [
-    {
-      icon: <FaUsers size={24} />,
-      title: "CTO",
-      desc: "Leading E_gramTech AI to drive innovation and impact",
-    },
-    {
-      icon: <FaProjectDiagram size={24} />,
-      title: "Project Manager",
-      desc: "Delivering high performance software from concept to launch",
-    },
-    {
-      icon: <FaCode size={24} />,
-      title: "Web Development",
-      desc: "Crafting scalable, high performance web apps and APIs",
-    },
-    {
-      icon: <FaRobot size={24} />,
-      title: "Machine Learning",
-      desc: "Designing intelligent, scalable AI powered solutions",
-    },
-    {
-      icon: <FaDatabase size={24} />,
-      title: "Database Design",
-      desc: "Optimizing data architecture for speed and scalability",
-    },
-    {
-      icon: <FaSitemap size={24} />,
-      title: "System Design",
-      desc: "Engineering resilient, scalable distributed systems",
-    },
-  ];
-
+/* Left card — abstract mesh gradient, no assets */
+function MeshCard() {
   return (
-    <section
-      id="about"
-      className="py-16 sm:py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 
-relative overflow-hidden"
+    <div
+      className="marquee-card"
+      style={{ background: "linear-gradient(135deg, #4f46e5 0%, #9333ea 48%, #db2777 100%)" }}
     >
-      {/* Background Elements */}
-      <div className="absolute inset-0 opacity-5">
-        <div
-          className="absolute top-20 left-10 w-32 h-32 rounded-full"
-          style={{ background: "linear-gradient(135deg, #4a38c2, #8f38c2)" }}
-        ></div>
-        <div
-          className="absolute bottom-20 right-10 w-24 h-24 rounded-full"
-          style={{ background: "linear-gradient(135deg, #c238b0, #b0c238)" }}
-        ></div>
-        <div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-40 
-h-40 rounded-full"
-          style={{ background: "linear-gradient(135deg, #38c24a, #b0c238)" }}
-        ></div>
+      <div
+        className="mesh-blob"
+        style={{
+          top: "-14%",
+          left: "-8%",
+          width: "58%",
+          height: "72%",
+          background: "rgba(255,255,255,0.55)",
+        }}
+      />
+      <div
+        className="mesh-blob mesh-blob-2"
+        style={{
+          right: "-10%",
+          bottom: "-18%",
+          width: "62%",
+          height: "78%",
+          background: "rgba(56,189,248,0.55)",
+        }}
+      />
+
+      {/* fine grid */}
+      <div
+        className="absolute inset-0"
+        style={{
+          opacity: 0.22,
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.7) 1px, transparent 1px)",
+          backgroundSize: "30px 30px",
+        }}
+      />
+
+      {/* concentric rings */}
+      <div
+        className="absolute"
+        style={{
+          top: "50%",
+          left: "50%",
+          width: "62%",
+          aspectRatio: "1 / 1",
+          transform: "translate(-50%, -50%)",
+          borderRadius: "50%",
+          border: "1px solid rgba(255,255,255,0.5)",
+          boxShadow:
+            "0 0 0 34px rgba(255,255,255,0.10), 0 0 0 68px rgba(255,255,255,0.07), 0 0 0 102px rgba(255,255,255,0.045)",
+        }}
+      />
+
+      <span
+        className="absolute bottom-5 left-5 text-[0.6875rem] uppercase tracking-[0.18em] text-white/85"
+        style={{ fontFamily: "var(--font-cascadia), ui-monospace, monospace" }}
+      >
+        mesh 04
+      </span>
+    </div>
+  );
+}
+
+/* Middle card — the developer portrait, 509x334 */
+function PortraitCard() {
+  return (
+    <div className="marquee-card" style={{ background: "#e7e5dd" }}>
+      <Image
+        src={PORTRAIT.src}
+        alt={PORTRAIT.alt}
+        width={PORTRAIT.width}
+        height={PORTRAIT.height}
+        sizes="(max-width: 48rem) 78vw, 509px"
+        className="h-full w-full object-cover"
+        style={{ filter: "saturate(0.98) contrast(1.02)" }}
+      />
+    </div>
+  );
+}
+
+/* Right card — dark listening-wrapped stats */
+function WrappedCard() {
+  return (
+    <div
+      className="marquee-card flex flex-col justify-between text-white"
+      style={{
+        padding: "clamp(0.875rem, 3.5vw, 1.5rem)",
+        background:
+          "radial-gradient(120% 120% at 8% 0%, #1f2937 0%, #111214 55%, #0a0a0b 100%)",
+      }}
+    >
+      <div className="flex items-center justify-between">
+        <span className="flex items-center gap-2 text-[0.6875rem] uppercase tracking-[0.18em] text-white/60">
+          <span
+            style={{
+              width: "0.4rem",
+              height: "0.4rem",
+              borderRadius: "50%",
+              background: "#1db954",
+            }}
+          />
+          2025 Wrapped
+        </span>
+        <span className="hidden text-[0.6875rem] uppercase tracking-[0.18em] text-white/40 sm:inline">
+          music · podcasts
+        </span>
       </div>
 
-      <div className="container mx-auto px-6 sm:px-8 lg:px-12 relative z-10">
-        <motion.div
-          className="text-center mb-16 sm:mb-24"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+      <div>
+        <div
+          style={{
+            fontFamily: "var(--font-cascadia), ui-monospace, monospace",
+            fontSize: "clamp(1.75rem, 8vw, 3.25rem)",
+            fontWeight: 700,
+            lineHeight: 1,
+            letterSpacing: "-0.04em",
+          }}
         >
-          <motion.h2
-            className="text-4xl sm:text-5xl md:text-6xl font-bold mt-10 mb-6 
-gradient-text-primary"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            About Me
-          </motion.h2>
-          <motion.p
-            className="text-base sm:text-lg text-gray-300 max-w-4xl mx-auto text-center 
-leading-relaxed"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-          >
-            Passionate{" "}
-            <span className="gradient-text-secondary font-semibold">
-              full-stack developer, machine learning engineer, and business
-              intelligence specialist
-            </span>{" "}
-            with building scalable, intelligent systems and data-driven
-            solutions that power modern applications, optimize business
-            operations, and drive digital growth.
-          </motion.p>
-        </motion.div>
+          38,412
+        </div>
+        <div className="mt-2 text-[0.6875rem] uppercase tracking-[0.18em] text-white/50">
+          minutes listened
+        </div>
+      </div>
 
-        <motion.div
-          ref={ref}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          {/* Left Column - Professional Image */}
-          <motion.div
-            variants={itemVariants}
-            className="relative group order-2 lg:order-1 max-w-md mx-auto w-full"
-          >
+      <div className="flex flex-col gap-1.5 sm:gap-2.5">
+        {WRAPPED_STATS.map((s) => (
+          <div key={s.label}>
+            <div className="flex items-baseline justify-between gap-3">
+              <span className="shrink-0 text-[0.6875rem] uppercase tracking-[0.14em] text-white/45">
+                {s.label}
+              </span>
+              <span className="truncate text-[0.8125rem] font-semibold text-white">
+                {s.value}
+              </span>
+            </div>
             <div
-              className="relative h-[350px] sm:h-[450px] lg:h-[500px] w-full overflow-hidden 
-rounded-2xl shadow-2xl"
+              className="mt-1.5 h-[3px] w-full overflow-hidden"
+              style={{ background: "rgba(255,255,255,0.12)" }}
             >
               <div
-                className="absolute inset-0 rounded-2xl"
                 style={{
-                  background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
-                  padding: "4px",
+                  width: `${s.pct}%`,
+                  height: "100%",
+                  background: s.hue,
                 }}
-              >
-                <div
-                  className="relative h-full w-full overflow-hidden rounded-2xl 
-bg-gradient-to-br from-slate-800 to-slate-900"
-                >
-                  {/* Dark overlay for light background balance */}
-                  <div
-                    className="absolute inset-0 bg-gradient-to-t from-slate-900/60 
-via-transparent to-slate-900/30 z-10"
-                  ></div>
-                  <Image
-                    src="/image/about.jpg"
-                    alt="emmanuel davis"
-                    fill
-                    style={{ objectFit: "contain" }}
-                    className="transition-transform duration-700 group-hover:scale-110 relative 
-z-0"
-                  />
-                  {/* Additional subtle overlay for better contrast */}
-                  <div className="absolute inset-0 bg-slate-900/20 z-5"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Floating Elements */}
-            <motion.div
-              className="absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-8 w-20 h-20 
-sm:w-24 sm:h-24 rounded-2xl shadow-lg"
-              style={{
-                background: "linear-gradient(135deg, #c238b0, #b0c238)",
-              }}
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-              className="absolute -top-6 -left-6 sm:-top-8 sm:-left-8 w-16 h-16 sm:w-20 sm:h-20 
-border-4 rounded-2xl"
-              style={{ borderColor: "#38c24a" }}
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            />
-          </motion.div>
-
-          {/* Right Column - Professional Content */}
-          <div
-            className="order-1 lg:order-2 flex flex-col items-center text-center space-y-8 
-px-4 sm:px-8"
-          >
-            <div className="space-y-6 w-full max-w-2xl mx-auto">
-              <motion.div variants={itemVariants}>
-                <h3 className="text-2xl sm:text-3xl font-bold gradient-text-secondary mb-4">
-                  Developer & Digital Innovator
-                </h3>
-                <div
-                  className="w-24 h-1 rounded-full mb-3 mx-auto"
-                  style={{
-                    background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
-                  }}
-                ></div>
-              </motion.div>
-
-              <motion.p
-                variants={itemVariants}
-                className="text-base sm:text-lg text-gray-300 leading-relaxed"
-              >
-                {`I'm a`}{" "}
-                <span className="gradient-text-primary font-semibold">
-                  Full-Stack Developer, Machine Learning Developer, and Business
-                  Intelligence Specialist
-                </span>{" "}
-                with{" "}
-                <span className="gradient-text-secondary font-semibold">
-                  years of experience
-                </span>
-                , specializing in building scalable web applications,
-                intelligent systems, and data-driven solutions that power
-                enterprise-level businesses.
-              </motion.p>
-
-              <motion.p
-                variants={itemVariants}
-                className="text-base sm:text-lg text-gray-300 leading-relaxed"
-              >
-                My expertise lies in designing{" "}
-                <span className="gradient-text-accent font-semibold">
-                  robust digital solutions
-                </span>{" "}
-                that combine web development, machine learning, and business
-                intelligence to solve complex problems while ensuring
-                performance, security, and scalability.
-              </motion.p>
-
-              <motion.p
-                variants={itemVariants}
-                className="text-base sm:text-lg text-gray-300 leading-relaxed"
-              >
-                {`I approach every project with analytical thinking, technical precision, and creative 
-problem-solving.  I focus on delivering solutions that drive real results.`}
-              </motion.p>
-
-              <motion.p
-                variants={itemVariants}
-                className="text-base sm:text-lg text-gray-300 leading-relaxed"
-              >
-                {`Curious by nature, I thrive on challenging projects that require innovative 
-solutions and meticulous execution. Beyond development, I'm passionate about exploring 
-emerging technologies  
-.`}
-              </motion.p>
-
-              {/* Education Stats */}
-              <motion.div variants={itemVariants} className="pt-2">
-                <h3 className="text-2xl sm:text-3xl font-bold gradient-text-secondary mb-4">
-                  Education
-                </h3>
-                <div
-                  className="w-24 h-1 rounded-full mt-2 mx-auto"
-                  style={{
-                    background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
-                  }}
-                ></div>
-              </motion.div>
-              <motion.p
-                variants={itemVariants}
-                className="text-base sm:text-lg text-gray-300 leading-relaxed"
-              >
-                <span className="gradient-text-primary font-semibold">BSc</span>{" "}
-                in Computer Science{" "}
-                <span className="gradient-text-secondary font-semibold">
-                  {" "}
-                  University of Ibadan
-                </span>{" "}
-                (In Progress)
-              </motion.p>
+              />
             </div>
           </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* Fragments keep the track's own gap as the only spacing, so the
+   duplicate set lines up pixel-for-pixel with the first. */
+function CardSet() {
+  return (
+    <>
+      <MeshCard />
+      <PortraitCard />
+      <WrappedCard />
+    </>
+  );
+}
+
+export default function About() {
+  return (
+    <section id="about" className="section section-light">
+      <div className="shell">
+        <motion.div
+          variants={stagger(0.08)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VIEWPORT}
+        >
+          <motion.div variants={fadeUp} className="eyebrow">
+            <span className="eyebrow-index">01</span>
+            <span className="eyebrow-rule" />
+            <span>About me</span>
+          </motion.div>
+
+          <motion.h2 variants={fadeUp} className="about-display">
+            About me
+          </motion.h2>
         </motion.div>
 
-        {/* Professional Expertise Section */}
         <motion.div
-          ref={expertiseRef}
-          className="mt-12 sm:mt-24"
-          variants={containerVariants}
+          variants={stagger(0.06)}
           initial="hidden"
-          animate={isExpertiseInView ? "visible" : "hidden"}
+          whileInView="visible"
+          viewport={VIEWPORT}
+          className="mt-8 flex flex-col gap-6"
         >
-          <motion.div
-            variants={itemVariants}
-            className="text-center mb-16 sm:mb-20"
-          >
-            <h2 className="text-3xl md:text-5xl font-bold gradient-text-primary mb-6">
-              My Expertise
-            </h2>
-            <p
-              className="text-base  text-gray-300 max-w-3xl mx-auto leading-relaxed 
-px-4"
-            >
-              Specialized skills and technologies that drive{" "}
-              <span className="gradient-text-secondary font-semibold">
-                exceptional web solutions
-              </span>
-            </p>
-            <div
-              className="w-32 h-1 rounded-full mx-auto mt-2"
-              style={{
-                background: "linear-gradient(135deg, #4a38c2, #8f38c2)",
-              }}
-            ></div>
-          </motion.div>
+          <motion.p variants={fadeUp} className="about-copy">
+            I&apos;m a <strong>Full-Stack Developer</strong>,{" "}
+            <strong>Machine Learning Developer</strong>, and{" "}
+            <strong>Business Intelligence Specialist</strong> with years of
+            experience, specializing in building scalable web applications,
+            intelligent systems, and data-driven solutions that power
+            enterprise-level businesses.
+          </motion.p>
 
-          <div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 
-max-w-7xl mx-auto"
-          >
-            {skills.map((skill, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                className="group relative glass-effect p-8 rounded-2xl hover:shadow-2xl 
-transition-all duration-500 cursor-pointer overflow-hidden text-center flex flex-col 
-items-center"
-                whileHover={{ y: -10, scale: 1.02 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >
-                {/* Background Gradient on Hover */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity 
-duration-500 rounded-2xl"
-                  style={{
-                    background: `linear-gradient(135deg, ${
-                      index % 3 === 0
-                        ? "#4a38c2, #8f38c2"
-                        : index % 3 === 1
-                          ? "#c238b0, #b0c238"
-                          : "#38c24a, #b0c238"
-                    })`,
-                  }}
-                ></div>
+          <motion.p variants={fadeUp} className="about-copy">
+            My expertise lies in designing robust digital solutions that combine
+            web development, machine learning, and business intelligence to
+            solve complex problems while ensuring performance, security, and
+            scalability.
+          </motion.p>
 
-                {/* Icon Container */}
-                <motion.div
-                  className="relative mb-6 p-4 rounded-2xl w-fit mx-auto"
-                  style={{
-                    background: `linear-gradient(135deg, ${
-                      index % 3 === 0
-                        ? "#4a38c2, #8f38c2"
-                        : index % 3 === 1
-                          ? "#c238b0, #b0c238"
-                          : "#38c24a, #b0c238"
-                    })`,
-                  }}
-                  whileHover={{ rotate: [0, -10, 10, 0] }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <div className="text-white text-3xl">{skill.icon}</div>
-                </motion.div>
+          <motion.p variants={fadeUp} className="about-copy">
+            I approach every project with analytical thinking, technical
+            precision, and creative problem-solving. I focus on delivering
+            solutions that drive real results.
+          </motion.p>
 
-                <h3
-                  className="text-xl sm:text-2xl font-bold mb-4 text-white 
-group-hover:gradient-text-primary transition-all duration-300"
-                >
-                  {skill.title}
-                </h3>
-                <p
-                  className="text-base text-gray-300 leading-relaxed group-hover:text-gray-200 
-transition-colors duration-300"
-                >
-                  {skill.desc}
-                </p>
-
-                {/* Hover Border Effect */}
-                <div
-                  className="absolute inset-0 rounded-2xl border-2 border-transparent 
-group-hover:border-opacity-30 transition-all duration-500"
-                  style={{
-                    borderColor: `${
-                      index % 3 === 0
-                        ? "#4a38c2"
-                        : index % 3 === 1
-                          ? "#c238b0"
-                          : "#38c24a"
-                    }`,
-                  }}
-                ></div>
-              </motion.div>
-            ))}
-          </div>
+          <motion.p variants={fadeUp} className="about-copy">
+            Curious by nature, I thrive on challenging projects that require
+            innovative solutions and meticulous execution. Beyond development,
+            I&apos;m passionate about exploring emerging technologies.
+          </motion.p>
         </motion.div>
       </div>
+
+      {/* Full-bleed marquee — three cards, set twice for a seamless loop */}
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={VIEWPORT}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="marquee"
+        style={{ marginTop: "var(--space-head)" }}
+      >
+        <div className="marquee-track">
+          <CardSet />
+          <div aria-hidden="true" style={{ display: "contents" }}>
+            <CardSet />
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 }

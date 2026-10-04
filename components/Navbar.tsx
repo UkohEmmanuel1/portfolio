@@ -1,178 +1,240 @@
 "use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useState, useEffect, useMemo } from "react";
-import { motion } from "framer-motion";
-import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
+import Link from "next/link";
+import { EASE } from "@/components/motion";
 
-const Navbar = () => {
-    const [active, setActive] = useState("Home");
-    const [isScrolled, setIsScrolled] = useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const menu = useMemo(() => ["Home", "About", "Skills", "Contact"], []);  
+const navItems = [
+  { name: "About", href: "#about" },
+  { name: "Projects", href: "#projects" },
+  { name: "Expertise", href: "#expertise" },
+  { name: "Contact", href: "#contact" },
+];
 
-    // Handle scroll effect for navbar
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
+function ArrowOut({ size = 14 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.9}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M7 17 17 7" />
+      <path d="M8 7h9v9" />
+    </svg>
+  );
+}
 
-            // Get all sections
-            const sections = menu.map(item => document.getElementById(item.toLowerCase()));
-            const scrollPosition = window.scrollY + 100; // Offset for better detection
+export default function Navbar() {
+  const [activeSection, setActiveSection] = useState("home");
+  const [menuOpen, setMenuOpen] = useState(false);
 
-            // Find current section
-            for (let i = sections.length - 1; i >= 0; i--) {
-                const section = sections[i];
-                if (section && section.offsetTop <= scrollPosition) {
-                    setActive(menu[i]);
-                    break;
-                }
-            }
-        };
+  useEffect(() => {
+    const sections = ["home", "about", "projects", "expertise", "contact"];
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [menu]);
+    const handleScroll = () => {
+      const probe = window.scrollY + window.innerHeight * 0.35;
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el && probe >= el.offsetTop && probe < el.offsetTop + el.offsetHeight) {
+          setActiveSection(id);
+          return;
+        }
+      }
+    };
 
-    return (
-        <motion.header
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled
-                ? "glass-effect py-3 px-6 lg:px-8 shadow-lg"
-                : "bg-transparent py-6 px-6 lg:px-8"
-                }`}
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  return (
+    <>
+      <motion.header
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
+        className="sticky top-0 z-30 grid grid-cols-[1fr_auto] md:grid-cols-[minmax(12rem,1fr)_auto_minmax(12rem,1fr)] items-center min-h-20 px-5 md:px-9"
+      >
+        {/* Left: wordmark */}
+        <Link
+          href="#home"
+          className="justify-self-start group flex items-center gap-2.5"
         >
-            <div className="container-custom flex justify-between items-center">
-                {/* Professional Logo */}
-                <motion.div
-                    className="flex gap-x-4 items-center cursor-pointer group"
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    onClick={() => {
-                        document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' });
-                        setActive('Home');
-                    }}
+          <span className="relative w-7 h-7 overflow-hidden rounded-full shrink-0">
+            <Image
+              src="/image/emma.png"
+              alt=""
+              fill
+              priority
+              sizes="28px"
+              className="object-cover"
+            />
+          </span>
+          <span
+            className="hidden sm:block text-[0.86rem] font-extrabold tracking-[0.14em] uppercase"
+            style={{ color: "#fff" }}
+          >
+            Emmanuel David
+          </span>
+        </Link>
+
+        {/* Center: glass nav pill */}
+        <nav
+          className="hidden md:flex items-center justify-self-center"
+          style={{
+            padding: "0.6rem 1rem",
+            background: "rgba(255,255,255,0.05)",
+            border: "1px solid var(--line-faint)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            borderRadius: "0.65rem",
+            gap: "clamp(1.1rem, 2vw, 2rem)",
+          }}
+        >
+          {navItems.map((item) => {
+            const isActive = activeSection === item.href.slice(1);
+            return (
+              <a
+                key={item.name}
+                href={item.href}
+                className="relative py-1"
+                style={{
+                  fontSize: "0.8125rem",
+                  letterSpacing: "-0.005em",
+                  color: isActive ? "var(--signal)" : "#fff",
+                  opacity: isActive ? 1 : 0.68,
+                  transition: "color 0.18s ease, opacity 0.18s ease",
+                }}
+              >
+                {item.name}
+                {isActive && (
+                  <motion.span
+                    layoutId="navActive"
+                    className="absolute inset-x-0 -bottom-0.5 h-px origin-left"
+                    style={{ background: "var(--signal)" }}
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
+                )}
+              </a>
+            );
+          })}
+        </nav>
+
+        {/* Right: actions */}
+        <div className="hidden md:flex items-center justify-self-end gap-1.4rem">
+          <Link href="/resume" className="btn btn-glass">
+            Resume
+          </Link>
+          <a href="#contact" className="btn btn-primary">
+            <span>Let&apos;s talk</span>
+            <ArrowOut />
+          </a>
+        </div>
+
+        {/* Mobile: menu trigger */}
+        <button
+          onClick={() => setMenuOpen(true)}
+          className="md:hidden justify-self-end"
+          style={{
+            fontFamily: "var(--font-mono-jb), ui-monospace, monospace",
+            fontSize: "0.9rem",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "#fff",
+            background: "none",
+            border: 0,
+            cursor: "pointer",
+          }}
+        >
+          Menu
+        </button>
+      </motion.header>
+
+      {/* Mobile fullscreen overlay */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.3, ease: EASE }}
+            className="md:hidden fixed inset-0 z-40 flex flex-col"
+            style={{ background: "#070707", padding: "5rem 1.25rem 1.5rem" }}
+          >
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-0 right-0 px-5 h-20 flex items-center"
+              style={{
+                fontFamily: "var(--font-mono-jb), ui-monospace, monospace",
+                fontSize: "0.9rem",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.6)",
+                background: "none",
+                border: 0,
+                cursor: "pointer",
+              }}
+            >
+              Close
+            </button>
+
+            <nav className="flex-1 flex flex-col justify-center gap-1">
+              {navItems.map((item, i) => (
+                <motion.a
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 0.4,
+                    delay: 0.05 + i * 0.05,
+                    ease: EASE,
+                  }}
+                  className="display-lg border-b"
+                  style={{
+                    borderColor: "rgba(255,255,255,0.11)",
+                    color: "#fff",
+                    paddingBottom: "0.6rem",
+                    textDecoration: "none",
+                  }}
                 >
-                    <div className="relative">
-                        <div className="w-12 h-12 rounded-full p-0.5"
-                            style={{ background: 'linear-gradient(135deg, #4a38c2, #8f38c2)' }}>
-                            <div className="w-full h-full rounded-full bg-white p-0.5">
-                                <Image
-                                    alt="emmanuel image"
-                                    src="/image/emma.png"
-                                    className="rounded-full object-cover"
-                                    width={44}
-                                    height={44}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <section className="hidden sm:block">
-                        <h1 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">
-                          Emmanuel David
-                        </h1>
-                        <p className="text-gray-300 text-sm font-medium">Full Stack & Machine Learning Developer</p>
-                    </section>
-                </motion.div>
+                  {item.name}
+                </motion.a>
+              ))}
+            </nav>
 
-                {/* Professional Desktop Menu */}
-                <nav className="hidden md:flex items-center gap-x-8">
-                    {menu.map((item, i) => (
-                        <motion.a
-                            href={`#${item.toLowerCase()}`}
-                            key={i}
-                            className={`relative px-4 py-2 rounded-lg font-medium transition-all duration-300 ${active === item
-                                ? "text-white"
-                                : "text-gray-300 hover:text-white"
-                                } cursor-pointer`}
-                            style={active === item ? {
-                                background: 'linear-gradient(135deg, #4a38c2, #8f38c2)'
-                            } : {}}
-                            onClick={() => setActive(item)}
-                            whileHover={{
-                                scale: 1.05,
-                                y: -2
-                            }}
-                            whileTap={{ scale: 0.95 }}
-                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        >
-                            {active === item && (
-                                <motion.div
-                                    className="absolute inset-0 rounded-lg"
-                                    style={{ background: 'linear-gradient(135deg, #4a38c2, #8f38c2)' }}
-                                    layoutId="activeTab"
-                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                />
-                            )}
-                            <span className="relative z-10">{item}</span>
-                        </motion.a>
-                    ))}
-                </nav>
-
-                {/* Professional Mobile menu button */}
-                <div className="md:hidden">
-                    <motion.button
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="p-2 rounded-lg text-gray-300 hover:bg-gray-800 focus:outline-none transition-colors"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <motion.div
-                            animate={{ rotate: isMobileMenuOpen ? 180 : 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            {isMobileMenuOpen ? (
-                                <RiCloseLine size={24} />
-                            ) : (
-                                <RiMenu3Line size={24} />
-                            )}
-                        </motion.div>
-                    </motion.button>
-                </div>
+            <div className="flex flex-col gap-2 pt-8">
+              <a
+                href="#contact"
+                onClick={() => setMenuOpen(false)}
+                className="btn btn-primary btn-lg w-full"
+              >
+                <span>Let&apos;s talk</span>
+                <ArrowOut />
+              </a>
+              <Link href="/resume" className="btn btn-glass btn-lg w-full">
+                Resume
+              </Link>
             </div>
-
-            {/* Professional Mobile Menu */}
-            {isMobileMenuOpen && (
-                <motion.div
-                    className="md:hidden absolute top-full left-0 right-0 glass-effect shadow-xl"
-                    initial={{ opacity: 0, y: -100 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -100 }}
-                    transition={{ duration: 0.4, ease: "easeOut"}}
-                >
-                    <nav className="container-custom py-2">
-                        <div className="flex flex-col gap-y-2 px-6 py-2 space-y-2 items-end text-right">
-                            {menu.map((item, i) => (
-                                <motion.a
-                                    href={`#${item.toLowerCase()}`}
-                                    key={i}
-                                    className={`px-4 py-3 rounded-xl font-medium transition-all duration-300 ${active === item
-                                        ? "text-white"
-                                        : "text-gray-300 hover:bg-gray-800"
-                                        } cursor-pointer`}
-                                    style={active === item ? {
-                                        background: 'linear-gradient(135deg, #4a38c2, #8f38c2)'
-                                    } : {}}
-                                    onClick={() => {
-                                        setActive(item);
-                                        setIsMobileMenuOpen(false);
-                                    }}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: i * 0.1, duration: 0.3 }}
-                                    whileHover={{ scale: 1.02, x: 5 }}
-                                    whileTap={{ scale: 0.98 }}
-                                >
-                                    {item}
-                                </motion.a>
-                            ))}
-                        </div>
-                    </nav>
-                </motion.div>
-            )}
-        </motion.header>
-    );
-};
-
-export default Navbar;
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
