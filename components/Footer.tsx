@@ -69,7 +69,7 @@ export default function Footer() {
     <footer
       ref={ref}
       className="relative overflow-hidden rule-faint"
-      style={{ background: "#000" }}
+      style={{ background: "var(--ink)" }}
     >
       {/* Giant ghost wordmark, drifting as the footer scrolls in */}
       <motion.div
@@ -80,7 +80,7 @@ export default function Footer() {
         <motion.span
           style={{
             y: markY,
-            color: "#fff",
+            color: "var(--offwhite)",
             marginBottom: "-0.12em",
             fontSize: "clamp(2.5rem, 9vw, 7rem)",
             fontWeight: 600,
@@ -118,7 +118,7 @@ export default function Footer() {
                       <Link
                         href={link.href}
                         className="mono-sm transition-colors duration-200"
-                        style={{ color: "#fff", opacity: 0.68 }}
+                        style={{ color: "var(--offwhite)", opacity: 0.68 }}
                       >
                         {link.name}
                       </Link>

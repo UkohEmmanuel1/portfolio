@@ -87,7 +87,7 @@ export default function Navbar() {
           </span>
           <span
             className="hidden sm:block text-[0.86rem] font-bold tracking-[0.14em] uppercase"
-            style={{ color: "#fff" }}
+            style={{ color: "var(--offwhite)" }}
           >
             Emmanuel David
           </span>
@@ -98,7 +98,7 @@ export default function Navbar() {
           className="hidden md:flex items-center"
           style={{
             padding: "0.6rem 1rem",
-            background: "rgba(255,255,255,0.05)",
+            background: "var(--glass)",
             border: "1px solid var(--line-faint)",
             backdropFilter: "blur(12px)",
             WebkitBackdropFilter: "blur(12px)",
@@ -116,7 +116,7 @@ export default function Navbar() {
                 style={{
                   fontSize: "0.8125rem",
                   letterSpacing: "-0.005em",
-                  color: isActive ? "var(--signal)" : "#fff",
+                  color: isActive ? "var(--signal)" : "var(--offwhite)",
                   opacity: isActive ? 1 : 0.68,
                   transition: "color 0.18s ease, opacity 0.18s ease",
                 }}
@@ -155,7 +155,7 @@ export default function Navbar() {
             fontSize: "0.9rem",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            color: "#fff",
+            color: "var(--offwhite)",
             background: "none",
             border: 0,
             cursor: "pointer",
@@ -174,7 +174,7 @@ export default function Navbar() {
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.3, ease: EASE }}
             className="md:hidden fixed inset-0 z-40 flex flex-col"
-            style={{ background: "#070707", padding: "5rem 1.25rem 1.5rem" }}
+            style={{ background: "var(--ink)", padding: "5rem 1.25rem 1.5rem" }}
           >
             <button
               onClick={() => setMenuOpen(false)}
@@ -184,7 +184,7 @@ export default function Navbar() {
                 fontSize: "0.9rem",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.6)",
+                color: "var(--on-dark-2)",
                 background: "none",
                 border: 0,
                 cursor: "pointer",
@@ -208,8 +208,8 @@ export default function Navbar() {
                   }}
                   className="display-lg border-b"
                   style={{
-                    borderColor: "rgba(255,255,255,0.11)",
-                    color: "#fff",
+                    borderColor: "var(--line-soft)",
+                    color: "var(--offwhite)",
                     paddingBottom: "0.6rem",
                     textDecoration: "none",
                   }}

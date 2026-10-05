@@ -54,7 +54,7 @@ function DisciplineCard({
         </span>
       </div>
 
-      <h3 className="display-sm card-title" style={{ color: "#fff" }}>
+      <h3 className="display-sm card-title" style={{ color: "var(--offwhite)" }}>
         {discipline.title}
       </h3>
 

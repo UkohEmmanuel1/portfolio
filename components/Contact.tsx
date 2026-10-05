@@ -118,7 +118,7 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
           transition={{ duration: 0.8, ease: EASE }}
-          className="relative overflow-hidden"
+          className="photo-panel relative overflow-hidden"
           style={{
             borderRadius: "var(--radius-card)",
             minHeight: "18rem",
@@ -211,7 +211,7 @@ export default function Contact() {
                 variants={slideIn}
                 href="mailto:emmanuelukoh08@gmail.com"
                 className="rule-row flex items-center gap-2.5"
-                style={{ color: "#fff", textDecoration: "none" }}
+                style={{ color: "var(--offwhite)", textDecoration: "none" }}
               >
                 <FaEnvelope size={14} style={{ color: "var(--on-dark-4)" }} />
                 <span className="body-text">emmanuelukoh08@gmail.com</span>
@@ -223,7 +223,7 @@ export default function Contact() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rule-row flex items-center gap-2.5"
-                style={{ color: "#fff", textDecoration: "none" }}
+                style={{ color: "var(--offwhite)", textDecoration: "none" }}
               >
                 <FaWhatsapp size={14} style={{ color: "var(--on-dark-4)" }} />
                 <span className="body-text">+234 816 794 9054</span>

@@ -1,172 +1,102 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { EASE } from "@/components/motion";
 
-function ArrowRight({ size = 13 }: { size?: number }) {
+/* Icons are inlined rather than pulled from a package: three 24px
+   outlines are cheaper than a dependency, and these paths are the
+   lucide geometry, so swapping in lucide later is a one-line change
+   per icon. The wrapper only exists to hold the shared attributes. */
+function Icon({ children }: { children: React.ReactNode }) {
   return (
     <svg
-      width={size}
-      height={size}
+      width={18}
+      height={18}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth={1.9}
+      strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <path d="M5 12h14" />
-      <path d="m13 6 6 6-6 6" />
+      {children}
     </svg>
   );
 }
 
-export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "16%"]);
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, 44]);
-  const contentFade = useTransform(scrollYProgress, [0, 0.9], [1, 0.15]);
-
+function EyeIcon() {
   return (
-    <section
-      ref={sectionRef}
-      id="home"
-      className="relative flex flex-col justify-end overflow-hidden"
-      style={{ minHeight: "100dvh", background: "#050505" }}
-    >
-      {/* Full-bleed photograph, heavily dimmed into the black, parallaxing */}
+    <Icon>
+      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+      <circle cx="12" cy="12" r="3" />
+    </Icon>
+  );
+}
+
+function MessageIcon() {
+  return (
+    <Icon>
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </Icon>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <Icon>
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="7 10 12 15 17 10" />
+      <line x1="12" y1="15" y2="3" />
+    </Icon>
+  );
+}
+
+export default function Hero() {
+  return (
+    <section id="home" className="hero">
       <motion.div
-        initial={{ opacity: 0, scale: 1.05 }}
-        animate={{ opacity: 0.25, scale: 1.01 }}
-        transition={{ duration: 1.8, ease: EASE }}
-        className="mask-dissolve absolute inset-0 -z-10 overflow-hidden"
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: EASE }}
+        className="hero-inner"
       >
-        <motion.div style={{ y: imageY }} className="absolute inset-[-12%]">
-          <Image
-            src="/image/myemma.jpg"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-            style={{ objectPosition: "center 40%" }}
-          />
-        </motion.div>
-      </motion.div>
+        {/* One h1 for the page. The role line is a p rather than a
+           second h1 — same visual treatment, but it leaves a single
+           document subject instead of two competing ones. */}
+        <h1 className="hero-greeting">Hi, I&rsquo;m Emmanuel David.</h1>
 
-      {/* Legibility shading */}
-      <div
-        className="absolute inset-0 -z-10"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(5,5,5,0.55), transparent 58%), linear-gradient(180deg, rgba(5,5,5,0.4), transparent 24%, transparent 55%, rgba(5,5,5,0.95))",
-        }}
-      />
+        <p className="hero-role">
+          Software Engineer <span aria-hidden="true">&middot;</span> Machine
+          Learning <span aria-hidden="true">&middot;</span> AI{" "}
+          <span aria-hidden="true">&middot;</span> Creative
+        </p>
 
-      <motion.div
-        style={{ y: contentY, opacity: contentFade }}
-        className="shell w-full relative"
-      >
-        <div className="flex flex-col items-center text-center md:items-center md:text-center" style={{ paddingBottom: "clamp(2rem, 4vw, 3rem)" }}>
-          {/* Availability */}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.18, ease: EASE }}
-            className="eyebrow md:justify-center"
-          >
-            <span className="signal-dot" />
-            <span style={{ color: "var(--on-dark-3)" }}>Available for new projects</span>
-          </motion.div>
+        <p className="hero-body" style={{ marginTop: "1.5rem", marginBottom: "1.5rem" }}>
+          I build software that holds up — machine learning systems, applied AI,
+          and the visual and interaction design that makes them feel considered
+          rather than merely functional.
+        </p>
 
-          {/* Name */}
-          <motion.h1
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.26, ease: EASE }}
-            className="display-xl"
-            style={{ color: "#fff" }}
-          >
-            Emmanuel David
-          </motion.h1>
+        <p className="hero-body" style={{ marginBottom: "3rem" }}>
+          Most of my work sits where engineering and craft overlap: shipping an
+          interface, then the models and infrastructure behind it.
+        </p>
 
-          {/* Identity line — the four pillars stated plainly */}
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.32, ease: EASE }}
-            className="lead-lg"
-            style={{
-              color: "#fff",
-              maxWidth: "52ch",
-              marginTop: "0.6rem",
-            }}
-          >
-            Software Engineer <span style={{ opacity: 0.4 }}>·</span> Machine Learning{" "}
-            <span style={{ opacity: 0.4 }}>·</span> AI{" "}
-            <span style={{ opacity: 0.4 }}>·</span> Creative
-          </motion.p>
-
-          {/* Lede + second line */}
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.38, ease: EASE }}
-            className="body-text"
-            style={{
-              color: "var(--on-dark-3)",
-              maxWidth: "52ch",
-              marginTop: "0.875rem",
-            }}
-          >
-            I build software that holds up — machine learning systems, applied AI, and
-            the visual and interaction design that makes them feel considered rather
-            than merely functional.
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.44, ease: EASE }}
-            className="body-text"
-            style={{
-              color: "var(--on-dark-4)",
-              maxWidth: "52ch",
-              marginTop: "0.5rem",
-            }}
-          >
-            Most of my work sits where engineering and craft overlap: shipping an
-            interface, then the models and infrastructure behind it.
-          </motion.p>
-
-          {/* Actions */}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.46, ease: EASE }}
-            className="flex flex-wrap items-center justify-center gap-2"
-            style={{ marginTop: "1.5rem" }}
-          >
-            <a href="#expertise" className="btn btn-primary btn-lg">
-              <span>View expertise</span>
-              <ArrowRight />
-            </a>
-            <a href="#contact" className="btn btn-glass btn-lg">
-              Start a project
-            </a>
-            <Link href="/resume" className="btn btn-outline btn-lg">
-              Resume
-            </Link>
-          </motion.div>
+        <div className="hero-actions">
+          <a href="#expertise" className="hero-pill">
+            <EyeIcon />
+            View expertise
+          </a>
+          <a href="#contact" className="hero-pill">
+            <MessageIcon />
+            Start a project
+          </a>
+          <Link href="/resume" className="hero-pill">
+            <DownloadIcon />
+            Resume
+          </Link>
         </div>
       </motion.div>
     </section>

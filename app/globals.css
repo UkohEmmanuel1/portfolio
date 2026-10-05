@@ -8,6 +8,11 @@
    ────────────────────────────────────────────── */
 
 :root {
+  /* Dark is the default scheme. The light overrides live in a
+     prefers-color-scheme block further down, so a device that
+     reports no preference still gets this. */
+  color-scheme: dark;
+
   /* Surfaces */
   --ink: #050505;
   --carbon: #0a0a0a;
@@ -31,6 +36,48 @@
   --on-dark-4: rgba(255, 255, 255, 0.5);
   --on-dark-5: rgba(255, 255, 255, 0.35);
   --on-dark-6: rgba(255, 255, 255, 0.22);
+
+  /* ──────────────────────────────────────────────
+     SCHEME-REACTIVE SURFACES
+     Colours that were literal white veils, glass scrims or
+     a white bloom. They read as intentional on near-black
+     and as invisible or muddy on white, so they get a token
+     and flip with the scheme rather than staying literal.
+     ────────────────────────────────────────────── */
+
+  /* Row/card hover veil */
+  --wash: rgba(255, 255, 255, 0.02);
+  --wash-strong: rgba(255, 255, 255, 0.06);
+
+  /* Frosted nav pill and glass buttons */
+  --glass: rgba(255, 255, 255, 0.1);
+  --glass-hover: rgba(255, 255, 255, 0.18);
+  --glass-ink: #ffffff;
+
+  /* Availability dot bloom */
+  --glow: rgba(255, 255, 255, 0.7);
+
+  /* Raised panel hover, one step off --graphite */
+  --panel-hover: #1a1a1a;
+
+  /* Inverted primary button: light pill on dark */
+  --btn-primary-bg: #f3f3ef;
+  --btn-primary-bg-hover: #e4e4de;
+  --btn-primary-ink: var(--ink);
+
+  /* Hero actions. The lavender pills are the light-scheme
+     look; dark keeps the glass treatment the page already uses. */
+  --pill: rgba(255, 255, 255, 0.1);
+  --pill-hover: rgba(255, 255, 255, 0.18);
+  --pill-ink: #ffffff;
+
+  /* Hero type. #a3a3a3 clears AA on both --ink and #ffffff,
+     so it is the one value that needs no override. */
+  --hero-measure: 900px;
+  --hero-bg: #050505;
+  --hero-greeting: #a3a3a3;
+  --hero-role: #ffffff;
+  --hero-body: rgba(255, 255, 255, 0.62);
 
   /* Geometry */
   --radius-card: 0.9rem;
@@ -72,6 +119,80 @@
   --font-mono: var(--font-cascadia), ui-monospace, monospace;
 
   --ease-expo: var(--ease-expo);
+}
+
+/* ──────────────────────────────────────────────
+   LIGHT SCHEME
+   Only for devices that report prefers-color-scheme:
+   light. Everything re-points rather than restyles, so no
+   component needs to know which scheme it is rendering
+   into. --offwhite is the primary-text token despite the
+   name, which is why it flips to ink here.
+   ────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+
+    /* Surfaces */
+    --ink: #ffffff;
+    --graphite: #f4f4ef;
+    --offwhite: #111111;
+
+    /* Accent */
+    --signal: #111111;
+    --signal-soft: rgba(0, 0, 0, 0.06);
+
+    /* Hairlines */
+    --line-strong: rgba(0, 0, 0, 0.8);
+    --line: rgba(0, 0, 0, 0.18);
+    --line-soft: rgba(0, 0, 0, 0.11);
+    --line-faint: rgba(0, 0, 0, 0.08);
+
+    /* Text alpha ladder */
+    --on-dark: rgba(0, 0, 0, 0.92);
+    --on-dark-2: rgba(0, 0, 0, 0.76);
+    --on-dark-3: rgba(0, 0, 0, 0.62);
+    --on-dark-4: rgba(0, 0, 0, 0.5);
+    --on-dark-5: rgba(0, 0, 0, 0.35);
+    --on-dark-6: rgba(0, 0, 0, 0.22);
+
+    /* Scheme-reactive surfaces, inverted */
+    --wash: rgba(0, 0, 0, 0.025);
+    --wash-strong: rgba(0, 0, 0, 0.05);
+    --glass: rgba(0, 0, 0, 0.04);
+    --glass-hover: rgba(0, 0, 0, 0.07);
+    --glass-ink: #111111;
+    --glow: rgba(0, 0, 0, 0.25);
+    --panel-hover: #e9e7df;
+
+    /* Primary button inverts: dark pill on light */
+    --btn-primary-bg: #111111;
+    --btn-primary-bg-hover: #2b2b2b;
+    --btn-primary-ink: #ffffff;
+
+    /* Hero actions, the lavender light-scheme look */
+    --pill: #f4f1fa;
+    --pill-hover: #e8e3f5;
+    --pill-ink: #1a1a1a;
+
+    /* Hero type */
+    --hero-bg: #ffffff;
+    --hero-role: #111111;
+    --hero-body: #737373;
+  }
+
+  /* About is already a hand-rolled light island, so under the
+     light scheme it becomes a tonal band on white instead of an
+     island in the dark. Soften its background so the two read
+     as one surface rather than a hard grey block. */
+  .section-light {
+    --light-bg: #faf9f5;
+    border-top-color: var(--line-faint);
+  }
+
+  /* The dark photo mat is only ever seen behind a dark card,
+     which stays dark on purpose, so it is left alone. */
 }
 
 /* ──────────────────────────────────────────────
@@ -329,6 +450,113 @@ body {
 }
 
 /* ──────────────────────────────────────────────
+   HERO
+   Centred editorial column. Every colour comes from
+   --hero-* or --pill-*, so one set of markup renders
+   the white/lavender treatment on a light device and the
+   dark glass treatment on a dark one, with no branching
+   in the component.
+   ────────────────────────────────────────────── */
+
+.hero {
+  background: var(--hero-bg);
+  color: var(--hero-role);
+}
+
+.hero-inner {
+  width: 100%;
+  max-width: var(--hero-measure);
+  margin-inline: auto;
+  padding-block: clamp(3rem, 8vw, 5rem);
+  padding-inline: clamp(1.25rem, 5vw, 2.5rem);
+}
+
+/* The greeting is deliberately the quieter of the two lines —
+   weight 400 against the role line's 500, plus the size gap. */
+.hero-greeting {
+  font-size: clamp(1.75rem, 5.4vw, 3.25rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--hero-greeting);
+  text-wrap: balance;
+}
+
+.hero-role {
+  margin-top: 0.5rem;
+  font-size: clamp(1.0625rem, 2.6vw, 1.75rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--hero-role);
+  text-wrap: balance;
+}
+
+.hero-body {
+  font-size: clamp(1rem, 0.8vw + 0.9rem, 1.1rem);
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--hero-body);
+  max-width: 650px;
+  text-wrap: pretty;
+}
+
+/* Wraps by default: three pills plus 16px gaps overflow a
+   320px viewport, and wrapping is what stops that becoming a
+   horizontal scroll rather than a second line. */
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: var(--pill);
+  color: var(--pill-ink);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background var(--dur-hover) ease, color var(--dur-hover) ease;
+}
+
+.hero-pill:hover {
+  background: var(--pill-hover);
+}
+
+.hero-pill:focus-visible {
+  outline: 2px solid var(--hero-role);
+  outline-offset: 2px;
+}
+
+.hero-pill svg {
+  flex: none;
+}
+
+/* A photographic panel stays dark in both schemes — a dark scrim
+   over a photo does not invert, and flipping the type to ink on
+   top of it would be unreadable. So the dark palette is re-scoped
+   to the subtree instead of following the page scheme. */
+.photo-panel {
+  --offwhite: #f4f4ef;
+  --signal: #ffffff;
+  --signal-soft: rgba(255, 255, 255, 0.12);
+  --on-dark-2: rgba(255, 255, 255, 0.76);
+  --on-dark-3: rgba(255, 255, 255, 0.62);
+  --on-dark-4: rgba(255, 255, 255, 0.5);
+  --on-dark-5: rgba(255, 255, 255, 0.35);
+  --on-dark-6: rgba(255, 255, 255, 0.22);
+  --line-faint: rgba(255, 255, 255, 0.08);
+  --line-soft: rgba(255, 255, 255, 0.11);
+}
+
+/* ──────────────────────────────────────────────
    HAIRLINE RULES
    ────────────────────────────────────────────── */
 
@@ -363,7 +591,7 @@ body {
 }
 
 .rule-row:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--wash);
 }
 
 .rule-index {
@@ -405,21 +633,21 @@ body {
 }
 
 .btn-primary {
-  background: #f3f3ef;
-  color: var(--ink);
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-ink);
 }
 
 .btn-primary:hover {
-  background: #e4e4de;
+  background: var(--btn-primary-bg-hover);
 }
 
 .btn-glass {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: var(--glass);
+  color: var(--glass-ink);
 }
 
 .btn-glass:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--glass-hover);
 }
 
 .btn-outline {
@@ -430,7 +658,7 @@ body {
 
 .btn-outline:hover {
   border-color: var(--offwhite);
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--wash-strong);
 }
 
 /* ──────────────────────────────────────────────
@@ -567,7 +795,7 @@ body {
 
 .marquee-card--panel:hover {
   transform: translateY(-3px);
-  background: #1a1a1a;
+  background: var(--panel-hover);
   border-color: var(--line);
 }
 
@@ -727,7 +955,7 @@ body {
   height: 0.4rem;
   border-radius: 50%;
   background: var(--signal);
-  box-shadow: 0 0 0.7rem rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 0.7rem var(--glow);
   animation: signal-pulse 2.4s var(--ease-expo) infinite;
   flex: none;
 }
