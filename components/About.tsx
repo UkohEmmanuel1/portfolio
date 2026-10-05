@@ -6,7 +6,7 @@ import { VIEWPORT, fadeUp, stagger } from "@/components/motion";
 
 const PORTRAIT = {
   src: "/image/about.jpg",
-  alt: "Emmanuel David, full-stack and machine learning developer",
+  alt: "Emmanuel David, software engineer working across machine learning, AI, and creative practice",
   width: 509,
   height: 334,
 };
@@ -215,31 +215,30 @@ export default function About() {
           className="mt-8 flex flex-col gap-6"
         >
           <motion.p variants={fadeUp} className="about-copy">
-            I&apos;m a <strong>Full-Stack Developer</strong>,{" "}
-            <strong>Machine Learning Developer</strong>, and{" "}
-            <strong>Business Intelligence Specialist</strong> with years of
-            experience, specializing in building scalable web applications,
-            intelligent systems, and data-driven solutions that power
-            enterprise-level businesses.
+            I&apos;m a <strong>Software Engineer</strong> working across{" "}
+            <strong>machine learning</strong>, <strong>applied AI</strong>, and{" "}
+            <strong>creative practice</strong>. Most of what I build sits at the seam
+            between those — systems that are technically sound and still feel like
+            someone bothered.
           </motion.p>
 
           <motion.p variants={fadeUp} className="about-copy">
-            My expertise lies in designing robust digital solutions that combine
-            web development, machine learning, and business intelligence to
-            solve complex problems while ensuring performance, security, and
-            scalability.
+            In practice that means training and shipping models, wiring them into real
+            applications, and designing the interfaces and identities that carry them. I
+            care about the unglamorous parts just as much: latency, authentication,
+            deployment, and the code somebody else has to read next year.
           </motion.p>
 
           <motion.p variants={fadeUp} className="about-copy">
-            I approach every project with analytical thinking, technical
-            precision, and creative problem-solving. I focus on delivering
-            solutions that drive real results.
+            I like problems that refuse to respect a single discipline. A feature might
+            need a model, a design system, and an API contract inside the same week, and
+            I like being the person who doesn&apos;t have to hand that off.
           </motion.p>
 
           <motion.p variants={fadeUp} className="about-copy">
-            Curious by nature, I thrive on challenging projects that require
-            innovative solutions and meticulous execution. Beyond development,
-            I&apos;m passionate about exploring emerging technologies.
+            Outside client work I photograph, shoot film, and keep a visual practice
+            running. It&apos;s the same instinct as the engineering — pay attention, then
+            strip out everything that doesn&apos;t earn its place.
           </motion.p>
         </motion.div>
       </div>
@@ -255,7 +254,7 @@ export default function About() {
       >
         <div className="marquee-track">
           <CardSet />
-          <div aria-hidden="true" style={{ display: "contents" }}>
+          <div aria-hidden="true" className="marquee-dupe">
             <CardSet />
           </div>
         </div>

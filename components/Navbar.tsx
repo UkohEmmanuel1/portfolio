@@ -10,6 +10,7 @@ const navItems = [
   { name: "About", href: "#about" },
   { name: "Projects", href: "#projects" },
   { name: "Expertise", href: "#expertise" },
+  { name: "Creative", href: "#creative" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -37,7 +38,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const sections = ["home", "about", "projects", "expertise", "contact"];
+    const sections = ["home", "about", "projects", "expertise", "creative", "contact"];
 
     const handleScroll = () => {
       const probe = window.scrollY + window.innerHeight * 0.35;
@@ -68,12 +69,12 @@ export default function Navbar() {
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
-        className="sticky top-0 z-30 grid grid-cols-[1fr_auto] md:grid-cols-[minmax(12rem,1fr)_auto_minmax(12rem,1fr)] items-center min-h-20 px-5 md:px-9"
+        className="sticky top-0 z-30 flex items-center justify-center min-h-20 px-5 md:px-9"
       >
         {/* Left: wordmark */}
         <Link
           href="#home"
-          className="justify-self-start group flex items-center gap-2.5"
+          className="absolute left-5 md:left-9 group flex items-center gap-2.5"
         >
           <span className="relative w-7 h-7 overflow-hidden rounded-full shrink-0">
             <Image
@@ -86,7 +87,7 @@ export default function Navbar() {
             />
           </span>
           <span
-            className="hidden sm:block text-[0.86rem] font-extrabold tracking-[0.14em] uppercase"
+            className="hidden sm:block text-[0.86rem] font-bold tracking-[0.14em] uppercase"
             style={{ color: "#fff" }}
           >
             Emmanuel David
@@ -95,7 +96,7 @@ export default function Navbar() {
 
         {/* Center: glass nav pill */}
         <nav
-          className="hidden md:flex items-center justify-self-center"
+          className="hidden md:flex items-center"
           style={{
             padding: "0.6rem 1rem",
             background: "rgba(255,255,255,0.05)",
@@ -136,7 +137,7 @@ export default function Navbar() {
         </nav>
 
         {/* Right: actions */}
-        <div className="hidden md:flex items-center justify-self-end gap-1.4rem">
+        <div className="hidden md:flex items-center absolute right-5 md:right-9 gap-1.4rem">
           <Link href="/resume" className="btn btn-glass">
             Resume
           </Link>
@@ -149,9 +150,9 @@ export default function Navbar() {
         {/* Mobile: menu trigger */}
         <button
           onClick={() => setMenuOpen(true)}
-          className="md:hidden justify-self-end"
+          className="md:hidden absolute right-5"
           style={{
-            fontFamily: "var(--font-mono-jb), ui-monospace, monospace",
+            fontFamily: "var(--font-cascadia), ui-monospace, monospace",
             fontSize: "0.9rem",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
@@ -180,7 +181,7 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
               className="absolute top-0 right-0 px-5 h-20 flex items-center"
               style={{
-                fontFamily: "var(--font-mono-jb), ui-monospace, monospace",
+                fontFamily: "var(--font-cascadia), ui-monospace, monospace",
                 fontSize: "0.9rem",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",

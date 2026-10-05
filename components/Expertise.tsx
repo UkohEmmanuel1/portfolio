@@ -3,45 +3,77 @@
 import { motion } from "framer-motion";
 import {
   SiNextdotjs,
-  SiFastapi,
-  SiPandas,
   SiTensorflow,
-  SiDocker,
+  SiOpenai,
+  SiFigma,
 } from "react-icons/si";
-import { VIEWPORT, fadeIn, fadeUp, stagger } from "@/components/motion";
+import { EASE, VIEWPORT, fadeUp, stagger } from "@/components/motion";
 
 const disciplines = [
   {
-    title: "Full-Stack Engineering",
+    title: "Software Engineering",
     blurb:
-      "End-to-end product build with React and Node on the front, Django, Laravel, and Express on the back, wired to the databases and services underneath.",
+      "Web platforms built end to end — React and Node in front, Django, Laravel, and Express behind, wired to the databases and services underneath.",
     Icon: SiNextdotjs,
   },
   {
     title: "Machine Learning",
     blurb:
-      "Supervised and unsupervised models, deep learning, and computer vision built with TensorFlow and scikit-learn, containerised for reproducible inference.",
+      "Supervised and unsupervised models, deep learning, and computer vision with TensorFlow and scikit-learn, containerised so inference is reproducible.",
     Icon: SiTensorflow,
   },
   {
-    title: "Data & Analytics",
+    title: "Applied AI",
     blurb:
-      "Pipelines and aggregation across PostgreSQL and MongoDB, with business intelligence dashboards that turn raw records into decisions.",
-    Icon: SiPandas,
+      "Retrieval, agents, and LLM-backed features moved out of the notebook and into production, with evaluation, guardrails, and cost that stays predictable.",
+    Icon: SiOpenai,
   },
   {
-    title: "API & Systems Design",
+    title: "Creative",
     blurb:
-      "REST and realtime API architecture, secure authentication, and system design that holds up under real traffic.",
-    Icon: SiFastapi,
-  },
-  {
-    title: "Cloud & DevOps",
-    blurb:
-      "Deployment and CI/CD, containerised services, Linux administration, and observability that keeps releases boring.",
-    Icon: SiDocker,
+      "Photography, film, and visual identity — art direction, type, and design systems made to be used rather than admired and left behind.",
+    Icon: SiFigma,
   },
 ];
+
+function DisciplineCard({
+  discipline,
+  index,
+}: {
+  discipline: (typeof disciplines)[number];
+  index: number;
+}) {
+  return (
+    <article className="marquee-card marquee-card--panel">
+      <div className="card-head">
+        <span className="card-icon">
+          <discipline.Icon size={17} />
+        </span>
+        <span className="mono-label card-index">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+      </div>
+
+      <h3 className="display-sm card-title" style={{ color: "#fff" }}>
+        {discipline.title}
+      </h3>
+
+      <p className="body-text card-desc">{discipline.blurb}</p>
+    </article>
+  );
+}
+
+/* Fragment, not a wrapper, so the track's own gap stays the only
+   spacing and the duplicate set lines up with the original. */
+function DisciplineSet() {
+  return (
+    <>
+      {disciplines.map((discipline, index) => (
+        <DisciplineCard key={discipline.title} discipline={discipline} index={index} />
+      ))}
+    </>
+  );
+}
 
 export default function Expertise() {
   return (
@@ -64,46 +96,37 @@ export default function Expertise() {
             style={{ marginBottom: "var(--space-head)" }}
           >
             <motion.h2 variants={fadeUp} className="display-lg" style={{ maxWidth: "30ch" }}>
-              Five disciplines, one operator
+              Four clear pillars
             </motion.h2>
             <motion.p
               variants={fadeUp}
               className="body-text lg:text-right"
               style={{ color: "var(--on-dark-3)", maxWidth: "42ch" }}
             >
-              Engineering, modelling, and infrastructure handled in one place — no
-              hand-offs between vendors or specialists.
+              One person carrying the whole thing — engineering, modelling, and visual
+              craft, without the hand-off in the middle.
             </motion.p>
           </div>
         </motion.div>
-
-        <motion.div
-          variants={stagger(0.06)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT}
-          className="card-grid"
-        >
-          {disciplines.map((d, i) => (
-            <motion.article key={d.title} variants={fadeIn} className="card">
-              <div className="card-head">
-                <span className="card-icon">
-                  <d.Icon size={17} />
-                </span>
-                <span className="mono-label card-index">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              </div>
-
-              <h3 className="display-sm card-title" style={{ color: "#fff" }}>
-                {d.title}
-              </h3>
-
-              <p className="body-text card-desc">{d.blurb}</p>
-            </motion.article>
-          ))}
-        </motion.div>
       </div>
+
+      {/* Full-bleed marquee, reversed against the About and Projects
+          strips above it — four cards, set twice for a seamless loop */}
+      <motion.div
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={VIEWPORT}
+        transition={{ duration: 0.8, ease: EASE }}
+        className="marquee marquee--stack"
+        style={{ marginTop: "var(--space-head)" }}
+      >
+        <div className="marquee-track marquee-track--reverse">
+          <DisciplineSet />
+          <div aria-hidden="true" className="marquee-dupe">
+            <DisciplineSet />
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 }

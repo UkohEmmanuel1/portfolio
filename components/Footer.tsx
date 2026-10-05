@@ -20,15 +20,16 @@ const columns = [
       { name: "About", href: "#about" },
       { name: "Projects", href: "#projects" },
       { name: "Expertise", href: "#expertise" },
+      { name: "Creative", href: "#creative" },
     ],
   },
   {
     title: "Capabilities",
     links: [
-      { name: "Web Development", href: "#expertise" },
+      { name: "Software Engineering", href: "#expertise" },
       { name: "Machine Learning", href: "#expertise" },
-      { name: "Database Design", href: "#expertise" },
-      { name: "System Design", href: "#expertise" },
+      { name: "Applied AI", href: "#expertise" },
+      { name: "Photography & Film", href: "#creative" },
     ],
   },
   {

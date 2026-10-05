@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { EASE } from "@/components/motion";
@@ -24,40 +24,6 @@ function ArrowRight({ size = 13 }: { size?: number }) {
     </svg>
   );
 }
-
-function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-
-  useEffect(() => {
-    if (!inView) return;
-
-    let frame = 0;
-    const total = 90;
-    const tick = () => {
-      frame++;
-      const t = frame / total;
-      const eased = 1 - Math.pow(2, -10 * t);
-      setCount(Math.round(to * Math.min(eased, 1)));
-      if (frame < total) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }, [inView, to]);
-
-  return (
-    <span ref={ref}>
-      {count}
-      {suffix}
-    </span>
-  );
-}
-
-const stats = [
-  { value: 5, suffix: "+", label: "Years in production" },
-  { value: 84, suffix: "+", label: "Projects delivered" },
-  { value: 14, suffix: "+", label: "Systems architected" },
-];
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -110,13 +76,13 @@ export default function Hero() {
         style={{ y: contentY, opacity: contentFade }}
         className="shell w-full relative"
       >
-        <div style={{ paddingBottom: "clamp(2rem, 4vw, 3rem)" }}>
+        <div className="flex flex-col items-center text-center md:items-center md:text-center" style={{ paddingBottom: "clamp(2rem, 4vw, 3rem)" }}>
           {/* Availability */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.18, ease: EASE }}
-            className="eyebrow"
+            className="eyebrow md:justify-center"
           >
             <span className="signal-dot" />
             <span style={{ color: "var(--on-dark-3)" }}>Available for new projects</span>
@@ -133,36 +99,53 @@ export default function Hero() {
             Emmanuel David
           </motion.h1>
 
+          {/* Identity line — the four pillars stated plainly */}
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.32, ease: EASE }}
+            className="lead-lg"
+            style={{
+              color: "#fff",
+              maxWidth: "52ch",
+              marginTop: "0.6rem",
+            }}
+          >
+            Software Engineer <span style={{ opacity: 0.4 }}>·</span> Machine Learning{" "}
+            <span style={{ opacity: 0.4 }}>·</span> AI{" "}
+            <span style={{ opacity: 0.4 }}>·</span> Creative
+          </motion.p>
+
           {/* Lede + second line */}
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.34, ease: EASE }}
-            className="lead-lg"
+            transition={{ duration: 0.8, delay: 0.38, ease: EASE }}
+            className="body-text"
             style={{
-              color: "var(--on-dark-2)",
+              color: "var(--on-dark-3)",
               maxWidth: "52ch",
               marginTop: "0.875rem",
             }}
           >
-            Crafting scalable web systems and intelligent APIs that power modern AI and
-            data-driven applications.
+            I build software that holds up — machine learning systems, applied AI, and
+            the visual and interaction design that makes them feel considered rather
+            than merely functional.
           </motion.p>
 
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: EASE }}
+            transition={{ duration: 0.8, delay: 0.44, ease: EASE }}
             className="body-text"
             style={{
-              color: "var(--on-dark-3)",
+              color: "var(--on-dark-4)",
               maxWidth: "52ch",
               marginTop: "0.5rem",
             }}
           >
-            Specializing in machine learning integration, database architecture, and
-            full-stack development to deliver enterprise-grade solutions built for
-            performance, security, and growth.
+            Most of my work sits where engineering and craft overlap: shipping an
+            interface, then the models and infrastructure behind it.
           </motion.p>
 
           {/* Actions */}
@@ -170,7 +153,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.46, ease: EASE }}
-            className="flex flex-wrap items-center gap-2"
+            className="flex flex-wrap items-center justify-center gap-2"
             style={{ marginTop: "1.5rem" }}
           >
             <a href="#expertise" className="btn btn-primary btn-lg">
@@ -184,52 +167,6 @@ export default function Hero() {
               Resume
             </Link>
           </motion.div>
-
-          {/* Stat rail with a rule that draws itself */}
-          <div className="relative" style={{ marginTop: "2.25rem" }}>
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 1, delay: 0.6, ease: EASE }}
-              className="absolute inset-x-0 top-0 h-px origin-left"
-              style={{ background: "var(--line-soft)" }}
-            />
-
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: {},
-                visible: { transition: { staggerChildren: 0.08, delayChildren: 0.7 } },
-              }}
-              className="grid grid-cols-3 gap-6"
-              style={{ paddingTop: "1.25rem", maxWidth: "44rem" }}
-            >
-              {stats.map((s) => (
-                <motion.div
-                  key={s.label}
-                  variants={{
-                    hidden: { opacity: 0, y: 8 },
-                    visible: {
-                      opacity: 1,
-                      y: 0,
-                      transition: { duration: 0.5, ease: EASE },
-                    },
-                  }}
-                >
-                  <div
-                    className="display-md"
-                    style={{ color: "#fff", marginBottom: "0.2rem" }}
-                  >
-                    <Counter to={s.value} suffix={s.suffix} />
-                  </div>
-                  <div className="mono-label" style={{ color: "var(--on-dark-4)" }}>
-                    {s.label}
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
         </div>
       </motion.div>
     </section>

@@ -15,8 +15,8 @@
   --offwhite: #f4f4ef;
 
   /* Accent */
-  --signal: #64ff9b;
-  --signal-soft: rgba(100, 255, 155, 0.12);
+  --signal: #ffffff;
+  --signal-soft: rgba(255, 255, 255, 0.12);
 
   /* Hairlines */
   --line-strong: rgba(255, 255, 255, 0.8);
@@ -64,8 +64,8 @@
   --radius-card: var(--radius-card);
   --radius-pill: var(--radius-pill);
 
-  --font-sans: var(--font-inter), system-ui, arial, sans-serif;
-  --font-mono: var(--font-mono-jb), ui-monospace, monospace;
+  --font-sans: var(--font-cascadia), ui-monospace, monospace;
+  --font-mono: var(--font-cascadia), ui-monospace, monospace;
 
   --ease-expo: var(--ease-expo);
 }
@@ -102,7 +102,7 @@ body {
   margin: 0;
   background-color: var(--ink);
   color: var(--offwhite);
-  font-family: var(--font-inter), system-ui, arial, sans-serif;
+  font-family: var(--font-cascadia), ui-monospace, monospace;
   font-weight: 500;
   font-optical-sizing: auto;
   line-height: 1.25;
@@ -153,7 +153,8 @@ body {
    LIGHT SECTION SCOPE
    Scoped to a single section rather than :root —
    the rest of the page is dark and must not shift.
-   Type is set in Cascadia Code throughout.
+   Type is Cascadia Code everywhere on the site,
+   so only colour needs overriding here.
    ────────────────────────────────────────────── */
 
 .section-light {
@@ -218,7 +219,7 @@ body {
   align-items: center;
   gap: 0.7rem;
   margin-bottom: 1.125rem;
-  font-family: var(--font-mono-jb), ui-monospace, monospace;
+  font-family: var(--font-cascadia), ui-monospace, monospace;
   font-size: 0.6875rem;
   font-weight: 400;
   line-height: 1;
@@ -308,7 +309,7 @@ body {
 }
 
 .mono-label {
-  font-family: var(--font-mono-jb), ui-monospace, monospace;
+  font-family: var(--font-cascadia), ui-monospace, monospace;
   font-size: 0.6875rem;
   font-weight: 400;
   line-height: 1;
@@ -317,7 +318,7 @@ body {
 }
 
 .mono-sm {
-  font-family: var(--font-mono-jb), ui-monospace, monospace;
+  font-family: var(--font-cascadia), ui-monospace, monospace;
   font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.08em;
@@ -491,6 +492,17 @@ body {
   animation-play-state: paused;
 }
 
+/* Duplicate set wrapper. display: contents keeps the track's own
+   gap as the only spacing, so the copy lines up with the original.
+   Class-driven rather than inline so the mobile stack can drop it. */
+.marquee-dupe {
+  display: contents;
+}
+
+.marquee-track--reverse {
+  animation-name: marquee-reverse;
+}
+
 @keyframes marquee {
   from {
     transform: translate3d(0, 0, 0);
@@ -502,6 +514,18 @@ body {
   }
 }
 
+/* Same distance travelled, opposite direction. Starting offset is
+   the end of the forward loop, which is invisible because the
+   duplicate set occupies exactly that space. */
+@keyframes marquee-reverse {
+  from {
+    transform: translate3d(calc(-50% - var(--gap-card) / 2), 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 /* Exact 509x334 on desktop, 3:2 preserved as the width shrinks */
 .marquee-card {
   position: relative;
@@ -510,6 +534,26 @@ body {
   aspect-ratio: 509 / 334;
   overflow: hidden;
   border-radius: 16px;
+}
+
+/* Text-bearing card: same geometry, plus the graphite surface.
+   The min-height floor keeps long copy from being clipped by
+   the frame's overflow — the card grows instead. */
+.marquee-card--panel {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-card);
+  background: var(--graphite);
+  border: 1px solid var(--line-soft);
+  min-height: 15rem;
+  transition: background var(--dur-hover) ease,
+    border-color var(--dur-hover) ease, transform 0.2s var(--ease-expo);
+}
+
+.marquee-card--panel:hover {
+  transform: translateY(-3px);
+  background: #1a1a1a;
+  border-color: var(--line);
 }
 
 /* Soft light blobs drifting over the gradient mesh card */
@@ -536,52 +580,44 @@ body {
 }
 
 /* ──────────────────────────────────────────────
-   CARD SYSTEM
-   Square cards, one accent, radius only. The
-   square comes from aspect-ratio with a min-height
-   floor, so long copy grows the card rather than
-   clipping — rows still equalise via flex stretch.
+   MOBILE STACK
+   Scoped to .marquee--stack so sections that opt in
+   collapse into a static column below 48rem. The
+   horizontal edge mask is dropped (it would fade the
+   sides of a full-width card) and the duplicate set
+   is removed so nothing appears twice.
    ────────────────────────────────────────────── */
 
-.card-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--gap-card);
-}
+@media (max-width: 47.9375rem) {
+  .marquee--stack {
+    -webkit-mask-image: none;
+    mask-image: none;
+    padding-inline: var(--gutter-sm);
+  }
 
-.card {
-  flex: 0 0 100%;
-  aspect-ratio: 1 / 1;
-  min-height: 13rem;
-  display: flex;
-  flex-direction: column;
-  padding: var(--space-card);
-  background: var(--graphite);
-  border: 1px solid var(--line-soft);
-  border-radius: var(--radius-card);
-  overflow: hidden;
-  transition: background var(--dur-hover) ease,
-    border-color var(--dur-hover) ease, transform 0.2s var(--ease-expo);
-}
+  .marquee--stack .marquee-track {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    animation: none;
+  }
 
-@media (min-width: 40rem) {
-  .card {
-    flex: 0 0 calc((100% - var(--gap-card)) / 2);
+  .marquee--stack .marquee-dupe {
+    display: none;
+  }
+
+  .marquee--stack .marquee-card {
+    width: 100%;
+    aspect-ratio: auto;
+    min-height: 11rem;
   }
 }
 
-@media (min-width: 64rem) {
-  .card {
-    flex: 0 0 calc((100% - 2 * var(--gap-card)) / 3);
-  }
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  background: #1a1a1a;
-  border-color: var(--line);
-}
+/* ──────────────────────────────────────────────
+   CARD PARTS
+   Shared by every card surface. Geometry and colour
+   live on the container — .marquee-card--panel.
+   ────────────────────────────────────────────── */
 
 .card-head {
   display: flex;
@@ -603,7 +639,7 @@ body {
   transition: border-color var(--dur-hover) ease;
 }
 
-.card:hover .card-icon {
+.marquee-card--panel:hover .card-icon {
   border-color: var(--line);
 }
 
@@ -612,7 +648,7 @@ body {
   transition: color var(--dur-hover) ease;
 }
 
-.card:hover .card-index {
+.marquee-card--panel:hover .card-index {
   color: var(--signal);
 }
 
@@ -661,7 +697,7 @@ body {
   height: 0.4rem;
   border-radius: 50%;
   background: var(--signal);
-  box-shadow: 0 0 0.7rem rgba(100, 255, 155, 0.7);
+  box-shadow: 0 0 0.7rem rgba(255, 255, 255, 0.7);
   animation: signal-pulse 2.4s var(--ease-expo) infinite;
   flex: none;
 }

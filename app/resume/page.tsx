@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const experienceData = [
   {
-    role: "Senior Full Stack & ML Engineer",
+    role: "Senior Software Engineer · ML & AI",
     company: "Freelance & Consulting",
     period: "2021 — 2023",
     desc: "Delivered 80+ high-performance web systems, ML inference APIs, and custom enterprise databases.",
@@ -62,7 +62,7 @@ export default function ResumePage() {
           </div>
           <h1 className="display-lg">Emmanuel David</h1>
           <p className="lead mt-2" style={{ color: "var(--on-dark-2)" }}>
-            Full stack &amp; machine learning developer
+            Software Engineer · Machine Learning · AI · Creative
           </p>
 
           <div
@@ -90,10 +90,10 @@ export default function ResumePage() {
             <span>Executive summary</span>
           </div>
           <p className="lead" style={{ color: "var(--on-dark-2)", maxWidth: "72ch" }}>
-            Results-driven full stack developer, machine learning engineer, and business
-            intelligence specialist with over five years designing distributed cloud
-            systems, ML pipelines, and high-performance web platforms — with 84+ client
-            and enterprise initiatives delivered.
+            Software engineer working across machine learning, applied AI, and creative
+            practice, with over five years designing distributed cloud systems, ML
+            pipelines, and high-performance web platforms — alongside a personal practice
+            in photography, film, and visual identity.
           </p>
         </section>
 
@@ -183,7 +183,7 @@ export default function ResumePage() {
 
         <div className="rule-ink-soft" />
         <p className="mono-label pt-6" style={{ color: "var(--on-dark-5)" }}>
-          Emmanuel David — Full stack &amp; machine learning developer
+          Emmanuel David — Software Engineer · Machine Learning · AI · Creative
         </p>
       </div>
     </div>
