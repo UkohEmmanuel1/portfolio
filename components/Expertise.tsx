@@ -86,7 +86,7 @@ export default function Expertise() {
           viewport={VIEWPORT}
         >
           <motion.div variants={fadeUp} className="eyebrow">
-            <span className="eyebrow-index">03</span>
+            <span className="eyebrow-index">02</span>
             <span className="eyebrow-rule" />
             <span>Expertise</span>
           </motion.div>
@@ -110,8 +110,8 @@ export default function Expertise() {
         </motion.div>
       </div>
 
-      {/* Full-bleed marquee, reversed against the About and Projects
-          strips above it — four cards, set twice for a seamless loop */}
+      {/* Full-bleed marquee, reversed against the About strip above it
+          — four cards, set twice for a seamless loop */}
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}

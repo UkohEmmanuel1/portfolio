@@ -13,8 +13,8 @@ export default function Home() {
       <main className="relative">
         <Hero />
         <About />
-        <Projects />
         <Expertise />
+        <Projects />
         <Contact />
         <Footer />
       </main>

@@ -149,7 +149,7 @@ export default function Projects() {
           viewport={VIEWPORT}
         >
           <motion.div variants={fadeUp} className="eyebrow">
-            <span className="eyebrow-index">02</span>
+            <span className="eyebrow-index">03</span>
             <span className="eyebrow-rule" />
             <span>Selected projects</span>
           </motion.div>
