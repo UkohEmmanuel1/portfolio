@@ -160,7 +160,7 @@ export default function Contact() {
             }}
           >
             <div className="eyebrow" style={{ marginBottom: 0 }}>
-              <span className="eyebrow-index">05</span>
+              <span className="eyebrow-index">04</span>
               <span className="eyebrow-rule" />
               <span>Contact</span>
             </div>

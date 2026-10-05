@@ -10,7 +10,6 @@ const navItems = [
   { name: "About", href: "#about" },
   { name: "Projects", href: "#projects" },
   { name: "Expertise", href: "#expertise" },
-  { name: "Creative", href: "#creative" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -38,7 +37,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const sections = ["home", "about", "projects", "expertise", "creative", "contact"];
+    const sections = ["home", "about", "projects", "expertise", "contact"];
 
     const handleScroll = () => {
       const probe = window.scrollY + window.innerHeight * 0.35;

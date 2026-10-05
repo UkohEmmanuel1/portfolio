@@ -52,6 +52,10 @@
   --gutter: 2.25rem;
   --gutter-sm: 1.25rem;
   --shell: 80rem;
+
+  /* Marquee card width, single-sourced so the staggered row
+     offset can never drift out of sync with the card itself. */
+  --card-w: min(509px, 78vw);
 }
 
 @theme inline {
@@ -503,6 +507,17 @@ body {
   animation-name: marquee-reverse;
 }
 
+/* Second row sits half a card along, so its edges fall between
+   the first row's instead of lining up with them. Half a card
+   plus half a gap is the brick stagger. Uses the independent
+   `translate` property because the track's own transform is
+   owned by the marquee keyframes — a class-level transform
+   would be overwritten on every animation frame, whereas
+   translate composes with it and leaves the loop maths alone. */
+.marquee-track--offset {
+  translate: calc((var(--card-w) + var(--gap-card)) / -2) 0;
+}
+
 @keyframes marquee {
   from {
     transform: translate3d(0, 0, 0);
@@ -530,7 +545,7 @@ body {
 .marquee-card {
   position: relative;
   flex: none;
-  width: min(509px, 78vw);
+  width: var(--card-w);
   aspect-ratio: 509 / 334;
   overflow: hidden;
   border-radius: 16px;
@@ -610,6 +625,21 @@ body {
     width: 100%;
     aspect-ratio: auto;
     min-height: 11rem;
+  }
+
+  /* The stagger is a desktop-only two-row effect. In a column
+     the translate would shove the whole stack off-screen. */
+  .marquee--stack .marquee-track--offset {
+    translate: none;
+  }
+
+  /* The 11rem floor above sits under what the longest blurbs
+     need at phone widths, so stacked cards come out ragged.
+     Raised for Projects only — the shared floor is left alone
+     so the shorter Expertise cards aren't padded out. ID
+     specificity beats .marquee--stack .marquee-card. */
+  #projects .marquee-card {
+    min-height: 16rem;
   }
 }
 

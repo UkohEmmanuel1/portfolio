@@ -110,16 +110,33 @@ function ProjectCard({
 }
 
 /* Fragment, not a wrapper, so the track's own gap stays the only
-   spacing and the duplicate set lines up with the original. */
-function ProjectSet() {
+   spacing and the duplicate set lines up with the original. The
+   offset keeps the 01..06 labels running across both rows instead
+   of restarting at 01 in the second one. */
+function ProjectRow({
+  items,
+  offset,
+}: {
+  items: (typeof projects)[number][];
+  offset: number;
+}) {
   return (
     <>
-      {projects.map((project, index) => (
-        <ProjectCard key={project.title} project={project} index={index} />
+      {items.map((project, i) => (
+        <ProjectCard
+          key={project.title}
+          project={project}
+          index={offset + i}
+        />
       ))}
     </>
   );
 }
+
+/* Three per row, so each row scrolls as its own loop. The track
+   translates exactly one set, which is three cards plus three
+   gaps — matching the -50% - gap/2 keyframe. */
+const ROWS = [projects.slice(0, 3), projects.slice(3, 6)];
 
 export default function Projects() {
   return (
@@ -156,22 +173,37 @@ export default function Projects() {
         </motion.div>
       </div>
 
-      {/* Full-bleed marquee — six cards, set twice for a seamless loop */}
-      <motion.div
-        initial={{ opacity: 0, y: 18 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={VIEWPORT}
-        transition={{ duration: 0.8, ease: EASE }}
-        className="marquee marquee--stack"
+      {/* Full-bleed marquees — two rows of three. Row two runs
+          reversed and shifted half a card, so the card edges
+          stagger instead of lining up with row one. */}
+      <div
+        className="flex flex-col gap-[var(--gap-card)]"
         style={{ marginTop: "var(--space-head)" }}
       >
-        <div className="marquee-track">
-          <ProjectSet />
-          <div aria-hidden="true" className="marquee-dupe">
-            <ProjectSet />
-          </div>
-        </div>
-      </motion.div>
+        {ROWS.map((row, r) => (
+          <motion.div
+            key={row[0].title}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.8, ease: EASE }}
+            className="marquee marquee--stack"
+          >
+            <div
+              className={
+                r === 1
+                  ? "marquee-track marquee-track--reverse marquee-track--offset"
+                  : "marquee-track"
+              }
+            >
+              <ProjectRow items={row} offset={r * 3} />
+              <div aria-hidden="true" className="marquee-dupe">
+                <ProjectRow items={row} offset={r * 3} />
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
 
       <div className="shell">
         {/* Source link */}
