@@ -78,55 +78,64 @@ function DisciplineSet() {
 export default function Expertise() {
   return (
     <section id="expertise" className="section section-ink">
-      <div className="shell">
-        <motion.div
-          variants={stagger(0.08)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT}
-        >
-          <motion.div variants={fadeUp} className="eyebrow">
-            <span className="eyebrow-index">02</span>
-            <span className="eyebrow-rule" />
-            <span>Expertise</span>
-          </motion.div>
-
-          <div
-            className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"
-            style={{ marginBottom: "var(--space-head)" }}
-          >
-            <motion.h2 variants={fadeUp} className="display-lg" style={{ maxWidth: "30ch" }}>
-              Four clear pillars
-            </motion.h2>
-            <motion.p
-              variants={fadeUp}
-              className="body-text lg:text-right"
-              style={{ color: "var(--on-dark-3)", maxWidth: "42ch" }}
+      {/* Head and marquee are siblings inside .section-stack, not
+          siblings inside .shell — the head's direct parent has to
+          outlast the marquee for the sticky pin to have anywhere
+          to travel. */}
+      <div className="section-stack">
+        <div className="section-head">
+          <div className="shell">
+            <motion.div
+              variants={stagger(0.08)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT}
             >
-              One person carrying the whole thing — engineering, modelling, and visual
-              craft, without the hand-off in the middle.
-            </motion.p>
+              <motion.div variants={fadeUp} className="eyebrow">
+                <span className="eyebrow-index">02</span>
+                <span className="eyebrow-rule" />
+                <span>Expertise</span>
+              </motion.div>
+
+              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+                <motion.h2
+                  variants={fadeUp}
+                  className="display-lg"
+                  style={{ maxWidth: "30ch" }}
+                >
+                  Four clear pillars
+                </motion.h2>
+                <motion.p
+                  variants={fadeUp}
+                  className="body-text lg:text-right"
+                  style={{ color: "var(--on-dark-3)", maxWidth: "42ch" }}
+                >
+                  One person carrying the whole thing — engineering, modelling, and visual
+                  craft, without the hand-off in the middle.
+                </motion.p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Full-bleed marquee, reversed against the About strip above it
+            — four cards, set twice for a seamless loop */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.8, ease: EASE }}
+          className="marquee marquee--stack"
+          style={{ marginTop: "var(--space-head)" }}
+        >
+          <div className="marquee-track marquee-track--reverse">
+            <DisciplineSet />
+            <div aria-hidden="true" className="marquee-dupe">
+              <DisciplineSet />
+            </div>
           </div>
         </motion.div>
       </div>
-
-      {/* Full-bleed marquee, reversed against the About strip above it
-          — four cards, set twice for a seamless loop */}
-      <motion.div
-        initial={{ opacity: 0, y: 18 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={VIEWPORT}
-        transition={{ duration: 0.8, ease: EASE }}
-        className="marquee marquee--stack"
-        style={{ marginTop: "var(--space-head)" }}
-      >
-        <div className="marquee-track marquee-track--reverse">
-          <DisciplineSet />
-          <div aria-hidden="true" className="marquee-dupe">
-            <DisciplineSet />
-          </div>
-        </div>
-      </motion.div>
     </section>
   );
 }

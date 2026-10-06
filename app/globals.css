@@ -110,6 +110,11 @@
      on a single vertical rail. */
   --shell: 900px;
 
+  /* Navbar height. Single-sourced so the header itself, the sticky
+     section heads, and the .section scroll-margin can never drift
+     apart and leave a head tucked under the bar. */
+  --nav-h: 5rem;
+
   /* Marquee card width, single-sourced so the staggered row
      offset can never drift out of sync with the card itself. */
   --card-w: min(509px, 78vw);
@@ -270,6 +275,10 @@ body {
 .section {
   position: relative;
   padding-block: var(--space-section);
+  /* Without this, an anchor jump parks the section's sticky head
+     behind the navbar, since the head's natural offset is the very
+     top of the section. */
+  scroll-margin-top: var(--nav-h);
 }
 
 .section-ink {
@@ -280,6 +289,47 @@ body {
 
 .section-ink:first-of-type {
   border-top: 0;
+}
+
+/* ──────────────────────────────────────────────
+   STICKY SECTION HEAD
+   The head pins just under the navbar while its own
+   section's content scrolls beneath it.
+
+   A sticky element travels only inside its DIRECT
+   parent's box. The head is therefore parented by
+   .section-stack, which wraps the head and the
+   scrolling content together — parented by .shell,
+   as it was before, .shell ended where the content
+   began and the head had no travel at all.
+   ────────────────────────────────────────────── */
+
+.section-stack {
+  position: relative;
+}
+
+.section-head {
+  position: sticky;
+  top: var(--nav-h);
+  /* Under the navbar's z-30 and the mobile menu's z-40, but over
+     the marquees, which are position: relative with no z-index. */
+  z-index: 10;
+  padding-bottom: var(--space-head);
+  /* Opaque so cards pass fully behind the text rather than showing
+     through it. var(--ink) follows the section in both colour
+     schemes, so the bar needs no scheme-specific rule. */
+  background: var(--ink);
+  border-bottom: 1px solid var(--line-faint);
+}
+
+/* On phones the bar is pinned chrome above the content, and
+   --space-head is a lot of screen to spend on it. The marquees
+   collapse to static columns below 48rem, so the travel here is
+   short and the padding is trimmed to match. */
+@media (max-width: 48rem) {
+  .section-head {
+    padding-bottom: 1rem;
+  }
 }
 
 /* ──────────────────────────────────────────────

@@ -141,70 +141,80 @@ const ROWS = [projects.slice(0, 3), projects.slice(3, 6)];
 export default function Projects() {
   return (
     <section id="projects" className="section section-ink">
-      <div className="shell">
-        <motion.div
-          variants={stagger(0.08)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT}
-        >
-          <motion.div variants={fadeUp} className="eyebrow">
-            <span className="eyebrow-index">03</span>
-            <span className="eyebrow-rule" />
-            <span>Selected projects</span>
-          </motion.div>
-
-          <div
-            className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-x-8 gap-y-3 items-end"
-            style={{ marginBottom: "var(--space-head)" }}
-          >
-            <motion.h2 variants={fadeUp} className="display-lg" style={{ maxWidth: "30ch" }}>
-              Things I&apos;ve designed, built, and shipped
-            </motion.h2>
-            <motion.p
-              variants={fadeUp}
-              className="body-text lg:text-right"
-              style={{ color: "var(--on-dark-3)", maxWidth: "46ch" }}
+      {/* Head and marquees sit inside .section-stack rather than as
+          siblings of .shell, so the head's direct parent outlasts
+          both rows and the pin has somewhere to travel. */}
+      <div className="section-stack">
+        <div className="section-head">
+          <div className="shell">
+            <motion.div
+              variants={stagger(0.08)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT}
             >
-              A selection across applied AI, software infrastructure, fintech, Web3, and
-              visual work — each one something I took from idea to shipped.
-            </motion.p>
-          </div>
-        </motion.div>
-      </div>
+              <motion.div variants={fadeUp} className="eyebrow">
+                <span className="eyebrow-index">03</span>
+                <span className="eyebrow-rule" />
+                <span>Selected projects</span>
+              </motion.div>
 
-      {/* Full-bleed marquees — two rows of three. Row two runs
-          reversed and shifted half a card, so the card edges
-          stagger instead of lining up with row one. */}
-      <div
-        className="flex flex-col gap-[var(--gap-card)]"
-        style={{ marginTop: "var(--space-head)" }}
-      >
-        {ROWS.map((row, r) => (
-          <motion.div
-            key={row[0].title}
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={VIEWPORT}
-            transition={{ duration: 0.8, ease: EASE }}
-            className="marquee marquee--stack"
-          >
-            <div
-              className={
-                r === 1
-                  ? "marquee-track marquee-track--reverse marquee-track--offset"
-                  : "marquee-track"
-              }
-            >
-              <ProjectRow items={row} offset={r * 3} />
-              <div aria-hidden="true" className="marquee-dupe">
-                <ProjectRow items={row} offset={r * 3} />
+              <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-x-8 gap-y-3 items-end">
+                <motion.h2
+                  variants={fadeUp}
+                  className="display-lg"
+                  style={{ maxWidth: "30ch" }}
+                >
+                  Things I&apos;ve designed, built, and shipped
+                </motion.h2>
+                <motion.p
+                  variants={fadeUp}
+                  className="body-text lg:text-right"
+                  style={{ color: "var(--on-dark-3)", maxWidth: "46ch" }}
+                >
+                  A selection across applied AI, software infrastructure, fintech, Web3,
+                  and visual work — each one something I took from idea to shipped.
+                </motion.p>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Full-bleed marquees — two rows of three. Row two runs
+            reversed and shifted half a card, so the card edges
+            stagger instead of lining up with row one. */}
+        <div
+          className="flex flex-col gap-[var(--gap-card)]"
+          style={{ marginTop: "var(--space-head)" }}
+        >
+          {ROWS.map((row, r) => (
+            <motion.div
+              key={row[0].title}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.8, ease: EASE }}
+              className="marquee marquee--stack"
+            >
+              <div
+                className={
+                  r === 1
+                    ? "marquee-track marquee-track--reverse marquee-track--offset"
+                    : "marquee-track"
+                }
+              >
+                <ProjectRow items={row} offset={r * 3} />
+                <div aria-hidden="true" className="marquee-dupe">
+                  <ProjectRow items={row} offset={r * 3} />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
+      {/* Outside the stack, so the head has already released by the
+          time the source link scrolls in. */}
       <div className="shell">
         {/* Source link */}
         <motion.div

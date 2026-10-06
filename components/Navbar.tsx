@@ -68,7 +68,8 @@ export default function Navbar() {
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
-        className="sticky top-0 z-30 flex items-center justify-center min-h-20 px-5 md:px-9"
+        className="sticky top-0 z-30 flex items-center justify-center px-5 md:px-9"
+        style={{ minHeight: "var(--nav-h)" }}
       >
         {/* Left: wordmark */}
         <Link
