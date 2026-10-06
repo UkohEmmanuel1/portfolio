@@ -64,14 +64,22 @@ export default function Hero() {
       >
         {/* One h1 for the page. The role line is a p rather than a
            second h1 — same visual treatment, but it leaves a single
-           document subject instead of two competing ones. */}
-        <h1 className="hero-greeting">Hi, I&rsquo;m Emmanuel David.</h1>
+           document subject instead of two competing ones.
 
-        <p className="hero-role">
-          Software Engineer <span aria-hidden="true">&middot;</span> Machine
-          Learning <span aria-hidden="true">&middot;</span> AI{" "}
-          <span aria-hidden="true">&middot;</span> Creative
-        </p>
+           Greeting and role pin under the navbar while the paragraphs
+           and pills below scroll beneath them. A plain div, not a
+           motion one: the entrance transform lives on .hero-inner, and
+           a transformed ancestor does not create a scrollport, so the
+           sticky is unaffected either way. */}
+        <div className="section-head">
+          <h1 className="hero-greeting">Hi, I&rsquo;m Emmanuel David.</h1>
+
+          <p className="hero-role">
+            Software Engineer <span aria-hidden="true">&middot;</span> Machine
+            Learning <span aria-hidden="true">&middot;</span> AI{" "}
+            <span aria-hidden="true">&middot;</span> Creative
+          </p>
+        </div>
 
         <p className="hero-body" style={{ marginTop: "1.5rem", marginBottom: "1.5rem" }}>
           I build software that holds up — machine learning systems, applied AI,

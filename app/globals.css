@@ -367,6 +367,16 @@ body {
   background: var(--light-accent);
 }
 
+/* The sticky bar has to take its section's surface rather than
+   --ink: .section-light paints itself with --light-bg but leaves
+   --ink alone, so the shared bar would cut a dark band across the
+   cream panel. Reading the token instead of a literal also picks up
+   the light scheme's own re-point of --light-bg. */
+.section-light .section-head {
+  background: var(--light-bg);
+  border-bottom-color: var(--light-line);
+}
+
 /* Display heading. Mono needs tight tracking at this size. */
 .about-display {
   font-family: var(--font-cascadia), ui-monospace, monospace;
@@ -521,13 +531,27 @@ body {
   color: var(--hero-role);
 }
 
-/* Same measure and pad as .shell — see the note there. */
+/* Same measure and pad as .shell — see the note there. It is also
+   the head's stacking parent: .hero-inner spans the greeting, the
+   role line and the copy beneath them, which is exactly the travel
+   a sticky head needs, so no extra wrapper is required here. Its
+   padding-block stays on this element, outside the sticky child, so
+   the pinned bar carries no dead space above the greeting. */
 .hero-inner {
   width: 100%;
   max-width: var(--shell);
   margin-inline: auto;
   padding-block: clamp(3rem, 8vw, 5rem);
   padding-inline: var(--pad);
+}
+
+/* The head is the h1 plus the role line; the two paragraphs and the
+   pills scroll beneath it. padding-bottom is 0 because the first body
+   paragraph already carries a 1.5rem margin — inheriting the bar's
+   padding would stack the two into a 68px gap. */
+.hero .section-head {
+  background: var(--hero-bg);
+  padding-bottom: 0;
 }
 
 /* The greeting is deliberately the quieter of the two lines —

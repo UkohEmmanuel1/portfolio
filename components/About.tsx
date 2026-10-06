@@ -189,30 +189,38 @@ function CardSet() {
 export default function About() {
   return (
     <section id="about" className="section section-light">
+      {/* Head, copy and marquee all sit inside .section-stack, so the
+          head's direct parent outlasts the marquee and the pin has
+          somewhere to travel. */}
+      <div className="section-stack">
+        <div className="section-head">
+          <div className="shell">
+            <motion.div
+              variants={stagger(0.08)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT}
+            >
+              <motion.div variants={fadeUp} className="eyebrow">
+                <span className="eyebrow-index">01</span>
+                <span className="eyebrow-rule" />
+                <span>About me</span>
+              </motion.div>
+
+              <motion.h2 variants={fadeUp} className="about-display">
+                About me
+              </motion.h2>
+            </motion.div>
+          </div>
+        </div>
+
       <div className="shell">
-        <motion.div
-          variants={stagger(0.08)}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VIEWPORT}
-        >
-          <motion.div variants={fadeUp} className="eyebrow">
-            <span className="eyebrow-index">01</span>
-            <span className="eyebrow-rule" />
-            <span>About me</span>
-          </motion.div>
-
-          <motion.h2 variants={fadeUp} className="about-display">
-            About me
-          </motion.h2>
-        </motion.div>
-
         <motion.div
           variants={stagger(0.06)}
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
-          className="mt-8 flex flex-col gap-6"
+          className="flex flex-col gap-6"
         >
           <motion.p variants={fadeUp} className="about-copy">
             I&apos;m a <strong>Software Engineer</strong> working across{" "}
@@ -259,6 +267,7 @@ export default function About() {
           </div>
         </div>
       </motion.div>
+      </div>
     </section>
   );
 }
