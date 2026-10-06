@@ -31,7 +31,7 @@ const educationData = [
 export default function ResumePage() {
   return (
     <div className="min-h-screen" style={{ background: "var(--ink)", padding: "clamp(2.5rem, 5vw, 4rem) 0" }}>
-      <div className="shell" style={{ maxWidth: "62rem" }}>
+      <div className="shell">
         {/* Top bar */}
         <div className="flex items-center justify-between gap-4 mb-10">
           <Link

@@ -72,8 +72,9 @@
   --pill-ink: #ffffff;
 
   /* Hero type. #a3a3a3 clears AA on both --ink and #ffffff,
-     so it is the one value that needs no override. */
-  --hero-measure: 900px;
+     so it is the one value that needs no override. The hero's
+     column width is deliberately absent here — --shell owns the
+     single measure that the hero and every section share. */
   --hero-bg: #050505;
   --hero-greeting: #a3a3a3;
   --hero-role: #ffffff;
@@ -95,10 +96,19 @@
   --space-card: clamp(1.25rem, 1.7vw, 1.75rem);
   --gap-card: clamp(0.875rem, 1.3vw, 1.25rem);
 
-  /* Gutter rhythm */
-  --gutter: 2.25rem;
+  /* Gutter rhythm. --pad is the one inline pad, read by .shell
+     and .hero-inner alike, so the hero text and the section text
+     can never resolve to different left edges. It floors at the
+     old --gutter-sm, which is why .shell needs no mobile override.
+     --gutter-sm itself stays for .marquee--stack, which sits
+     outside the shell and has nothing to inherit from. */
+  --pad: clamp(1.25rem, 5vw, 2.5rem);
   --gutter-sm: 1.25rem;
-  --shell: 80rem;
+
+  /* One measure for the whole page. The hero and every section
+     share it, and that shared measure is what puts all their text
+     on a single vertical rail. */
+  --shell: 900px;
 
   /* Marquee card width, single-sourced so the staggered row
      offset can never drift out of sync with the card itself. */
@@ -246,17 +256,15 @@ body {
    top rule, never by a background change.
    ────────────────────────────────────────────── */
 
+/* Deliberately the same box as .hero-inner further down — same
+   measure, same pad. That identity is the alignment: at every
+   viewport the hero text and the section text resolve to one left
+   edge, so nothing has to be nudged into place. */
 .shell {
   width: 100%;
   max-width: var(--shell);
   margin-inline: auto;
-  padding-inline: var(--gutter);
-}
-
-@media (max-width: 48rem) {
-  .shell {
-    padding-inline: var(--gutter-sm);
-  }
+  padding-inline: var(--pad);
 }
 
 .section {
@@ -463,12 +471,13 @@ body {
   color: var(--hero-role);
 }
 
+/* Same measure and pad as .shell — see the note there. */
 .hero-inner {
   width: 100%;
-  max-width: var(--hero-measure);
+  max-width: var(--shell);
   margin-inline: auto;
   padding-block: clamp(3rem, 8vw, 5rem);
-  padding-inline: clamp(1.25rem, 5vw, 2.5rem);
+  padding-inline: var(--pad);
 }
 
 /* The greeting is deliberately the quieter of the two lines —
