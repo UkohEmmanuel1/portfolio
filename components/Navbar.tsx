@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,12 +35,24 @@ function ArrowOut({ size = 14 }: { size?: number }) {
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [navHidden, setNavHidden] = useState(false);
+  const lastY = useRef(0);
 
   useEffect(() => {
     const sections = ["home", "about", "expertise", "projects", "contact"];
 
     const handleScroll = () => {
-      const probe = window.scrollY + window.innerHeight * 0.35;
+      const y = window.scrollY;
+      const delta = y - lastY.current;
+
+      // Threshold ignores trackpad drift so the bar doesn't flicker at rest.
+      if (Math.abs(delta) > 4) {
+        // Never hide over the hero, or #home would land somewhere invisible.
+        setNavHidden(delta > 0 && y > 80);
+        lastY.current = y;
+      }
+
+      const probe = y + window.innerHeight * 0.35;
       for (const id of sections) {
         const el = document.getElementById(id);
         if (el && probe >= el.offsetTop && probe < el.offsetTop + el.offsetHeight) {
@@ -66,8 +78,12 @@ export default function Navbar() {
     <>
       <motion.header
         initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
+        animate={{ opacity: navHidden ? 0 : 1, y: navHidden ? -24 : 0 }}
+        transition={
+          navHidden
+            ? { duration: 0.28, ease: EASE }
+            : { duration: 0.7, delay: 0.1, ease: EASE }
+        }
         className="sticky top-0 z-30 flex items-center justify-center px-5 md:px-9"
         style={{ minHeight: "var(--nav-h)" }}
       >
@@ -113,6 +129,10 @@ export default function Navbar() {
               <a
                 key={item.name}
                 href={item.href}
+                // scroll-margin-top still reserves --nav-h, so jumping to a
+                // section further down the page would hide the bar and leave
+                // an empty band above the heading. Clear the flag on click.
+                onClick={() => setNavHidden(false)}
                 className="relative py-1"
                 style={{
                   fontSize: "0.8125rem",
@@ -137,11 +157,11 @@ export default function Navbar() {
         </nav>
 
         {/* Right: actions */}
-        <div className="hidden md:flex items-center absolute right-5 md:right-9 gap-1.4rem">
+        <div className="hidden md:flex items-center absolute right-5 md:right-9 gap-[1.4rem]">
           <Link href="/resume" className="btn btn-glass">
             Resume
           </Link>
-          <a href="#contact" className="btn btn-primary">
+          <a href="#contact" onClick={() => setNavHidden(false)} className="btn btn-primary">
             <span>Let&apos;s talk</span>
             <ArrowOut />
           </a>
