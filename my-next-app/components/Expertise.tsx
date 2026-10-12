@@ -3,19 +3,12 @@
 import { motion } from "framer-motion";
 import {
   SiNextdotjs,
-  SiTailwindcss,
   SiFastapi,
-  SiNumpy,
   SiPandas,
-  SiScikitlearn,
   SiTensorflow,
-  SiPostgresql,
-  SiMongodb,
-  SiLinux,
   SiDocker,
-  SiGit,
 } from "react-icons/si";
-import { VIEWPORT, fadeUp, slideIn, stagger } from "@/components/motion";
+import { VIEWPORT, fadeIn, fadeUp, stagger } from "@/components/motion";
 
 const disciplines = [
   {
@@ -48,21 +41,6 @@ const disciplines = [
       "Deployment and CI/CD, containerised services, Linux administration, and observability that keeps releases boring.",
     Icon: SiDocker,
   },
-];
-
-const stack = [
-  { name: "Next.js", Icon: SiNextdotjs },
-  { name: "Django", Icon: SiFastapi },
-  { name: "Laravel", Icon: SiNextdotjs },
-  { name: "Tailwind", Icon: SiTailwindcss },
-  { name: "NumPy", Icon: SiNumpy },
-  { name: "scikit-learn", Icon: SiScikitlearn },
-  { name: "TensorFlow", Icon: SiTensorflow },
-  { name: "PostgreSQL", Icon: SiPostgresql },
-  { name: "MongoDB", Icon: SiMongodb },
-  { name: "Linux", Icon: SiLinux },
-  { name: "Docker", Icon: SiDocker },
-  { name: "Git", Icon: SiGit },
 ];
 
 export default function Expertise() {
@@ -104,61 +82,25 @@ export default function Expertise() {
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
-          className="rule-list"
+          className="card-grid"
         >
           {disciplines.map((d, i) => (
-            <motion.div
-              key={d.title}
-              variants={slideIn}
-              whileHover={{ x: 4 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="rule-row"
-            >
-              <div
-                className="grid grid-cols-[1.6rem_1fr] md:grid-cols-[1.6rem_11rem_1fr] gap-x-4 md:gap-x-6"
-              >
-                <span className="mono-label rule-index" style={{ color: "var(--on-dark-6)" }}>
+            <motion.article key={d.title} variants={fadeIn} className="card">
+              <div className="card-head">
+                <span className="card-icon">
+                  <d.Icon size={17} />
+                </span>
+                <span className="mono-label card-index">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <div className="flex items-center gap-2.5" style={{ marginBottom: "0.5rem", gridColumn: "2", gridRow: "1" }}>
-                  <d.Icon size={15} style={{ color: "var(--signal)", flex: "none" }} />
-                  <span className="display-sm" style={{ color: "#fff" }}>
-                    {d.title}
-                  </span>
-                </div>
-                <p
-                  className="body-text md:text-right"
-                  style={{
-                    color: "var(--on-dark-3)",
-                    gridColumn: "2",
-                    gridRow: "2",
-                    maxWidth: "60ch",
-                  }}
-                >
-                  {d.blurb}
-                </p>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={VIEWPORT}
-          transition={{ duration: 0.6 }}
-          className="flex flex-wrap items-center gap-x-5 gap-y-2.5"
-          style={{ marginTop: "clamp(2rem, 4vw, 3rem)" }}
-        >
-          {stack.map((s) => (
-            <span
-              key={s.name}
-              className="flex items-center gap-1.5"
-              style={{ color: "var(--on-dark-4)" }}
-            >
-              <s.Icon size={13} />
-              <span className="mono-sm">{s.name}</span>
-            </span>
+              <h3 className="display-sm card-title" style={{ color: "#fff" }}>
+                {d.title}
+              </h3>
+
+              <p className="body-text card-desc">{d.blurb}</p>
+            </motion.article>
           ))}
         </motion.div>
       </div>

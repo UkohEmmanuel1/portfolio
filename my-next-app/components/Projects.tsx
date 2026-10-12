@@ -2,43 +2,51 @@
 
 import { motion } from "framer-motion";
 import { FaGithub } from "react-icons/fa";
-import { VIEWPORT, fadeUp, slideIn, stagger } from "@/components/motion";
+import {
+  SiBitcoin,
+  SiNestjs,
+  SiNextdotjs,
+  SiOpenai,
+  SiShieldsdotio,
+  SiTensorflow,
+} from "react-icons/si";
+import { VIEWPORT, fadeIn, fadeUp, stagger } from "@/components/motion";
 
 const projects = [
   {
     title: "Nexus AI",
     desc: "Intelligent retrieval-augmented generation platform for processing documents, retrieving contextual information, and generating grounded responses.",
-    tags: ["RAG", "Vector search", "LLM", "Python"],
+    Icon: SiOpenai,
     href: undefined as string | undefined,
   },
   {
     title: "Apex Autonomous Market Intelligence Agent",
     desc: "AI-powered market intelligence system combining autonomous agents, computer vision, and vector search to analyse and extract insight from market data.",
-    tags: ["AI agents", "Computer vision", "Vector search", "Python"],
+    Icon: SiTensorflow,
     href: undefined as string | undefined,
   },
   {
     title: "DigiDrop",
     desc: "Web3 platform integrating wallet authentication, blockchain infrastructure, referral systems, and a modern Next.js interface.",
-    tags: ["Web3", "Blockchain", "Wallet auth", "Next.js"],
+    Icon: SiNextdotjs,
     href: undefined as string | undefined,
   },
   {
     title: "AI Blockchain Personal Finance Guardian",
     desc: "AI-powered financial assistant designed to help users track, understand, and manage financial activity through automated interactions.",
-    tags: ["Fintech", "Automation", "LLM", "APIs"],
+    Icon: SiBitcoin,
     href: undefined as string | undefined,
   },
   {
     title: "Deep Learning Cybersecurity Suite",
     desc: "Machine-learning security system for real-time anomaly detection and intelligent threat analysis.",
-    tags: ["Deep learning", "Anomaly detection", "Real-time", "Security"],
+    Icon: SiShieldsdotio,
     href: undefined as string | undefined,
   },
   {
     title: "Aurikrex EdTech",
     desc: "Full-stack education platform with secure authentication, REST APIs, database infrastructure, and scalable backend architecture.",
-    tags: ["Full stack", "REST APIs", "Auth", "PostgreSQL"],
+    Icon: SiNestjs,
     href: undefined as string | undefined,
   },
 ];
@@ -101,66 +109,38 @@ export default function Projects() {
           initial="hidden"
           whileInView="visible"
           viewport={VIEWPORT}
-          className="rule-list"
+          className="card-grid"
         >
           {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              variants={slideIn}
-              className="rule-row"
-            >
-              <div className="group grid grid-cols-[1.6rem_1fr] md:grid-cols-[1.6rem_1fr_auto] items-start gap-x-4 md:gap-x-6">
-                <span
-                  className="mono-label rule-index"
-                  style={{ color: "var(--on-dark-6)" }}
-                >
+            <motion.article key={project.title} variants={fadeIn} className="card group">
+              <div className="card-head">
+                <span className="card-icon">
+                  <project.Icon size={17} />
+                </span>
+                <span className="mono-label card-index">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-
-                <div>
-                  {project.href ? (
-                    <a
-                      href={project.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-baseline gap-2 no-underline"
-                      style={{ color: "inherit" }}
-                    >
-                      <h3 className="display-sm transition-colors duration-200 group-hover:text-[var(--signal)]">
-                        {project.title}
-                      </h3>
-                      <ArrowOut />
-                    </a>
-                  ) : (
-                    <h3 className="display-sm">{project.title}</h3>
-                  )}
-
-                  <p
-                    className="body-text"
-                    style={{
-                      color: "var(--on-dark-3)",
-                      maxWidth: "62ch",
-                      marginTop: "0.375rem",
-                    }}
-                  >
-                    {project.desc}
-                  </p>
-                </div>
-
-                {/* Tag rail */}
-                <div className="col-start-2 md:col-start-3 flex flex-wrap gap-x-3.5 gap-y-1 md:justify-end md:pt-0.5">
-                  {project.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="mono-label"
-                      style={{ color: "var(--on-dark-4)" }}
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
               </div>
-            </motion.div>
+
+              {project.href ? (
+                <a
+                  href={project.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-baseline gap-2 no-underline"
+                  style={{ color: "inherit" }}
+                >
+                  <h3 className="display-sm card-title transition-colors duration-200 group-hover:text-[var(--signal)]">
+                    {project.title}
+                  </h3>
+                  <ArrowOut />
+                </a>
+              ) : (
+                <h3 className="display-sm card-title">{project.title}</h3>
+              )}
+
+              <p className="body-text card-desc">{project.desc}</p>
+            </motion.article>
           ))}
         </motion.div>
 

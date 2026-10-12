@@ -45,6 +45,8 @@
   --space-head: clamp(1.75rem, 3.5vw, 2.75rem);
   --space-row: 1.125rem;
   --space-para: 0.75rem;
+  --space-card: clamp(1.25rem, 1.7vw, 1.75rem);
+  --gap-card: clamp(0.875rem, 1.3vw, 1.25rem);
 
   /* Gutter rhythm */
   --gutter: 2.25rem;
@@ -147,6 +149,69 @@ body {
   border-top: 0;
 }
 
+/* ──────────────────────────────────────────────
+   LIGHT SECTION SCOPE
+   Scoped to a single section rather than :root —
+   the rest of the page is dark and must not shift.
+   Type is set in Cascadia Code throughout.
+   ────────────────────────────────────────────── */
+
+.section-light {
+  --light-bg: #f4f4ef;
+  --light-bg-alt: #eceae3;
+  --light-text: #1a1a1a;
+  --light-text-2: #454545;
+  --light-text-3: #6b6b6b;
+  --light-line: rgba(0, 0, 0, 0.1);
+  --light-accent: #1a1a1a;
+
+  background: var(--light-bg);
+  color: var(--light-text);
+  border-top: 1px solid var(--light-line);
+}
+
+.section-light .eyebrow {
+  color: var(--light-text-3);
+}
+
+.section-light .eyebrow-index,
+.section-light .eyebrow-rule {
+  color: var(--light-accent);
+}
+
+.section-light .eyebrow-rule {
+  background: var(--light-accent);
+}
+
+/* Display heading. Mono needs tight tracking at this size. */
+.about-display {
+  font-family: var(--font-cascadia), ui-monospace, monospace;
+  font-size: clamp(2.25rem, 5.5vw, 4rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--light-text);
+  text-wrap: balance;
+}
+
+/* Body measure runs wider than a serif would need, since
+   every glyph here is the same width. */
+.about-copy {
+  font-family: var(--font-cascadia), ui-monospace, monospace;
+  font-size: clamp(0.9375rem, 1.05vw, 1.0625rem);
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: -0.01em;
+  color: var(--light-text-2);
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+
+.about-copy strong {
+  font-weight: 600;
+  color: var(--light-text);
+}
+
 /* Eyebrow: index + rule + label */
 .eyebrow {
   display: flex;
@@ -170,6 +235,11 @@ body {
   flex: 0 0 3rem;
   height: 1px;
   background: var(--line);
+}
+
+/* Centre the index-rule-label cluster over centred copy */
+.eyebrow-center {
+  justify-content: center;
 }
 
 /* Uniform vertical rhythm inside prose blocks */
@@ -383,6 +453,176 @@ body {
 .media-frame:hover img {
   transform: scale(1.03);
   filter: saturate(1.04) brightness(1.02);
+}
+
+/* Landscape frame, capped at 509x334, holding one image at
+   a time. Slides crossfade inside a 12px mat and images use
+   contain, so nothing is ever cropped. */
+.marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 6%,
+    #000 94%,
+    transparent
+  );
+}
+
+/* Track holds the card set twice, so a -50% shift loops seamlessly */
+.marquee-track {
+  display: flex;
+  align-items: stretch;
+  gap: var(--gap-card);
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* Half the track is 3 cards + 2.5 gaps, so the half-gap
+       correction is what makes one set land exactly on the next */
+    transform: translate3d(calc(-50% - var(--gap-card) / 2), 0, 0);
+  }
+}
+
+/* Exact 509x334 on desktop, 3:2 preserved as the width shrinks */
+.marquee-card {
+  position: relative;
+  flex: none;
+  width: min(509px, 78vw);
+  aspect-ratio: 509 / 334;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* Soft light blobs drifting over the gradient mesh card */
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(38px);
+  animation: mesh-drift 11s ease-in-out infinite;
+}
+
+.mesh-blob-2 {
+  animation-duration: 15s;
+  animation-direction: reverse;
+}
+
+@keyframes mesh-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) scale(1.08);
+  }
+}
+
+/* ──────────────────────────────────────────────
+   CARD SYSTEM
+   Square cards, one accent, radius only. The
+   square comes from aspect-ratio with a min-height
+   floor, so long copy grows the card rather than
+   clipping — rows still equalise via flex stretch.
+   ────────────────────────────────────────────── */
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--gap-card);
+}
+
+.card {
+  flex: 0 0 100%;
+  aspect-ratio: 1 / 1;
+  min-height: 13rem;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-card);
+  background: var(--graphite);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  transition: background var(--dur-hover) ease,
+    border-color var(--dur-hover) ease, transform 0.2s var(--ease-expo);
+}
+
+@media (min-width: 40rem) {
+  .card {
+    flex: 0 0 calc((100% - var(--gap-card)) / 2);
+  }
+}
+
+@media (min-width: 64rem) {
+  .card {
+    flex: 0 0 calc((100% - 2 * var(--gap-card)) / 3);
+  }
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  background: #1a1a1a;
+  border-color: var(--line);
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.card-icon {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: none;
+  border-radius: 0.7rem;
+  border: 1px solid var(--line-soft);
+  background: var(--signal-soft);
+  color: var(--signal);
+  transition: border-color var(--dur-hover) ease;
+}
+
+.card:hover .card-icon {
+  border-color: var(--line);
+}
+
+.card-index {
+  color: var(--on-dark-6);
+  transition: color var(--dur-hover) ease;
+}
+
+.card:hover .card-index {
+  color: var(--signal);
+}
+
+.card-title {
+  margin-top: 0.875rem;
+}
+
+.card-desc {
+  margin-top: 0.5rem;
+  color: var(--on-dark-3);
 }
 
 /* ──────────────────────────────────────────────

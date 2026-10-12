@@ -18,29 +18,6 @@ const experienceData = [
   },
 ];
 
-const skillGroups = [
-  {
-    label: "Languages & frameworks",
-    items:
-      "Python, TypeScript, JavaScript, C++, Next.js, React, Node.js, Express.js, NestJS, Tailwind CSS",
-  },
-  {
-    label: "AI & machine learning",
-    items:
-      "PyTorch, TensorFlow, Scikit-Learn, OpenAI API, LangChain, NLP, Predictive Modeling",
-  },
-  {
-    label: "Databases & storage",
-    items:
-      "PostgreSQL, MongoDB, Redis, Amazon RDS, Firebase Firestore, Schema Optimisation",
-  },
-  {
-    label: "Cloud & DevOps",
-    items:
-      "AWS, Docker, Kubernetes, Terraform, Lambda, Jenkins, Grafana, Prometheus, CI/CD",
-  },
-];
-
 const educationData = [
   {
     degree: "BSc in Computer Science",
@@ -171,40 +148,13 @@ export default function ResumePage() {
           ))}
         </section>
 
-        {/* Toolkit */}
-        <section className="mb-12">
-          <div
-            className="eyebrow"
-            style={{ borderTop: "1px solid var(--line-strong)", paddingTop: "1.25rem" }}
-          >
-            <span className="eyebrow-index">03</span>
-            <span className="eyebrow-rule" />
-            <span>Technical toolkit</span>
-          </div>
-
-          {skillGroups.map((g) => (
-            <div
-              key={g.label}
-              className="grid grid-cols-1 md:grid-cols-[13rem_1fr] gap-x-6 gap-y-2 py-3.5"
-              style={{ borderTop: "1px solid var(--line-soft)" }}
-            >
-              <span className="mono-label" style={{ color: "var(--on-dark-4)" }}>
-                {g.label}
-              </span>
-              <p className="body-text" style={{ color: "var(--on-dark-2)" }}>
-                {g.items}
-              </p>
-            </div>
-          ))}
-        </section>
-
         {/* Education */}
         <section className="mb-12">
           <div
             className="eyebrow"
             style={{ borderTop: "1px solid var(--line-strong)", paddingTop: "1.25rem" }}
           >
-            <span className="eyebrow-index">04</span>
+            <span className="eyebrow-index">03</span>
             <span className="eyebrow-rule" />
             <span>Education</span>
           </div>

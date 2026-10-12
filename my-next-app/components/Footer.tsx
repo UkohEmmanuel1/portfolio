@@ -20,7 +20,6 @@ const columns = [
       { name: "About", href: "#about" },
       { name: "Projects", href: "#projects" },
       { name: "Expertise", href: "#expertise" },
-      { name: "Stack", href: "#skills" },
     ],
   },
   {
@@ -30,15 +29,6 @@ const columns = [
       { name: "Machine Learning", href: "#expertise" },
       { name: "Database Design", href: "#expertise" },
       { name: "System Design", href: "#expertise" },
-    ],
-  },
-  {
-    title: "Stack",
-    links: [
-      { name: "Languages", href: "#skills" },
-      { name: "Web & Full Stack", href: "#skills" },
-      { name: "AI & ML", href: "#skills" },
-      { name: "Cloud & DevOps", href: "#skills" },
     ],
   },
   {
@@ -112,7 +102,7 @@ export default function Footer() {
             initial="hidden"
             whileInView="visible"
             viewport={VIEWPORT}
-            className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10"
+            className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10"
             style={{ marginBottom: "4rem" }}
           >
             {columns.map((col) => (
