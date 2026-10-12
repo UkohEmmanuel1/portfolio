@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -35,22 +35,19 @@ function ArrowOut({ size = 14 }: { size?: number }) {
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [navHidden, setNavHidden] = useState(false);
-  const lastY = useRef(0);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const sections = ["home", "about", "expertise", "projects", "contact"];
 
     const handleScroll = () => {
       const y = window.scrollY;
-      const delta = y - lastY.current;
 
-      // Threshold ignores trackpad drift so the bar doesn't flicker at rest.
-      if (Math.abs(delta) > 4) {
-        // Never hide over the hero, or #home would land somewhere invisible.
-        setNavHidden(delta > 0 && y > 80);
-        lastY.current = y;
-      }
+      // The chrome frosts in after the first few pixels so the bar
+      // reads as transparent over the hero and as material everywhere
+      // else. setScrolled bails out when the value is unchanged, so
+      // this does not re-render on every scroll frame.
+      setScrolled(y > 8);
 
       const probe = y + window.innerHeight * 0.35;
       for (const id of sections) {
@@ -67,30 +64,16 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // publish nav-hidden state to <html> so pinned heads can slide up when the bar hides
-  useEffect(() => {
-    document.documentElement.dataset.nav = navHidden ? "hidden" : "shown";
-    return () => {
-      delete document.documentElement.dataset.nav;
-    };
-  }, [navHidden]);
-
   return (
     <>
       <motion.header
         initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: navHidden ? 0 : 1, y: navHidden ? -24 : 0 }}
-        transition={
-          navHidden
-            ? { duration: 0.28, ease: EASE }
-            : { duration: 0.7, delay: 0.1, ease: EASE }
-        }
-        className="sticky top-0 z-30 flex items-center justify-center px-5 md:px-9"
-        style={{
-          minHeight: "var(--nav-h)",
-          // Prevent invisible header from intercepting clicks while hidden.
-          pointerEvents: navHidden ? "none" : "auto",
-        }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
+        className={`nav-chrome sticky top-0 z-30 flex items-center justify-center px-5 md:px-9${
+          scrolled ? " nav-chrome--scrolled" : ""
+        }`}
+        style={{ minHeight: "var(--nav-h)" }}
       >
         {/* Left: wordmark */}
         <Link
@@ -134,10 +117,6 @@ export default function Navbar() {
               <a
                 key={item.name}
                 href={item.href}
-                // scroll-margin-top still reserves --nav-h, so jumping to a
-                // section further down the page would hide the bar and leave
-                // an empty band above the heading. Clear the flag on click.
-                onClick={() => setNavHidden(false)}
                 className="relative py-1"
                 style={{
                   fontSize: "0.8125rem",
@@ -166,7 +145,7 @@ export default function Navbar() {
           <Link href="/resume" className="btn btn-glass">
             Resume
           </Link>
-          <a href="#contact" onClick={() => setNavHidden(false)} className="btn btn-primary">
+          <a href="#contact" className="btn btn-primary">
             <span>Let&apos;s talk</span>
             <ArrowOut />
           </a>

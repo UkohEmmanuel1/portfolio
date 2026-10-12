@@ -10,6 +10,7 @@ import {
   SiTensorflow,
 } from "react-icons/si";
 import { EASE, VIEWPORT, fadeIn, fadeUp, stagger } from "@/components/motion";
+import { usePinnedHead } from "@/components/usePinnedHead";
 
 const projects = [
   {
@@ -139,44 +140,70 @@ function ProjectRow({
 const ROWS = [projects.slice(0, 3), projects.slice(3, 6)];
 
 export default function Projects() {
+  const { ref: sentinelRef, pinned } = usePinnedHead<HTMLSpanElement>();
+
   return (
     <section id="projects" className="section section-ink">
       {/* Head and marquees sit inside .section-stack rather than as
           siblings of .shell, so the head's direct parent outlasts
-          both rows and the pin has somewhere to travel. */}
+          both rows and the pin has somewhere to travel. The sentinel
+          shares the head's flow top, so CSS and the observer can
+          never disagree about where "pinned" starts. */}
       <div className="section-stack">
-        <div className="section-head section-head--sticky">
-          <div className="shell">
-            <motion.div
-              variants={stagger(0.08)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={VIEWPORT}
-            >
-              <motion.div variants={fadeUp} className="eyebrow">
+        <span
+          ref={sentinelRef}
+          aria-hidden="true"
+          style={{ position: "absolute", top: 0, left: 0, width: 1, height: 1 }}
+        />
+        <div
+          className="section-head section-head--sticky"
+          data-pin={pinned ? "true" : "false"}
+        >
+          <div className="section-head__full">
+            <div className="shell">
+              <motion.div
+                variants={stagger(0.08)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={VIEWPORT}
+              >
+                <motion.div variants={fadeUp} className="eyebrow">
+                  <span className="eyebrow-index">03</span>
+                  <span className="eyebrow-rule" />
+                  <span>Selected projects</span>
+                </motion.div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-x-8 gap-y-3 items-end">
+                  <motion.h2
+                    variants={fadeUp}
+                    className="display-lg"
+                    style={{ maxWidth: "30ch" }}
+                  >
+                    Things I&apos;ve designed, built, and shipped
+                  </motion.h2>
+                  <motion.p
+                    variants={fadeUp}
+                    className="body-text lg:text-right"
+                    style={{ color: "var(--on-dark-3)", maxWidth: "46ch" }}
+                  >
+                    A selection across applied AI, software infrastructure, fintech, Web3,
+                    and visual work — each one something I took from idea to shipped.
+                  </motion.p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Collapsed one-liner. Decorative duplicate — the full row
+              above stays in the DOM and keeps the real heading. */}
+          <div className="section-head__slim" aria-hidden="true">
+            <div className="shell">
+              <div className="eyebrow">
                 <span className="eyebrow-index">03</span>
                 <span className="eyebrow-rule" />
                 <span>Selected projects</span>
-              </motion.div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-x-8 gap-y-3 items-end">
-                <motion.h2
-                  variants={fadeUp}
-                  className="display-lg"
-                  style={{ maxWidth: "30ch" }}
-                >
-                  Things I&apos;ve designed, built, and shipped
-                </motion.h2>
-                <motion.p
-                  variants={fadeUp}
-                  className="body-text lg:text-right"
-                  style={{ color: "var(--on-dark-3)", maxWidth: "46ch" }}
-                >
-                  A selection across applied AI, software infrastructure, fintech, Web3,
-                  and visual work — each one something I took from idea to shipped.
-                </motion.p>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
 

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { VIEWPORT, fadeUp, stagger } from "@/components/motion";
+import { usePinnedHead } from "@/components/usePinnedHead";
 
 const PORTRAIT = {
   src: "/image/about.jpg",
@@ -187,30 +188,56 @@ function CardSet() {
 }
 
 export default function About() {
+  const { ref: sentinelRef, pinned } = usePinnedHead<HTMLSpanElement>();
+
   return (
     <section id="about" className="section section-light">
       {/* Head, copy and marquee all sit inside .section-stack, so the
           head's direct parent outlasts the marquee and the pin has
-          somewhere to travel. */}
+          somewhere to travel. The sentinel marks the pin line — it
+          shares the head's flow top, so CSS and the observer can never
+          disagree about where "pinned" starts. */}
       <div className="section-stack">
-        <div className="section-head section-head--sticky">
-          <div className="shell">
-            <motion.div
-              variants={stagger(0.08)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={VIEWPORT}
-            >
-              <motion.div variants={fadeUp} className="eyebrow">
+        <span
+          ref={sentinelRef}
+          aria-hidden="true"
+          style={{ position: "absolute", top: 0, left: 0, width: 1, height: 1 }}
+        />
+        <div
+          className="section-head section-head--sticky"
+          data-pin={pinned ? "true" : "false"}
+        >
+          <div className="section-head__full">
+            <div className="shell">
+              <motion.div
+                variants={stagger(0.08)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={VIEWPORT}
+              >
+                <motion.div variants={fadeUp} className="eyebrow">
+                  <span className="eyebrow-index">01</span>
+                  <span className="eyebrow-rule" />
+                  <span>About me</span>
+                </motion.div>
+
+                <motion.h2 variants={fadeUp} className="about-display">
+                  About me
+                </motion.h2>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Collapsed one-liner. Decorative duplicate — the full row
+              above stays in the DOM and keeps the real heading. */}
+          <div className="section-head__slim" aria-hidden="true">
+            <div className="shell">
+              <div className="eyebrow">
                 <span className="eyebrow-index">01</span>
                 <span className="eyebrow-rule" />
                 <span>About me</span>
-              </motion.div>
-
-              <motion.h2 variants={fadeUp} className="about-display">
-                About me
-              </motion.h2>
-            </motion.div>
+              </div>
+            </div>
           </div>
         </div>
 

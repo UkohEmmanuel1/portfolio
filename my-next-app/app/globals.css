@@ -115,6 +115,19 @@
      apart and leave a head tucked under the bar. */
   --nav-h: 5rem;
 
+  /* Frosted chrome. One pair of tokens drives both sticky layers —
+     the navbar scrim and the collapsed section-head bar — so the two
+     can never drift into different materials. Dark translucent on
+     purpose: it keeps nav text legible even where it crosses the
+     light About panel. */
+  --chrome-bg: rgba(5, 5, 5, 0.62);
+  --chrome-blur: 14px;
+  --chrome-line: var(--line-faint);
+
+  /* Collapsed sticky head height — the slim one-liner it becomes
+     once pinned. */
+  --head-slim-h: 2.9rem;
+
   /* Marquee card width, single-sourced so the staggered row
      offset can never drift out of sync with the card itself. */
   --card-w: min(509px, 78vw);
@@ -185,6 +198,11 @@
     --btn-primary-bg: #111111;
     --btn-primary-bg-hover: #2b2b2b;
     --btn-primary-ink: #ffffff;
+
+    /* Frosted chrome flips to a light veil so the same rule set
+       renders a white frost on a light page. */
+    --chrome-bg: rgba(255, 255, 255, 0.72);
+    --chrome-line: var(--line-faint);
 
     /* Hero actions, the lavender light-scheme look */
     --pill: #f4f1fa;
@@ -292,6 +310,29 @@ body {
 }
 
 /* ──────────────────────────────────────────────
+   NAV CHROME
+   The sticky navbar's own material. Transparent over
+   the hero, frosts in after the first few pixels of
+   scroll so the wordmark and actions always sit on a
+   real surface instead of raw content. Same --chrome-*
+   tokens as the collapsed section head below, so the
+   two layers read as one material stack.
+   ────────────────────────────────────────────── */
+
+.nav-chrome {
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
+}
+
+.nav-chrome--scrolled {
+  background: var(--chrome-bg);
+  backdrop-filter: blur(var(--chrome-blur)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--chrome-blur)) saturate(1.4);
+  border-bottom-color: var(--chrome-line);
+}
+
+/* ──────────────────────────────────────────────
    SECTION HEAD
    The eyebrow-plus-heading bar shared by every
    section. Most heads scroll normally with their
@@ -318,22 +359,82 @@ body {
      schemes, so the bar needs no scheme-specific rule. */
   background: var(--ink);
   border-bottom: 1px solid var(--line-faint);
+  transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
-/* Only the heads that opt in pin to the viewport. */
+/* Only the heads that opt in pin to the viewport.
+
+   The head carries two stacked rows: the full editorial
+   layout (.section-head__full) and a slim one-line label
+   (.section-head__slim) pinned to the top of the box. At
+   rest the full row shows. Once pinned (data-pin, set by
+   the usePinnedHead sentinel) the rows crossfade and the
+   glass strip takes over.
+
+   The box itself NEVER changes height — it stays at its
+   natural flow height and only goes transparent. Shrinking
+   it would move every element below it in flow and the
+   content would jump mid-scroll; a transparent box with a
+   slim strip on top costs nothing in layout and the rest of
+   the band is inert (pointer-events: none) so cards behind
+   keep their hover. */
 .section-head--sticky {
   position: sticky;
   top: var(--nav-h);
   /* Under the navbar's z-30 and the mobile menu's z-40, but over
      the marquees, which are position: relative with no z-index. */
   z-index: 10;
-  /* Slide with the navbar when it hides, so no bare band is left above the head. */
-  transition: top 0.28s ease;
 }
 
-/* When the navbar is hidden, pinned section heads move up to take its place. */
-html[data-nav="hidden"] .section-head--sticky {
+.section-head__full {
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-expo);
+}
+
+/* The slim row. Owns the glass material only while pinned —
+   keeping backdrop-filter out of the resting state so an
+   invisible row never composites. */
+.section-head__slim {
+  position: absolute;
   top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  height: var(--head-slim-h);
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s var(--ease-expo),
+    background-color 0.3s ease;
+}
+
+.section-head--sticky[data-pin="true"] {
+  /* The full block dissolves; the strip is what remains. */
+  background: transparent;
+  border-bottom-color: transparent;
+  pointer-events: none;
+}
+
+.section-head--sticky[data-pin="true"] .section-head__full {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+}
+
+.section-head--sticky[data-pin="true"] .section-head__slim {
+  opacity: 1;
+  transform: translateY(0);
+  background: var(--chrome-bg);
+  backdrop-filter: blur(var(--chrome-blur)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--chrome-blur)) saturate(1.4);
+  border-bottom: 1px solid var(--chrome-line);
+  box-shadow: 0 14px 28px -20px rgba(0, 0, 0, 0.55);
+}
+
+/* Reused eyebrow inside the strip: same mono index-rule-label
+   pattern, no trailing gap (the strip supplies its own height). */
+.section-head__slim .eyebrow {
+  margin-bottom: 0;
 }
 
 /* On phones the bar is pinned chrome above the content, and
@@ -389,6 +490,25 @@ html[data-nav="hidden"] .section-head--sticky {
 .section-light .section-head {
   background: var(--light-bg);
   border-bottom-color: var(--light-line);
+}
+
+/* Pinned: the cream block dissolves the same way the dark one does
+   — transparent box, cream glass strip on top. These rules sit after
+   .section-light .section-head so the opaque cream doesn't win back
+   the pinned state (same specificity, later in the file). */
+.section-light .section-head--sticky[data-pin="true"] {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+
+/* The strip goes cream, not --chrome-bg: it sits directly on the
+   light island and a dark frost here would cut the same band the
+   unpinned rule above avoids. color-mix keeps it one token — the
+   light scheme's own re-point of --light-bg flows through. */
+.section-light .section-head--sticky[data-pin="true"] .section-head__slim {
+  background: color-mix(in srgb, var(--light-bg) 78%, transparent);
+  border-bottom-color: var(--light-line);
+  box-shadow: 0 14px 28px -22px rgba(0, 0, 0, 0.35);
 }
 
 /* Display heading. Mono needs tight tracking at this size. */
