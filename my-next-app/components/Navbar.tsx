@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,8 +8,8 @@ import { EASE } from "@/components/motion";
 
 const navItems = [
   { name: "About", href: "#about" },
-  { name: "Projects", href: "#projects" },
   { name: "Expertise", href: "#expertise" },
+  { name: "Projects", href: "#projects" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -35,12 +35,24 @@ function ArrowOut({ size = 14 }: { size?: number }) {
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [navHidden, setNavHidden] = useState(false);
+  const lastY = useRef(0);
 
   useEffect(() => {
-    const sections = ["home", "about", "projects", "expertise", "contact"];
+    const sections = ["home", "about", "expertise", "projects", "contact"];
 
     const handleScroll = () => {
-      const probe = window.scrollY + window.innerHeight * 0.35;
+      const y = window.scrollY;
+      const delta = y - lastY.current;
+
+      // Threshold ignores trackpad drift so the bar doesn't flicker at rest.
+      if (Math.abs(delta) > 4) {
+        // Never hide over the hero, or #home would land somewhere invisible.
+        setNavHidden(delta > 0 && y > 80);
+        lastY.current = y;
+      }
+
+      const probe = y + window.innerHeight * 0.35;
       for (const id of sections) {
         const el = document.getElementById(id);
         if (el && probe >= el.offsetTop && probe < el.offsetTop + el.offsetHeight) {
@@ -55,25 +67,35 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // publish nav-hidden state to <html> so pinned heads can slide up when the bar hides
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    document.documentElement.dataset.nav = navHidden ? "hidden" : "shown";
     return () => {
-      document.body.style.overflow = "";
+      delete document.documentElement.dataset.nav;
     };
-  }, [menuOpen]);
+  }, [navHidden]);
 
   return (
     <>
       <motion.header
         initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
-        className="sticky top-0 z-30 grid grid-cols-[1fr_auto] md:grid-cols-[minmax(12rem,1fr)_auto_minmax(12rem,1fr)] items-center min-h-20 px-5 md:px-9"
+        animate={{ opacity: navHidden ? 0 : 1, y: navHidden ? -24 : 0 }}
+        transition={
+          navHidden
+            ? { duration: 0.28, ease: EASE }
+            : { duration: 0.7, delay: 0.1, ease: EASE }
+        }
+        className="sticky top-0 z-30 flex items-center justify-center px-5 md:px-9"
+        style={{
+          minHeight: "var(--nav-h)",
+          // Prevent invisible header from intercepting clicks while hidden.
+          pointerEvents: navHidden ? "none" : "auto",
+        }}
       >
         {/* Left: wordmark */}
         <Link
           href="#home"
-          className="justify-self-start group flex items-center gap-2.5"
+          className="absolute left-5 md:left-9 group flex items-center gap-2.5"
         >
           <span className="relative w-7 h-7 overflow-hidden rounded-full shrink-0">
             <Image
@@ -86,8 +108,8 @@ export default function Navbar() {
             />
           </span>
           <span
-            className="hidden sm:block text-[0.86rem] font-extrabold tracking-[0.14em] uppercase"
-            style={{ color: "#fff" }}
+            className="hidden sm:block text-[0.86rem] font-bold tracking-[0.14em] uppercase"
+            style={{ color: "var(--offwhite)" }}
           >
             Emmanuel David
           </span>
@@ -95,10 +117,10 @@ export default function Navbar() {
 
         {/* Center: glass nav pill */}
         <nav
-          className="hidden md:flex items-center justify-self-center"
+          className="hidden md:flex items-center"
           style={{
             padding: "0.6rem 1rem",
-            background: "rgba(255,255,255,0.05)",
+            background: "var(--glass)",
             border: "1px solid var(--line-faint)",
             backdropFilter: "blur(12px)",
             WebkitBackdropFilter: "blur(12px)",
@@ -112,11 +134,15 @@ export default function Navbar() {
               <a
                 key={item.name}
                 href={item.href}
+                // scroll-margin-top still reserves --nav-h, so jumping to a
+                // section further down the page would hide the bar and leave
+                // an empty band above the heading. Clear the flag on click.
+                onClick={() => setNavHidden(false)}
                 className="relative py-1"
                 style={{
                   fontSize: "0.8125rem",
                   letterSpacing: "-0.005em",
-                  color: isActive ? "var(--signal)" : "#fff",
+                  color: isActive ? "var(--signal)" : "var(--offwhite)",
                   opacity: isActive ? 1 : 0.68,
                   transition: "color 0.18s ease, opacity 0.18s ease",
                 }}
@@ -136,11 +162,11 @@ export default function Navbar() {
         </nav>
 
         {/* Right: actions */}
-        <div className="hidden md:flex items-center justify-self-end gap-1.4rem">
+        <div className="hidden md:flex items-center absolute right-5 md:right-9 gap-[1.4rem]">
           <Link href="/resume" className="btn btn-glass">
             Resume
           </Link>
-          <a href="#contact" className="btn btn-primary">
+          <a href="#contact" onClick={() => setNavHidden(false)} className="btn btn-primary">
             <span>Let&apos;s talk</span>
             <ArrowOut />
           </a>
@@ -149,13 +175,13 @@ export default function Navbar() {
         {/* Mobile: menu trigger */}
         <button
           onClick={() => setMenuOpen(true)}
-          className="md:hidden justify-self-end"
+          className="md:hidden absolute right-5"
           style={{
-            fontFamily: "var(--font-mono-jb), ui-monospace, monospace",
+            fontFamily: "var(--font-cascadia), ui-monospace, monospace",
             fontSize: "0.9rem",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            color: "#fff",
+            color: "var(--offwhite)",
             background: "none",
             border: 0,
             cursor: "pointer",
@@ -174,17 +200,17 @@ export default function Navbar() {
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.3, ease: EASE }}
             className="md:hidden fixed inset-0 z-40 flex flex-col"
-            style={{ background: "#070707", padding: "5rem 1.25rem 1.5rem" }}
+            style={{ background: "var(--ink)", padding: "5rem 1.25rem 1.5rem" }}
           >
             <button
               onClick={() => setMenuOpen(false)}
               className="absolute top-0 right-0 px-5 h-20 flex items-center"
               style={{
-                fontFamily: "var(--font-mono-jb), ui-monospace, monospace",
+                fontFamily: "var(--font-cascadia), ui-monospace, monospace",
                 fontSize: "0.9rem",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.6)",
+                color: "var(--on-dark-2)",
                 background: "none",
                 border: 0,
                 cursor: "pointer",
@@ -208,8 +234,8 @@ export default function Navbar() {
                   }}
                   className="display-lg border-b"
                   style={{
-                    borderColor: "rgba(255,255,255,0.11)",
-                    color: "#fff",
+                    borderColor: "var(--line-soft)",
+                    color: "var(--offwhite)",
                     paddingBottom: "0.6rem",
                     textDecoration: "none",
                   }}

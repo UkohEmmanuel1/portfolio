@@ -18,17 +18,16 @@ const columns = [
     links: [
       { name: "Home", href: "#home" },
       { name: "About", href: "#about" },
-      { name: "Projects", href: "#projects" },
       { name: "Expertise", href: "#expertise" },
+      { name: "Projects", href: "#projects" },
     ],
   },
   {
     title: "Capabilities",
     links: [
-      { name: "Web Development", href: "#expertise" },
+      { name: "Software Engineering", href: "#expertise" },
       { name: "Machine Learning", href: "#expertise" },
-      { name: "Database Design", href: "#expertise" },
-      { name: "System Design", href: "#expertise" },
+      { name: "Applied AI", href: "#expertise" },
     ],
   },
   {
@@ -69,67 +68,79 @@ export default function Footer() {
   return (
     <footer
       ref={ref}
-      className="relative overflow-hidden rule-faint"
-      style={{ background: "#000" }}
+      className="relative rule-faint"
+      style={{ background: "var(--ink)" }}
     >
-      {/* Giant ghost wordmark, drifting as the footer scrolls in */}
-      <motion.div
+      {/* Clipping lives on this layer, not on the footer root. The
+          wordmark's own box already clips the horizontal bleed, so
+          the root's copy was doing double duty. */}
+      <div
         aria-hidden="true"
-        className="pointer-events-none select-none absolute inset-x-0 bottom-0 flex justify-center overflow-hidden"
+        className="absolute inset-0 overflow-hidden"
         style={{ opacity: 0.055, zIndex: 0 }}
       >
-        <motion.span
-          style={{
-            y: markY,
-            color: "#fff",
-            marginBottom: "-0.12em",
-            fontSize: "clamp(2.5rem, 9vw, 7rem)",
-            fontWeight: 600,
-            lineHeight: 1,
-            letterSpacing: "-0.045em",
-            whiteSpace: "nowrap",
-          }}
-        >
-          EMMANUEL DAVID
-        </motion.span>
-      </motion.div>
-
-      <div className="relative" style={{ paddingTop: "6rem", zIndex: 1 }}>
-        <div className="shell">
-          {/* Link grid */}
-          <motion.div
-            variants={stagger(0.07)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={VIEWPORT}
-            className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10"
-            style={{ marginBottom: "4rem" }}
+        {/* Giant ghost wordmark, drifting as the footer scrolls in */}
+        <motion.div className="pointer-events-none select-none absolute inset-x-0 bottom-0 flex justify-center overflow-hidden">
+          <motion.span
+            style={{
+              y: markY,
+              color: "var(--offwhite)",
+              marginBottom: "-0.12em",
+              fontSize: "clamp(2.5rem, 9vw, 7rem)",
+              fontWeight: 600,
+              lineHeight: 1,
+              letterSpacing: "-0.045em",
+              whiteSpace: "nowrap",
+            }}
           >
-            {columns.map((col) => (
-              <motion.div key={col.title} variants={fadeUp}>
-                <div
-                  className="mono-label"
-                  style={{ color: "var(--on-dark-4)", marginBottom: "1rem" }}
-                >
-                  {col.title}
-                </div>
-                <ul className="flex flex-col gap-2.5">
-                  {col.links.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        href={link.href}
-                        className="mono-sm transition-colors duration-200"
-                        style={{ color: "#fff", opacity: 0.68 }}
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </motion.div>
+            EMMANUEL DAVID
+          </motion.span>
+        </motion.div>
+      </div>
 
+      {/* The link grid is the head. It scrolls normally with the
+          footer rather than pinning. */}
+      <div className="section-stack" style={{ paddingTop: "6rem", zIndex: 1 }}>
+        <div className="section-head">
+          <div className="shell">
+            {/* Link grid */}
+            <motion.div
+              variants={stagger(0.07)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT}
+              className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10"
+            >
+              {columns.map((col) => (
+                <motion.div key={col.title} variants={fadeUp}>
+                  <div
+                    className="mono-label"
+                    style={{ color: "var(--on-dark-4)", marginBottom: "1rem" }}
+                  >
+                    {col.title}
+                  </div>
+                  <ul className="flex flex-col gap-2.5">
+                    {col.links.map((link) => (
+                      <li key={link.name}>
+                        <Link
+                          href={link.href}
+                          className="mono-sm transition-colors duration-200"
+                          style={{ color: "var(--offwhite)", opacity: 0.68 }}
+                        >
+                          {link.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+
+        {/* The grid's old 4rem margin-bottom moved here — inside the
+            head it would have added 4rem to the pinned height. */}
+        <div className="shell" style={{ paddingTop: "var(--space-head)" }}>
           {/* Meta row */}
           <motion.div
             initial={{ opacity: 0 }}
