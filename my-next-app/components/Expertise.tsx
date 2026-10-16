@@ -1,13 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import {
   SiNextdotjs,
   SiTensorflow,
   SiOpenai,
   SiFigma,
 } from "react-icons/si";
-import { EASE, VIEWPORT, fadeUp, stagger } from "@/components/motion";
+
 
 const disciplines = [
   {
@@ -63,77 +63,6 @@ function DisciplineCard({
   );
 }
 
-/* Fragment, not a wrapper, so the track's own gap stays the only
-   spacing and the duplicate set lines up with the original. */
-function DisciplineSet() {
-  return (
-    <>
-      {disciplines.map((discipline, index) => (
-        <DisciplineCard key={discipline.title} discipline={discipline} index={index} />
-      ))}
-    </>
-  );
-}
-
 export default function Expertise() {
-  return (
-    <section id="expertise" className="section section-ink">
-      {/* Head and marquee are grouped inside .section-stack, kept
-          separate from .shell so the marquee can run full-bleed. */}
-      <div className="section-stack">
-        <div className="section-head">
-          <div className="shell">
-            <motion.div
-              variants={stagger(0.08)}
-              initial="hidden"
-              whileInView="visible"
-              viewport={VIEWPORT}
-            >
-              <motion.div variants={fadeUp} className="eyebrow">
-                <span className="eyebrow-index">02</span>
-                <span className="eyebrow-rule" />
-                <span>Expertise</span>
-              </motion.div>
-
-              <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-                <motion.h2
-                  variants={fadeUp}
-                  className="display-lg"
-                  style={{ maxWidth: "30ch" }}
-                >
-                  Four clear pillars
-                </motion.h2>
-                <motion.p
-                  variants={fadeUp}
-                  className="body-text lg:text-right"
-                  style={{ color: "var(--on-dark-3)", maxWidth: "42ch" }}
-                >
-                  One person carrying the whole thing — engineering, modelling, and visual
-                  craft, without the hand-off in the middle.
-                </motion.p>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Full-bleed marquee, reversed against the About strip above it
-            — four cards, set twice for a seamless loop */}
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={VIEWPORT}
-          transition={{ duration: 0.8, ease: EASE }}
-          className="marquee marquee--stack"
-          style={{ marginTop: "var(--space-head)" }}
-        >
-          <div className="marquee-track marquee-track--reverse">
-            <DisciplineSet />
-            <div aria-hidden="true" className="marquee-dupe">
-              <DisciplineSet />
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
+ return <section id="expertise" className="section section-ink"><div className="shell"><div className="section-heading"><div><p className="eyebrow"><span className="eyebrow-index">02</span> Expertise</p><h2 className="display-lg">Different disciplines.<br />One considered approach.</h2></div><p className="body-text">Engineering, modelling, and visual craft — connected from the first idea to the final detail.</p></div><div className="expertise-grid">{disciplines.map((discipline, index) => <DisciplineCard key={discipline.title} discipline={discipline} index={index} />)}</div></div></section>;
 }

@@ -1,17 +1,6 @@
 import type { Metadata } from "next";
-import { Cascadia_Code } from "next/font/google";
-import "./globals.css";
 
-const cascadia = Cascadia_Code({
-  variable: "--font-cascadia",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-  // Next ships no metric overrides for Cascadia Code, so it cannot build a
-  // size-adjusted fallback. Opting out keeps the fallback stable instead of
-  // reflowing on swap.
-  adjustFontFallback: false,
-});
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Emmanuel David — Software Engineer · ML · AI · Creative",
@@ -26,7 +15,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cascadia.variable}>
+      <body>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         {children}
       </body>
     </html>
