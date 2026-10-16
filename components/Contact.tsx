@@ -315,7 +315,7 @@ export default function Contact() {
                   style={{ color: "var(--signal)", marginBottom: "1.5rem" }}
                 >
                   <FaCheck size={15} />
-                  <span>Message sent — thank you.</span>
+                  <span>Message sent. Thank you.</span>
                 </motion.div>
               )}
 

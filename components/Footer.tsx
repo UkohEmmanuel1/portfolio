@@ -138,7 +138,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* The grid's old 4rem margin-bottom moved here — inside the
+        {/* The grid's old 4rem margin-bottom moved here: inside the
             head it would have added 4rem to the pinned height. */}
         <div className="shell" style={{ paddingTop: "var(--space-head)" }}>
           {/* Meta row */}

@@ -13,7 +13,7 @@ const disciplines = [
   {
     title: "Software Engineering",
     blurb:
-      "Web platforms built end to end — React and Node in front, Django, Laravel, and Express behind, wired to the databases and services underneath.",
+      "Web platforms built end to end: React and Node in front, Django, Laravel, and Express behind, wired to the databases and services underneath.",
     Icon: SiNextdotjs,
   },
   {
@@ -31,7 +31,7 @@ const disciplines = [
   {
     title: "Creative",
     blurb:
-      "Photography, film, and visual identity — art direction, type, and design systems made to be used rather than admired and left behind.",
+      "Photography, film, and visual identity: art direction, type, and design systems made to be used rather than admired and left behind.",
     Icon: SiFigma,
   },
 ];
@@ -108,7 +108,7 @@ export default function Expertise() {
                   className="body-text lg:text-right"
                   style={{ color: "var(--on-dark-3)", maxWidth: "42ch" }}
                 >
-                  One person carrying the whole thing — engineering, modelling, and visual
+                  One person carrying the whole thing: engineering, modelling, and visual
                   craft, without the hand-off in the middle.
                 </motion.p>
               </div>
@@ -117,7 +117,7 @@ export default function Expertise() {
         </div>
 
         {/* Full-bleed marquee, reversed against the About strip above it
-            — four cards, set twice for a seamless loop */}
+           : four cards, set twice for a seamless loop */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}

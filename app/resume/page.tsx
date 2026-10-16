@@ -8,7 +8,7 @@ const experienceData = [
   {
     role: "Senior Software Engineer · ML & AI",
     company: "Freelance & Consulting",
-    period: "2021 — 2023",
+    period: "2021 to 2023",
     desc: "Delivered 80+ high-performance web systems, ML inference APIs, and custom enterprise databases.",
     highlights: [
       "Developed custom classification and predictive models inside Next.js and Python services.",
@@ -92,7 +92,7 @@ export default function ResumePage() {
           <p className="lead" style={{ color: "var(--on-dark-2)", maxWidth: "72ch" }}>
             Software engineer working across machine learning, applied AI, and creative
             practice, with over five years designing distributed cloud systems, ML
-            pipelines, and high-performance web platforms — alongside a personal practice
+            pipelines, and high-performance web platforms, alongside a personal practice
             in photography, film, and visual identity.
           </p>
         </section>
@@ -137,7 +137,7 @@ export default function ResumePage() {
                       style={{ color: "var(--on-dark-3)" }}
                     >
                       <span aria-hidden="true" style={{ color: "var(--signal)", lineHeight: 1.65 }}>
-                        —
+                        •
                       </span>
                       <span>{h}</span>
                     </li>
@@ -183,7 +183,7 @@ export default function ResumePage() {
 
         <div className="rule-ink-soft" />
         <p className="mono-label pt-6" style={{ color: "var(--on-dark-5)" }}>
-          Emmanuel David — Software Engineer · Machine Learning · AI · Creative
+          Emmanuel David | Software Engineer · Machine Learning · AI · Creative
         </p>
       </div>
     </div>

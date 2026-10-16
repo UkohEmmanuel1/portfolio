@@ -14,7 +14,7 @@ import { EASE, VIEWPORT, fadeIn, fadeUp, stagger } from "@/components/motion";
 const projects = [
   {
     title: "Nexus AI",
-    desc: "Retrieval-augmented generation platform for working through large document sets — grounded answers, citations, and evaluation on every query.",
+    desc: "Retrieval-augmented generation platform for working through large document sets: grounded answers, citations, and evaluation on every query.",
     Icon: SiOpenai,
     href: undefined as string | undefined,
   },
@@ -38,13 +38,13 @@ const projects = [
   },
   {
     title: "Deep Learning Cybersecurity Suite",
-    desc: "Machine-learning detection for live network traffic — anomaly scoring and threat analysis at the pace real systems produce events.",
+    desc: "Machine-learning detection for live network traffic: anomaly scoring and threat analysis at the pace real systems produce events.",
     Icon: SiShieldsdotio,
     href: undefined as string | undefined,
   },
   {
     title: "Visual Practice",
-    desc: "Ongoing photography, film, and brand work — portraiture, product imagery, and identity systems built to be used rather than just admired.",
+    desc: "Ongoing photography, film, and brand work: portraiture, product imagery, and identity systems built to be used rather than just admired.",
     Icon: FaCamera,
     href: undefined as string | undefined,
   },
@@ -135,7 +135,7 @@ function ProjectRow({
 
 /* Three per row, so each row scrolls as its own loop. The track
    translates exactly one set, which is three cards plus three
-   gaps — matching the -50% - gap/2 keyframe. */
+   gaps: matching the -50% - gap/2 keyframe. */
 const ROWS = [projects.slice(0, 3), projects.slice(3, 6)];
 
 export default function Projects() {
@@ -179,14 +179,14 @@ export default function Projects() {
                     style={{ color: "var(--on-dark-3)", maxWidth: "46ch" }}
                   >
                     A selection across applied AI, software infrastructure, fintech, Web3,
-                    and visual work — each one something I took from idea to shipped.
+                    and visual work: each one something I took from idea to shipped.
                   </motion.p>
                 </div>
               </motion.div>
             </div>
           </div>
 
-          {/* Collapsed one-liner. Decorative duplicate — the full row
+          {/* Collapsed one-liner. Decorative duplicate: the full row
               above stays in the DOM and keeps the real heading. */}
           <div className="section-head__slim" aria-hidden="true">
             <div className="shell">
@@ -199,7 +199,7 @@ export default function Projects() {
           </div>
         </div>
 
-        {/* Full-bleed marquees — two rows of three. Row two runs
+        {/* Full-bleed marquees: two rows of three. Row two runs
             reversed and shifted half a card, so the card edges
             stagger instead of lining up with row one. */}
         <div

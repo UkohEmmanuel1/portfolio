@@ -17,7 +17,7 @@ const WRAPPED_STATS = [
   { label: "On repeat", value: "Coding podcasts", pct: 61, hue: "#38bdf8" },
 ];
 
-/* Left card — abstract mesh gradient, no assets */
+/* Left card: abstract mesh gradient, no assets */
 function MeshCard() {
   return (
     <div
@@ -82,7 +82,7 @@ function MeshCard() {
   );
 }
 
-/* Middle card — the developer portrait, 509x334 */
+/* Middle card: the developer portrait, 509x334 */
 function PortraitCard() {
   return (
     <div className="marquee-card" style={{ background: "#e7e5dd" }}>
@@ -99,7 +99,7 @@ function PortraitCard() {
   );
 }
 
-/* Right card — dark listening-wrapped stats */
+/* Right card: dark listening-wrapped stats */
 function WrappedCard() {
   return (
     <div
@@ -192,7 +192,7 @@ export default function About() {
     <section id="about" className="section section-light">
       {/* Head, copy and marquee all sit inside .section-stack, so the
           head's direct parent outlasts the marquee and the pin has
-          somewhere to travel. The sentinel marks the pin line — it
+          somewhere to travel. The sentinel marks the pin line: it
           shares the head's flow top, so CSS and the observer can never
           disagree about where "pinned" starts. */}
       <div className="section-stack">
@@ -220,7 +220,7 @@ export default function About() {
             </div>
           </div>
 
-          {/* Collapsed one-liner. Decorative duplicate — the full row
+          {/* Collapsed one-liner. Decorative duplicate: the full row
               above stays in the DOM and keeps the real heading. */}
           <div className="section-head__slim" aria-hidden="true">
             <div className="shell">
@@ -245,7 +245,7 @@ export default function About() {
             I&apos;m a <strong>Software Engineer</strong> working across{" "}
             <strong>machine learning</strong>, <strong>applied AI</strong>, and{" "}
             <strong>creative practice</strong>. Most of what I build sits at the seam
-            between those — systems that are technically sound and still feel like
+            between those: systems that are technically sound and still feel like
             someone bothered.
           </motion.p>
 
@@ -264,13 +264,13 @@ export default function About() {
 
           <motion.p variants={fadeUp} className="about-copy">
             Outside client work I photograph, shoot film, and keep a visual practice
-            running. It&apos;s the same instinct as the engineering — pay attention, then
+            running. It&apos;s the same instinct as the engineering: pay attention, then
             strip out everything that doesn&apos;t earn its place.
           </motion.p>
         </motion.div>
       </div>
 
-      {/* Full-bleed marquee — three cards, set twice for a seamless loop */}
+      {/* Full-bleed marquee: three cards, set twice for a seamless loop */}
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}

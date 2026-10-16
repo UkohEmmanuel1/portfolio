@@ -63,7 +63,7 @@ export default function Hero() {
         className="hero-inner"
       >
         {/* One h1 for the page. The role line is a p rather than a
-           second h1 — same visual treatment, but it leaves a single
+           second h1: same visual treatment, but it leaves a single
            document subject instead of two competing ones.
 
            Greeting and role are grouped so the two read as one
@@ -81,7 +81,7 @@ export default function Hero() {
         </div>
 
         <p className="hero-body" style={{ marginTop: "1.5rem", marginBottom: "1.5rem" }}>
-          I build software that holds up — machine learning systems, applied AI,
+          I build software that holds up: machine learning systems, applied AI,
           and the visual and interaction design that makes them feel considered
           rather than merely functional.
         </p>
