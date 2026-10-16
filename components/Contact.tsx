@@ -18,7 +18,7 @@ const socialLinks = [
   { icon: FaGithub, href: "https://github.com/UkohEmmanuel1", label: "GitHub" },
   {
     icon: FaLinkedinIn,
-    href: "https://www.linkedin.com/in/emmanuel-david-77606131b/",
+    href: "https://www.linkedin.com/in/emmanueldavidukoh",
     label: "LinkedIn",
   },
   { icon: FaTwitter, href: "https://x.com/emma_nuel_david", label: "X" },

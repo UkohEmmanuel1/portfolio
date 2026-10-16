@@ -34,7 +34,7 @@ const columns = [
     title: "Connect",
     links: [
       { name: "GitHub", href: "https://github.com/UkohEmmanuel1" },
-      { name: "LinkedIn", href: "https://www.linkedin.com/in/emmanuel-david-77606131b/" },
+      { name: "LinkedIn", href: "https://www.linkedin.com/in/emmanueldavidukoh" },
       { name: "X / Twitter", href: "https://x.com/emma_nuel_david" },
       { name: "Instagram", href: "https://www.instagram.com/emma_nuel_david/" },
     ],
@@ -45,7 +45,7 @@ const socialLinks = [
   { icon: FaGithub, href: "https://github.com/UkohEmmanuel1", label: "GitHub" },
   {
     icon: FaLinkedinIn,
-    href: "https://www.linkedin.com/in/emmanuel-david-77606131b/",
+    href: "https://www.linkedin.com/in/emmanueldavidukoh",
     label: "LinkedIn",
   },
   { icon: FaTwitter, href: "https://x.com/emma_nuel_david", label: "X" },
