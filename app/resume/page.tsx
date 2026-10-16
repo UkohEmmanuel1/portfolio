@@ -148,6 +148,8 @@ export default function ResumePage() {
             <li>Google Project Management Professional, Coursera</li>
             <li>System Design &amp; API Architecture Fundamentals</li>
             <li>Frontend and backend development</li>
+            <li>Machine Learning</li>
+            <li>Artificial Intelligence</li>
           </ul>
         </ResumeSection>
 
