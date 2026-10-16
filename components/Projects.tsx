@@ -1,6 +1,6 @@
 "use client";
 
-
+import { motion } from "framer-motion";
 import { FaCamera, FaGithub } from "react-icons/fa";
 import {
   SiBitcoin,
@@ -9,8 +9,7 @@ import {
   SiShieldsdotio,
   SiTensorflow,
 } from "react-icons/si";
-
-
+import { EASE, VIEWPORT, fadeIn, fadeUp, stagger } from "@/components/motion";
 
 const projects = [
   {
@@ -110,6 +109,153 @@ function ProjectCard({
   );
 }
 
+/* Fragment, not a wrapper, so the track's own gap stays the only
+   spacing and the duplicate set lines up with the original. The
+   offset keeps the 01..06 labels running across both rows instead
+   of restarting at 01 in the second one. */
+function ProjectRow({
+  items,
+  offset,
+}: {
+  items: (typeof projects)[number][];
+  offset: number;
+}) {
+  return (
+    <>
+      {items.map((project, i) => (
+        <ProjectCard
+          key={project.title}
+          project={project}
+          index={offset + i}
+        />
+      ))}
+    </>
+  );
+}
+
+/* Three per row, so each row scrolls as its own loop. The track
+   translates exactly one set, which is three cards plus three
+   gaps — matching the -50% - gap/2 keyframe. */
+const ROWS = [projects.slice(0, 3), projects.slice(3, 6)];
+
 export default function Projects() {
- return <section id="projects" className="section section-ink"><div className="shell"><div className="section-heading"><div><p className="eyebrow"><span className="eyebrow-index">03</span> Selected projects</p><h2 className="display-lg">Ideas turned into<br />real-world systems.</h2></div><p className="body-text">A selection across applied AI, software infrastructure, fintech, Web3, and visual work.</p></div><div className="projects-grid">{projects.map((project,index) => <ProjectCard key={project.title} project={project} index={index} />)}</div><a className="text-link project-source" href="https://github.com/UkohEmmanuel1" target="_blank" rel="noopener noreferrer"><FaGithub /> Explore GitHub ↗</a></div></section>;
+
+  return (
+    <section id="projects" className="section section-ink">
+      {/* Head and marquees sit inside .section-stack rather than as
+          siblings of .shell, so the head's direct parent outlasts
+          both rows and the pin has somewhere to travel. The sentinel
+          shares the head's flow top, so CSS and the observer can
+          never disagree about where "pinned" starts. */}
+      <div className="section-stack">
+        <div
+          className="section-head"
+        >
+          <div className="section-head__full">
+            <div className="shell">
+              <motion.div
+                variants={stagger(0.08)}
+                initial="hidden"
+                whileInView="visible"
+                viewport={VIEWPORT}
+              >
+                <motion.div variants={fadeUp} className="eyebrow">
+                  <span className="eyebrow-index">03</span>
+                  <span className="eyebrow-rule" />
+                  <span>Selected projects</span>
+                </motion.div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-x-8 gap-y-3 items-end">
+                  <motion.h2
+                    variants={fadeUp}
+                    className="display-lg"
+                    style={{ maxWidth: "30ch" }}
+                  >
+                    Things I&apos;ve designed, built, and shipped
+                  </motion.h2>
+                  <motion.p
+                    variants={fadeUp}
+                    className="body-text lg:text-right"
+                    style={{ color: "var(--on-dark-3)", maxWidth: "46ch" }}
+                  >
+                    A selection across applied AI, software infrastructure, fintech, Web3,
+                    and visual work — each one something I took from idea to shipped.
+                  </motion.p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Collapsed one-liner. Decorative duplicate — the full row
+              above stays in the DOM and keeps the real heading. */}
+          <div className="section-head__slim" aria-hidden="true">
+            <div className="shell">
+              <div className="eyebrow">
+                <span className="eyebrow-index">03</span>
+                <span className="eyebrow-rule" />
+                <span>Selected projects</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Full-bleed marquees — two rows of three. Row two runs
+            reversed and shifted half a card, so the card edges
+            stagger instead of lining up with row one. */}
+        <div
+          className="flex flex-col gap-[var(--gap-card)]"
+          style={{ marginTop: "var(--space-head)" }}
+        >
+          {ROWS.map((row, r) => (
+            <motion.div
+              key={row[0].title}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ duration: 0.8, ease: EASE }}
+              className="marquee marquee--stack"
+            >
+              <div
+                className={
+                  r === 1
+                    ? "marquee-track marquee-track--reverse marquee-track--offset"
+                    : "marquee-track"
+                }
+              >
+                <ProjectRow items={row} offset={r * 3} />
+                <div aria-hidden="true" className="marquee-dupe">
+                  <ProjectRow items={row} offset={r * 3} />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Outside the stack, so the head has already released by the
+          time the source link scrolls in. */}
+      <div className="shell">
+        {/* Source link */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.6 }}
+          className="flex items-center justify-end"
+          style={{ marginTop: "var(--space-head)" }}
+        >
+          <a
+            href="https://github.com/UkohEmmanuel1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mono-sm inline-flex items-center gap-2"
+            style={{ color: "var(--on-dark-3)" }}
+          >
+            <FaGithub size={14} />
+            <span>All source on GitHub</span>
+          </a>
+        </motion.div>
+      </div>
+    </section>
+  );
 }

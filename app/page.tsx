@@ -16,8 +16,8 @@ export default function Home() {
         <Expertise />
         <Projects />
         <Contact />
+        <Footer />
       </main>
-      <Footer />
     </>
   );
 }

@@ -1,7 +1,18 @@
 "use client";
 
-import { useState, type ChangeEvent, type FormEvent } from "react";
-import { FaTwitter, FaLinkedinIn, FaGithub, FaInstagram } from "react-icons/fa";
+import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
+import {
+  FaEnvelope,
+  FaWhatsapp,
+  FaTwitter,
+  FaLinkedinIn,
+  FaGithub,
+  FaInstagram,
+  FaCheck,
+} from "react-icons/fa";
+import { EASE, VIEWPORT, fadeUp, slideIn, stagger } from "@/components/motion";
 
 const socialLinks = [
   { icon: FaGithub, href: "https://github.com/UkohEmmanuel1", label: "GitHub" },
@@ -18,7 +29,33 @@ const socialLinks = [
   },
 ];
 
+function ArrowOut({ size = 14 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.9}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M7 17 17 7" />
+      <path d="M8 7h9v9" />
+    </svg>
+  );
+}
+
 export default function Contact() {
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: bannerRef,
+    offset: ["start end", "end start"],
+  });
+  const bannerY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -78,31 +115,292 @@ export default function Contact() {
 
   return (
     <section id="contact" className="section section-ink">
-      <div className="shell contact-grid">
-        <div>
-          <p className="eyebrow"><span className="eyebrow-index">04</span> Get in touch</p>
-          <h2 className="display-lg">Good work starts<br />with a conversation.</h2>
-          <p className="contact-intro">Have an idea, an interesting challenge, or a project in mind? Tell me a little about it.</p>
-          <a className="text-link contact-email" href="mailto:emmanuelukoh08@gmail.com">emmanuelukoh08@gmail.com ↗</a>
-          <a className="contact-phone" href="https://wa.me/2348167949054" target="_blank" rel="noopener noreferrer">WhatsApp · +234 816 794 9054 ↗</a>
-          <div className="contact-socials">
-            {socialLinks.map(({icon: Icon, href, label}) => <a key={label} href={href} target="_blank" rel="noopener noreferrer" aria-label={label}><Icon size={17} /></a>)}
+      {/* The eyebrow and h2 are lifted into a .section-head above the
+          panel so they read as the section's heading. The panel keeps
+          its own overflow-hidden: the parallax image inside is inset
+          -8% and relies on it to stay clipped to the rounded corners. */}
+      <div className="section-stack">
+        <div className="section-head">
+          <div className="shell">
+            <motion.div
+              variants={stagger(0.08)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT}
+            >
+              <motion.div variants={fadeUp} className="eyebrow">
+                <span className="eyebrow-index">04</span>
+                <span className="eyebrow-rule" />
+                <span>Contact</span>
+              </motion.div>
+
+              <motion.h2
+                variants={fadeUp}
+                className="display-lg"
+                style={{ maxWidth: "38ch" }}
+              >
+                Let&apos;s build something that lasts
+              </motion.h2>
+            </motion.div>
           </div>
         </div>
-        <div className="contact-form">
-          <h3 className="display-sm">Tell me what you’re working on</h3>
-          <p className="body-text contact-form-note">A few details are all it takes to get started.</p>
-          {sent && <p role="status" className="form-success">Message sent. Thank you — I’ll be in touch.</p>}
-          {error && <p role="alert" className="form-error">{error}</p>}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              <label className="block"><span className="form-label">Your name</span><input type="text" autoComplete="name" name="name" value={formData.name} onChange={handleChange} required placeholder="Your name" className="field" /></label>
-              <label className="block"><span className="form-label">Email address</span><input type="email" autoComplete="email" name="email" value={formData.email} onChange={handleChange} required placeholder="you@company.com" className="field" /></label>
+
+        <div className="shell">
+          {/* CTA banner */}
+          <motion.div
+            ref={bannerRef}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.8, ease: EASE }}
+            className="photo-panel relative overflow-hidden"
+            style={{
+              borderRadius: "var(--radius-card)",
+              minHeight: "18rem",
+              marginBottom: "var(--space-head)",
+            }}
+          >
+            <motion.div
+              aria-hidden="true"
+              className="absolute inset-0"
+              style={{ opacity: 0.22, borderRadius: "var(--radius-card)" }}
+            >
+              <motion.div style={{ y: bannerY }} className="absolute inset-[-8%]">
+                <Image
+                  src="/image/about.jpg"
+                  alt=""
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  style={{ objectPosition: "center 25%" }}
+                />
+              </motion.div>
+            </motion.div>
+            <div
+              className="absolute inset-0"
+              style={{
+                borderRadius: "var(--radius-card)",
+                background:
+                  "linear-gradient(180deg, rgba(5,5,5,0.6), rgba(5,5,5,0.45) 45%, rgba(5,5,5,0.75))",
+              }}
+            />
+
+            <div
+              className="relative flex flex-col justify-end h-full w-full"
+              style={{
+                padding: "clamp(1.5rem, 3vw, 2.5rem)",
+                minHeight: "18rem",
+                border: "1px solid var(--line-faint)",
+                borderRadius: "var(--radius-card)",
+              }}
+            >
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href="mailto:emmanuelukoh08@gmail.com"
+                  className="btn btn-primary btn-lg"
+                >
+                  <span>Email me</span>
+                  <ArrowOut />
+                </a>
+                <a
+                  href="https://wa.me/+2348167949054"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-glass btn-lg"
+                >
+                  <FaWhatsapp size={14} />
+                  <span>WhatsApp</span>
+                </a>
+              </div>
             </div>
-            <label className="block"><span className="form-label">What’s the project?</span><input type="text" name="subject" value={formData.subject} onChange={handleChange} required placeholder="A platform, an AI idea, something new…" className="field" /></label>
-            <label className="block"><span className="form-label">A little more detail</span><textarea name="message" value={formData.message} onChange={handleChange} required rows={5} placeholder="The idea, your timeline, and what you’d like to achieve." className="field" /></label>
-            <button type="submit" disabled={isSubmitting} className="btn btn-primary self-start">{isSubmitting ? "Sending…" : "Send message ↗"}</button>
-          </form>
+          </motion.div>
+
+          {/* Form + details */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.25fr] gap-x-10 gap-y-12 lg:gap-x-20">
+            <motion.div
+              variants={stagger(0.06)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT}
+            >
+              <motion.div variants={slideIn} className="eyebrow">
+                <span>Direct channels</span>
+              </motion.div>
+
+              <motion.div
+                variants={slideIn}
+                className="rule-list"
+              >
+                <motion.a
+                  variants={slideIn}
+                  href="mailto:emmanuelukoh08@gmail.com"
+                  className="rule-row flex items-center gap-2.5"
+                  style={{ color: "var(--offwhite)", textDecoration: "none" }}
+                >
+                  <FaEnvelope size={14} style={{ color: "var(--on-dark-4)" }} />
+                  <span className="body-text">emmanuelukoh08@gmail.com</span>
+                </motion.a>
+
+                <motion.a
+                  variants={slideIn}
+                  href="https://wa.me/+2348167949054"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rule-row flex items-center gap-2.5"
+                  style={{ color: "var(--offwhite)", textDecoration: "none" }}
+                >
+                  <FaWhatsapp size={14} style={{ color: "var(--on-dark-4)" }} />
+                  <span className="body-text">+234 816 794 9054</span>
+                </motion.a>
+
+                <motion.div
+                  variants={slideIn}
+                  className="rule-row flex items-center gap-2.5"
+                  style={{ borderTop: "1px solid var(--line-soft)" }}
+                >
+                  <span className="signal-dot" />
+                  <span className="body-text" style={{ color: "var(--on-dark-3)" }}>
+                    Replies within 24 hours
+                  </span>
+                </motion.div>
+              </motion.div>
+
+              <motion.div
+                variants={slideIn}
+                className="flex flex-wrap items-center gap-1.5"
+                style={{ marginTop: "1.5rem" }}
+              >
+                {socialLinks.map((s) => {
+                  const Icon = s.icon;
+                  return (
+                    <motion.a
+                      key={s.label}
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      whileHover={{ y: -2 }}
+                      className="flex items-center justify-center"
+                      style={{
+                        width: "2.1rem",
+                        height: "2.1rem",
+                        borderRadius: "999px",
+                        border: "1px solid var(--line-faint)",
+                        color: "var(--on-dark-2)",
+                      }}
+                    >
+                      <Icon size={14} />
+                    </motion.a>
+                  );
+                })}
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              variants={stagger(0.06)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VIEWPORT}
+            >
+              <motion.div variants={slideIn} className="eyebrow">
+                <span>Project inquiry</span>
+              </motion.div>
+
+              {sent && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  role="status"
+                  className="flex items-center gap-2.5 mono-sm"
+                  style={{ color: "var(--signal)", marginBottom: "1.5rem" }}
+                >
+                  <FaCheck size={15} />
+                  <span>Message sent — thank you.</span>
+                </motion.div>
+              )}
+
+              {error && <p role="alert" className="body-text" style={{ color: "var(--offwhite)", marginBottom: "1.5rem" }}>{error}</p>}
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <motion.label variants={slideIn} className="block">
+                    <span className="mono-label" style={{ color: "var(--on-dark-4)" }}>
+                      Your name
+                    </span>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      placeholder="Jane Okafor"
+                      className="field"
+                      style={{ marginTop: "0.5rem" }}
+                    />
+                  </motion.label>
+
+                  <motion.label variants={slideIn} className="block">
+                    <span className="mono-label" style={{ color: "var(--on-dark-4)" }}>
+                      Your email
+                    </span>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="jane@company.com"
+                      className="field"
+                      style={{ marginTop: "0.5rem" }}
+                    />
+                  </motion.label>
+                </div>
+
+                <motion.label variants={slideIn} className="block">
+                  <span className="mono-label" style={{ color: "var(--on-dark-4)" }}>
+                    Subject
+                  </span>
+                  <input
+                    type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    placeholder="Platform build / ML pipeline / architecture review"
+                    className="field"
+                    style={{ marginTop: "0.5rem" }}
+                  />
+                </motion.label>
+
+                <motion.label variants={slideIn} className="block">
+                  <span className="mono-label" style={{ color: "var(--on-dark-4)" }}>
+                    Message
+                  </span>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={4}
+                    placeholder="Scope, timeline, and what success looks like."
+                    className="field resize-none"
+                    style={{ marginTop: "0.5rem" }}
+                  />
+                </motion.label>
+
+                <motion.div variants={slideIn} className="pt-1">
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="btn btn-primary btn-lg"
+                    whileHover={{ y: -1 }}
+                  >
+                    {isSubmitting ? <span>Sending…</span> : <span>Send message</span>}
+                    {!isSubmitting && <ArrowOut />}
+                  </motion.button>
+                </motion.div>
+              </form>
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>
