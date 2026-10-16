@@ -1,0 +1,7 @@
+import Image from "next/image";
+export default function About() {
+ return <section id="about" className="section about-section"><div className="shell about-grid">
+   <div><p className="eyebrow"><span className="eyebrow-index">01</span> A little about me</p><h2 className="display-lg">Curious by nature.<br />Deliberate by design.</h2><div className="about-image"><Image src="/image/about.jpg" alt="A glimpse into Emmanuel’s creative practice" width={509} height={334} sizes="(max-width: 760px) 90vw, 440px" /></div></div>
+   <div className="about-text"><p className="lead">I work where engineering and creative practice overlap.</p><p>I’m a software engineer working across machine learning, applied AI, and creative practice. I build systems that are technically sound and still feel considered.</p><p>That means training and shipping models, wiring them into real applications, and designing the interfaces that carry them. I care just as much about latency, authentication, deployment, and the code somebody else has to read next year.</p><p>I like problems that cross disciplines. A feature might need a model, a design system, and an API contract in the same week.</p><p>Outside software, I photograph, shoot film, and explore visual identity. The instinct is the same: pay attention, then strip out everything that doesn’t earn its place.</p><a href="#contact" className="text-link">Let’s make something together ↗</a></div>
+ </div></section>;
+}

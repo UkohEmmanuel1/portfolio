@@ -10,14 +10,14 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="relative">
+      <main id="main-content" className="relative">
         <Hero />
         <About />
         <Expertise />
         <Projects />
         <Contact />
-        <Footer />
       </main>
+      <Footer />
     </>
   );
 }
