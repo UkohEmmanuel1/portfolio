@@ -61,6 +61,7 @@ export default function Contact() {
     email: "",
     subject: "",
     message: "",
+    website: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
@@ -79,35 +80,25 @@ export default function Contact() {
     setError("");
     setSent(false);
 
-    const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[char] || char));
-    const emailHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #222; background: #f4f4ef; color: #080808; border-radius: 12px;">
-        <h2 style="color: #080808; border-bottom: 1px solid #ccc; padding-bottom: 10px;">New Portfolio Inquiry</h2>
-        <p><strong>From:</strong> ${escapeHtml(formData.name)} (${escapeHtml(formData.email)})</p>
-        <p><strong>Subject:</strong> ${escapeHtml(formData.subject)}</p>
-        <div style="background: #e9e8e2; padding: 16px; border-radius: 8px; margin: 20px 0; border: 1px solid #d6d5cf;">
-          <p style="white-space: pre-line; line-height: 1.6; color: #080808;">${escapeHtml(formData.message)}</p>
-        </div>
-      </div>
-    `;
-
     try {
-      const response = await fetch("https://techxmail.onrender.com/sendmail", {
+      const response = await fetch("/api/contact", {
         method: "POST",
-        body: JSON.stringify({
-          name: formData.name,
-          mail: "emmanuelukoh08@gmail.com",
-          html: emailHtml,
-          subject: `Portfolio Message: ${formData.subject || "Project Inquiry"}`,
-        }),
         headers: { "Content-Type": "application/json" },
-        signal: AbortSignal.timeout(20000),
+        body: JSON.stringify(formData),
+        signal: AbortSignal.timeout(40000),
       });
-      if (!response.ok) throw new Error("Message delivery failed");
+      const result = await response.json().catch(() => null);
+      if (!response.ok || result?.success !== true) {
+        throw new Error(result?.error || "Your message could not be sent. Please email me directly.");
+      }
       setSent(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    } catch {
-      setError("Your message could not be sent. Please try again or email me directly.");
+      setFormData({ name: "", email: "", subject: "", message: "", website: "" });
+    } catch (error) {
+      setError(error instanceof Error && error.name === "TimeoutError"
+        ? "Sending took too long. Please email me directly rather than submitting again."
+        : error instanceof TypeError
+          ? "Could not connect to send your message. Please email me directly."
+          : error instanceof Error ? error.message : "Your message could not be sent. Please email me directly.");
     } finally {
       setIsSubmitting(false);
     }
@@ -320,7 +311,10 @@ export default function Contact() {
               )}
 
               {error && <p role="alert" className="body-text" style={{ color: "var(--offwhite)", marginBottom: "1.5rem" }}>{error}</p>}
-              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5" aria-busy={isSubmitting}>
+                <div hidden aria-hidden="true">
+                  <label>Website<input name="website" value={formData.website} onChange={handleChange} tabIndex={-1} autoComplete="off" /></label>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <motion.label variants={slideIn} className="block">
                     <span className="mono-label" style={{ color: "var(--on-dark-4)" }}>
@@ -328,6 +322,8 @@ export default function Contact() {
                     </span>
                     <input
                       type="text"
+                      autoComplete="name"
+                      maxLength={120}
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
@@ -344,6 +340,8 @@ export default function Contact() {
                     </span>
                     <input
                       type="email"
+                      autoComplete="email"
+                      maxLength={254}
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
@@ -361,6 +359,7 @@ export default function Contact() {
                   </span>
                   <input
                     type="text"
+                    maxLength={200}
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
@@ -376,6 +375,7 @@ export default function Contact() {
                     Message
                   </span>
                   <textarea
+                    maxLength={8000}
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
