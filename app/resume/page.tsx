@@ -15,7 +15,7 @@ const experience = [
   {
     role: "Full Stack Developer Intern",
     company: "XStakUp",
-    period: "Aug 2025 to May 2026",
+    period: "Aug 2025 to Present",
     description: "Built and optimised responsive interfaces, integrated asynchronous REST APIs, improved rendering efficiency, resolved linting and CI/CD issues, and collaborated during Agile sprints on accessibility and performance improvements.",
   },
 ];
